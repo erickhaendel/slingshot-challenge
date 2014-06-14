@@ -1,3 +1,5 @@
+-- LETS USE ALL RESOURCES DIR AND FILES IN LOWERCASE AS STANDARD FILE NAMES
+
 -----------------------------
 -- GUI resources/images/buttons
 -----------------------------
