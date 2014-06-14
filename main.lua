@@ -9,7 +9,7 @@ math.randomseed( os.time() )
 -- NEXT SCENE
 -------------------------------------------
 if default_login_mode == "on" then
-	storyboard.gotoScene( "welcome" )
+	composer.gotoScene( "welcome" )
 else
-	storyboard.gotoScene( "menu" )
+	composer.gotoScene( "menu" )	
 end

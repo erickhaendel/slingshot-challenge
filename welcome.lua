@@ -4,8 +4,6 @@
 
 require( "includeall" )
 
-local scene = storyboard.newScene()
-
 -----------------------------------------
 -- Prototype Functions
 -----------------------------------------
@@ -32,6 +30,7 @@ end
 
 removeTudo = function()
 
+  abstractmenugui.removeMenuBackgroundImage() 
   abstractmenugui.removeMenuLogoffButton()
   abstractmenugui.removeMenuLoginButton()
   abstractmenugui.removeMenuSignupButton()
@@ -39,6 +38,11 @@ removeTudo = function()
 end
 
 criaTudo = function()
+
+	abstractmenugui.createMenuBackgroundImage(
+		display.contentCenterX, 
+		display.contentCenterY,
+		templateWelcomeBackgroundFile)
 
 	abstractmenugui.createMenuSignupButton(
 		display.contentCenterX*0.70, 
@@ -73,25 +77,24 @@ end
 -------------------------------------------
 -- Create a Background touch event
 -------------------------------------------
+local scene = composer.newScene()
 
-function scene:createScene( event )
-  local group = self.view
-  -- Load the background image
-  local bg = display.newImage( templateWelcomeBackgroundFile, display.contentCenterX, display.contentCenterY, true )
-  group:insert( bg )  
-  criaTudo()  
+function scene:create( event )
+	local sceneGroup = self.view
+  	criaTudo()  
 end
 
-function scene:enterScene( event )
-  criaTudo() 
+function scene:show( event )
+	local phase = event.phase
+  	criaTudo() 
 end
 
-function scene:exitScene( event ) 
-  local group = self.view
+function scene:hide( event )
+	local phase = event.phase
   removeTudo()  
 end
 
-function scene:destroyScene( event )
+function scene:destroy( event )
   local group = self.view  
   removeTudo()
 end
@@ -100,10 +103,11 @@ end
 -- END OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 
-scene:addEventListener( "createScene", scene )
-scene:addEventListener( "enterScene", scene )
-scene:addEventListener( "exitScene", scene )
-scene:addEventListener( "destroyScene", scene )
+-- Listener setup
+scene:addEventListener( "create", scene )
+scene:addEventListener( "show", scene )
+scene:addEventListener( "hide", scene )
+scene:addEventListener( "destroy", scene )
 
 ---------------------------------------------------------------------------------
 

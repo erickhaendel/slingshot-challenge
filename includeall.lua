@@ -3,7 +3,7 @@
 -------------------------------------------
 
 -- CORONA LIBS
-storyboard =      	require( "storyboard"        )
+composer = 			require( "composer" 		 ) -- lets use composer instead storyboard
 widget =          	require( "widget"            )
 facebook =        	require( "facebook"          )
 json =            	require( "json"              )

@@ -2,56 +2,56 @@
 -- GUI resources/images/buttons
 -----------------------------
 
-templatePlayButtonDefaultFile 			= "resources/images/buttons/Play.png"
-templatePlayButtonOverFile 				= "resources/images/buttons/Play.png"
-templateLoginButtonDefaultFile			= "resources/images/buttons/Login.png"
-templateLoginButtonOverFile				= "resources/images/buttons/Login.png"
-templateLogoffButtonDefaultFile			= "resources/images/buttons/Logoff.png"
-templateLogoffButtonOverFile			= "resources/images/buttons/Logoff.png"
-templateSignupButtonDefaultFile			= "resources/images/buttons/SignUp.png"
-templateSignupButtonOverFile			= "resources/images/buttons/SignUp.png"
-templateAboutButtonDefaultFile 			= "resources/images/buttons/About.png"
-templateAboutButtonOverFile 			= "resources/images/buttons/About.png"
+templatePlayButtonDefaultFile 			= "resources/images/buttons/play.png"
+templatePlayButtonOverFile 				= "resources/images/buttons/play.png"
+templateLoginButtonDefaultFile			= "resources/images/buttons/login.png"
+templateLoginButtonOverFile				= "resources/images/buttons/login.png"
+templateLogoffButtonDefaultFile			= "resources/images/buttons/logoff.png"
+templateLogoffButtonOverFile			= "resources/images/buttons/logoff.png"
+templateSignupButtonDefaultFile			= "resources/images/buttons/signup.png"
+templateSignupButtonOverFile			= "resources/images/buttons/signup.png"
+templateAboutButtonDefaultFile 			= "resources/images/buttons/about.png"
+templateAboutButtonOverFile 			= "resources/images/buttons/about.png"
 templateAllowSoundButtonDefaultFile 	= "resources/images/buttons/sound.png"
 templateAllowSoundButtonOverFile 		= "resources/images/buttons/sound.png"
 templateMuteSoundButtonDefaultFile 		= "resources/images/buttons/mutesound.png"
 templateMuteSoundButtonOverFile 		= "resources/images/buttons/mutesound.png"
+templateBackButtonDefaultFile 			= "resources/images/buttons/back.png"
+templateBackButtonOverFile 				= "resources/images/buttons/back.png"
+templateCancelButtonDefaultFile 		= "resources/images/buttons/cancel.png"
+templateCancelButtonOverFile 			= "resources/images/buttons/cancel.png"
 
-templateButtonDefaultFile 				= "resources/images/buttons/Default.png"
-templateButtonOverFile 					= "resources/images/buttons/Default.png"
+templateButtonDefaultFile 				= "resources/images/buttons/default.png"
+templateButtonOverFile 					= "resources/images/buttons/default.png"
 
 -----------------------------
 -- GUI resources/images/backgrounds
 -----------------------------
 
-templateWelcomeBackgroundFile 			= "resources/images/backgrounds/Welcome.png"
-templateMenuBackgroundFile 				= "resources/images/backgrounds/Menu.png"
-templateSignupBackgroundFile			= "resources/images/backgrounds/Signup.png"
-templateLoginBackgroundFile				= "resources/images/backgrounds/Signup.png"
+templateWelcomeBackgroundFile 			= "resources/images/backgrounds/welcome.png"
+templateMenuBackgroundFile 				= "resources/images/backgrounds/menu.png"
+templateSignupBackgroundFile			= "resources/images/backgrounds/signup.png"
+templateLoginBackgroundFile				= "resources/images/backgrounds/signup.png"
 
 -----------------------------
 -- GAMEPLAY resources/images
 -----------------------------
-templateGameplaySkyFile 				= "resources/images/sky.png"
-templateGameplayGrassFile				= "resources/images/grass.png"
-templateGameplayWallFile				= "resources/images/wall.png"
-templateGameplayBlueSlingshotFile		= "resources/images/blue_slingshot.png"
-templateGameplayGreenSlingshotFile		= "resources/images/green_slingshot.png"
-templateGameplayBoulderFile				= "resources/images/boulder.png"
-templateGameplaySodaCanFile				= "resources/images/soda_can.png"
-templateGameplaySodaCanSmashed1File		= "resources/images/soda_can_smashed_1.png"
-templateGameplaySodaCanSmashed2File		= "resources/images/soda_can_smashed_2.png"
+-- templateGameplaySkyFile 				= "resources/images/sky.png"
+-- templateGameplayGrassFile				= "resources/images/grass.png"
+-- templateGameplayWallFile				= "resources/images/wall.png"
+-- templateGameplayBlueSlingshotFile		= "resources/images/blue_slingshot.png"
+-- templateGameplayGreenSlingshotFile		= "resources/images/green_slingshot.png"
+-- templateGameplayBoulderFile				= "resources/images/boulder.png"
+-- templateGameplaySodaCanFile				= "resources/images/soda_can.png"
+-- templateGameplaySodaCanSmashed1File		= "resources/images/soda_can_smashed_1.png"
+-- templateGameplaySodaCanSmashed2File		= "resources/images/soda_can_smashed_2.png"
 
 ------------------------------
 -- AUDIO
 ------------------------------
-templateThemeSongAudioFile			= "resources/audio/Songs/Menu.wav"
-templateKnockSongAudioFile 			= "resources/audio/Effects//hitcan.mp3"
-templateSquishSongAudioFile 		= "resources/audio/Effects//squish_wav.wav"
-templateButtonSoundAudioFile		= "resources/audio/Effects//button-sound.wav"
-templateButtonBackSoundAudioFile	= "resources/audio/Effects//button-back.wav"
-templateBandReleaseAudioFile 		= "resources/audio/Effects//band-release.wav"
-templateStretchAudioFile 			= "resources/audio/Effects//stretch-1.wav"
+templateThemeSongAudioFile			= "resources/audio/songs/menu.wav"
+-- templateKnockSongAudioFile 			= "resources/audio/Effects/hitcan.mp3"
+
 
 ------------------------------
 -- FONT

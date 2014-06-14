@@ -10,9 +10,10 @@ require( "globaldefinitions" )
 -- GROUPS
 -------------------------------------------
 
-menuButtonsGroup  = display.newGroup()
-menuLabelsGroup   = display.newGroup()
-menuImagesGroup   = display.newGroup()
+menuImagesGroup   = display.newGroup() -- Layer 01: must be first because of the background images - farground
+menuButtonsGroup  = display.newGroup() -- Layer 02: it make sense come after the image group - nearground
+menuLabelsGroup   = display.newGroup() -- Layer 03: It is foreground
+
 
 -------------------------------------------
 -- AUDIO GUI METHODS
@@ -218,8 +219,8 @@ loadingMenuBackButton     = nil
 
 -----------------------------------------------
 
-createMenuBackButton = function(x,y,destination)
-  if not menuBackButton then loadingMenuBackButton(x,y,destination);  end 
+createMenuBackButton = function(x,y, buttonImageDefaultFile, buttonImageOverFile, text, destination)
+  if not menuBackButton then loadingMenuBackButton(x,y, buttonImageDefaultFile, buttonImageOverFile, text, destination);  end 
 end
 
 removeMenuBackButton = function()
@@ -233,19 +234,20 @@ menuBackButtonPress = function( event )
 
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( menuBackButton.destination )
+    composer.gotoScene( menuBackButton.destination )
+    removeMenuBackButton()
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )  
 end
 
-loadingMenuBackButton = function(x,y,destination)
+loadingMenuBackButton = function(x,y, buttonImageDefaultFile, buttonImageOverFile, text, destination)
+  if text == nil then text = ""; end
   menuBackButton = widget.newButton
   { 
-
-    defaultFile = templateMediumButtonDefaultFile,
-    overFile    = templateMediumButtonOverFile,
-    label       = "Back",
+    defaultFile = buttonImageDefaultFile,
+    overFile    = buttonImageOverFile,
+    label       = text,
     labelColor  = { default = { templateFontColorButtonR, templateFontColorButtonG, templateFontColorButtonB }, }, 
     font        = templateDefaultFont,
     fontSize    = templateDefaultButtonSizeFont,
@@ -289,7 +291,7 @@ menuAboutButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "about" )
+    composer.gotoScene( "about" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -343,7 +345,7 @@ menuPlayButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "choosegamemode" )
+    composer.gotoScene( "choosegamemode" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -397,7 +399,7 @@ menuSettingButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "setting" )
+    composer.gotoScene( "setting" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -451,7 +453,7 @@ menuHowToPlayButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "howtoplay" )
+    composer.gotoScene( "howtoplay" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -505,7 +507,7 @@ menuPrivacyPolicyButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "privacypolicy" )
+    composer.gotoScene( "privacypolicy" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -559,7 +561,7 @@ menuLoginButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "login" )
+    composer.gotoScene( "login" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -613,7 +615,7 @@ menuLogoffButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "welcome" )
+    composer.gotoScene( "welcome" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -667,7 +669,7 @@ menuSignupButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "signup" )
+    composer.gotoScene( "signup" )    
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -721,7 +723,7 @@ menuPlayTutorialButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "playtutorial" )
+    composer.gotoScene( "playtutorial" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -775,7 +777,7 @@ menuPlayOnlineButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "playonline" )
+    composer.gotoScene( "playonline" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -829,7 +831,7 @@ menuChoosingSlingshotButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "choosingslingshot" )
+    composer.gotoScene( "choosingslingshot" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -884,7 +886,7 @@ menuGreenSlingshotButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "game" )
+    composer.gotoScene( "game" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -939,7 +941,7 @@ menuBlueSlingshotButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "game" )
+    composer.gotoScene( "game" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -1022,7 +1024,7 @@ menuHighscoreButtonPress = function( event )
   end
   local buttonListener = {}
   function buttonListener:timer( event )
-    storyboard.gotoScene( "highscore" )
+    composer.gotoScene( "highscore" )
   end
 
   timer.performWithDelay( templateButtonTimeDelay, buttonListener )
@@ -1229,4 +1231,28 @@ end
 loadingMenuTitleImage = function(x,y, buttonImageDefaultFile, buttonImageOverFile, text)
   menuTitleImage = display.newImage( templateLogoFile, x, y, true )  
   menuImagesGroup:insert( menuTitleImage )
+end
+
+-------------------------------------------
+-- BACKGROUND IMAGE METHODS
+-------------------------------------------
+
+menuBackgroundImage = nil
+
+-- PROTOTYPE
+createMenuBackgroundImage  = nil
+removeMenuBackgroundImage  = nil
+loadingBackgroundImage     = nil
+
+createMenuBackgroundImage = function(x,y, backgroundImageFile)
+  if not menuBackgroundImage then loadingMenuBackgroundImage(x,y, backgroundImageFile);  end 
+end
+
+removeMenuBackgroundImage = function()
+  if menuBackgroundImage then menuImagesGroup:remove( menuBackgroundImage ); menuBackgroundImage = nil; end 
+end
+
+loadingMenuBackgroundImage = function(x,y, backgroundImageFile)
+  menuBackgroundImage = display.newImage( backgroundImageFile, x, y, true )  
+  menuImagesGroup:insert( menuBackgroundImage )
 end
