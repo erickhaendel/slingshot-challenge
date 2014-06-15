@@ -8,69 +8,67 @@ require( "includeall" )
 -- Prototype Functions
 -----------------------------------------
 
-local criaTudo, removeTudo
+local criaTudo, removeTudo, removeObject
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-local isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+local loginButton = nil
+local signupButton = nil
+local backgroundImage = nil
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+local welcomeImages = display.newGroup()
+local welcomeButtons = display.newGroup()
+
 
 -----------------------------------------
 -- RELEASE MODE
 -----------------------------------------
 
-removeTudo = function()
+removeObject = function(object, group)
+  if group then group:remove( object ); end
+  if object then object:removeSelf( ); object = nil; end 
+end
 
-  abstractmenugui.removeMenuBackgroundImage() 
-  abstractmenugui.removeMenuLogoffButton()
-  abstractmenugui.removeMenuLoginButton()
-  abstractmenugui.removeMenuSignupButton()
-  abstractmenugui.removeMuteSoundButton()  
+removeTudo = function()
+	if welcomeImages then welcomeImages:remove( backgroundImage ); end
+	if backgroundImage then backgroundImage:removeSelf( ); backgroundImage = nil; end 
+
+	--removeObject(backgroundImage, welcomeImages)  -- destroi imagem de fundo
+	removeObject(loginButton, welcomeButtons)  -- destroi botao login
+	removeObject(signupButton, welcomeButtons)  -- destroi botao signup	
+
+  	abstractmenugui.removeMuteSoundButton()  -- destroi o botao de mutar som
 end
 
 criaTudo = function()
 
-	abstractmenugui.createMenuBackgroundImage(
-		display.contentCenterX, 
-		display.contentCenterY,
-		templateWelcomeBackgroundFile)
-
-	abstractmenugui.createMenuSignupButton(
-		display.contentCenterX*0.70, 
-		display.contentCenterY*1.55,
-		templateSignupButtonDefaultFile,
-		templateSignupButtonOverFile,
-		"")
-
-	abstractmenugui.createMuteSoundButton(
-		display.contentCenterX*1.75, 
-		display.contentCenterY*1.65,
-		"")
-	
 	if player_validated  == 1 then
-
 		removeTudo()
-		storyboard.gotoScene( "menu" )
-
+		composer.gotoScene( "menu" )
 	else
 
-	  abstractmenugui.createMenuLoginButton(
-		display.contentCenterX*1.30, 
-		display.contentCenterY*1.55,
-		templateLoginButtonDefaultFile,
-		templateLoginButtonOverFile,
-		"")
-	end
+		--------------------------------------------------------------------------------------------------------------------------------
+		--  description -> method (type, x, y, imageDefaultFile, imageOverFile, text, textColor, fieldsize, fontName, fontSize, eventFunction)
+		--------------------------------------------------------------------------------------------------------------------------------
+		-- IMAGE BACKGROUND
+		backgroundImage = abstractmenugui.createMenuAbstractObject(
+			"image",display.contentCenterX, display.contentCenterY,
+			templateWelcomeBackgroundFile,nil,nil,nil,nil,nil,nil,nil)
+		welcomeImages:insert( backgroundImage )		
+		
+		-- BOTAO SIGNUP
+		signupButton = abstractmenugui.createMenuAbstractObject(
+			"button",display.contentCenterX*0.70, display.contentCenterY*1.55,
+			templateSignupButtonDefaultFile,templateSignupButtonOverFile,nil,nil,nil,nil,nil,abstractmenugui.menuAbstractTransitionEvent("signup"))
+		welcomeButtons:insert( signupButton )
 
+		-- BOTAO LOGIN
+		loginButton = abstractmenugui.createMenuAbstractObject(
+			"button",display.contentCenterX*1.30, display.contentCenterY*1.55,
+			templateLoginButtonDefaultFile,templateLoginButtonOverFile,nil,nil,nil,nil,nil,abstractmenugui.menuAbstractTransitionEvent("login"))
+		welcomeButtons:insert( loginButton )
+
+		-- BOTAO MUTAR SOM
+		abstractmenugui.createMuteSoundButton(display.contentCenterX*1.75, display.contentCenterY*1.65,"")
+	end	
 
 end
 

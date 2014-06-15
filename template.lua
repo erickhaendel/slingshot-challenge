@@ -22,6 +22,8 @@ templateBackButtonDefaultFile 			= "resources/images/buttons/back.png"
 templateBackButtonOverFile 				= "resources/images/buttons/back.png"
 templateCancelButtonDefaultFile 		= "resources/images/buttons/cancel.png"
 templateCancelButtonOverFile 			= "resources/images/buttons/cancel.png"
+templateConfirmButtonDefaultFile 		= "resources/images/buttons/ok.png"
+templateConfirmButtonOverFile 			= "resources/images/buttons/ok.png"
 
 templateButtonDefaultFile 				= "resources/images/buttons/default.png"
 templateButtonOverFile 					= "resources/images/buttons/default.png"
@@ -47,6 +49,16 @@ templateLoginBackgroundFile				= "resources/images/backgrounds/signup.png"
 -- templateGameplaySodaCanFile				= "resources/images/soda_can.png"
 -- templateGameplaySodaCanSmashed1File		= "resources/images/soda_can_smashed_1.png"
 -- templateGameplaySodaCanSmashed2File		= "resources/images/soda_can_smashed_2.png"
+
+------------------------------
+-- GUI EFFECTS
+------------------------------
+templateTransitionsSceneTime 		= 5000
+templateTransitionsSceneEffects  	= "fromTop" 
+-- fade,crossFade,zoomOutIn,zoomOutInFade,zoomInOut,zoomInOutFade,flip,flipFadeOutIn,zoomOutInRotate,zoomOutInFadeRotate,
+-- zoomInOutRotate, zoomInOutFadeRotate, fromRight, fromLeft, fromTop, fromBottom, slideLeft, slideRight, slideDown, slideUp
+
+
 
 ------------------------------
 -- AUDIO
