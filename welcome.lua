@@ -10,13 +10,13 @@ require( "includeall" )
 
 local criaTudo, removeTudo, removeObject
 
-local loginButton = nil
-local signupButton = nil
-local backgroundImage = nil
+local loginButton, signupButton, backgroundImage
 
-local welcomeImages = display.newGroup()
-local welcomeButtons = display.newGroup()
+local createBackgroundImage, createLoginButton, createSignupButton
+local loginButtonPress, signupButtonPress
 
+local imagesGroup = display.newGroup()
+local buttonsGroup = display.newGroup()
 
 -----------------------------------------
 -- RELEASE MODE
@@ -28,14 +28,75 @@ removeObject = function(object, group)
 end
 
 removeTudo = function()
-	if welcomeImages then welcomeImages:remove( backgroundImage ); end
-	if backgroundImage then backgroundImage:removeSelf( ); backgroundImage = nil; end 
+	removeObject(backgroundImage, imagesGroup)  -- destroi imagem de fundo
+	removeObject(loginButton, buttonsGroup)  -- destroi botao login
+	removeObject(signupButton, buttonsGroup)  -- destroi botao signup	
+end
 
-	--removeObject(backgroundImage, welcomeImages)  -- destroi imagem de fundo
-	removeObject(loginButton, welcomeButtons)  -- destroi botao login
-	removeObject(signupButton, welcomeButtons)  -- destroi botao signup	
+createBackgroundImage = function(x,y, templateLogoFile)
+  return display.newImage( templateLogoFile, x, y, true )  
+end
 
-  	abstractmenugui.removeMuteSoundButton()  -- destroi o botao de mutar som
+signupButtonPress = function( event )
+  if sound_mode == "on" then
+    audio.play( buttonSound )
+  end
+  local buttonListener = {}
+  function buttonListener:timer( event )
+    composer.gotoScene( "signup" )
+  end
+
+  timer.performWithDelay( templateButtonTimeDelay, buttonListener )
+end
+
+createSignupButton = function(x,y)
+  local button = widget.newButton 
+  {
+    defaultFile = templateSignupButtonDefaultFile,
+    overFile = templateSignupButtonOverFile,
+    label = "", 
+    labelColor = { default = { 0, 0, 0 }, },
+    font = templateDefaultFont,
+    fontSize = templateDefaultButtonSizeFont,
+    emboss = true, 
+    onPress = signupButtonPress, 
+   }
+
+  button.x = x
+  button.y = y
+
+  return button
+end
+
+loginButtonPress = function( event )
+  if sound_mode == "on" then
+    audio.play( buttonSound )
+  end
+  local buttonListener = {}
+  function buttonListener:timer( event )
+    composer.gotoScene( "login" )
+  end
+
+  timer.performWithDelay( templateButtonTimeDelay, buttonListener )
+end
+
+createLoginButton = function(x,y)
+  local button = widget.newButton 
+  {
+    defaultFile = templateLoginButtonDefaultFile,
+    overFile = templateLoginButtonOverFile,
+    label = "", 
+    labelColor = { default = { 0, 0, 0 }, },
+    font = templateDefaultFont,
+    fontSize = templateDefaultButtonSizeFont,
+    emboss = true, 
+    onPress = loginButtonPress, 
+   }
+
+  button.x = x
+  button.y = y
+
+  return button
 end
 
 criaTudo = function()
@@ -45,29 +106,17 @@ criaTudo = function()
 		composer.gotoScene( "menu" )
 	else
 
-		--------------------------------------------------------------------------------------------------------------------------------
-		--  description -> method (type, x, y, imageDefaultFile, imageOverFile, text, textColor, fieldsize, fontName, fontSize, eventFunction)
-		--------------------------------------------------------------------------------------------------------------------------------
 		-- IMAGE BACKGROUND
-		backgroundImage = abstractmenugui.createMenuAbstractObject(
-			"image",display.contentCenterX, display.contentCenterY,
-			templateWelcomeBackgroundFile,nil,nil,nil,nil,nil,nil,nil)
-		welcomeImages:insert( backgroundImage )		
-		
+		backgroundImage = createBackgroundImage(display.contentCenterX, display.contentCenterY,templateWelcomeBackgroundFile)
+		imagesGroup:insert( backgroundImage )	
+
 		-- BOTAO SIGNUP
-		signupButton = abstractmenugui.createMenuAbstractObject(
-			"button",display.contentCenterX*0.70, display.contentCenterY*1.55,
-			templateSignupButtonDefaultFile,templateSignupButtonOverFile,nil,nil,nil,nil,nil,abstractmenugui.menuAbstractTransitionEvent("signup"))
-		welcomeButtons:insert( signupButton )
+		signupButton = createSignupButton(display.contentCenterX*0.70, display.contentCenterY*1.55)
+		buttonsGroup:insert( signupButton )
 
 		-- BOTAO LOGIN
-		loginButton = abstractmenugui.createMenuAbstractObject(
-			"button",display.contentCenterX*1.30, display.contentCenterY*1.55,
-			templateLoginButtonDefaultFile,templateLoginButtonOverFile,nil,nil,nil,nil,nil,abstractmenugui.menuAbstractTransitionEvent("login"))
-		welcomeButtons:insert( loginButton )
-
-		-- BOTAO MUTAR SOM
-		abstractmenugui.createMuteSoundButton(display.contentCenterX*1.75, display.contentCenterY*1.65,"")
+		loginButton = createSignupButton(display.contentCenterX*1.30, display.contentCenterY*1.55)
+		buttonsGroup:insert( loginButton )
 	end	
 
 end
