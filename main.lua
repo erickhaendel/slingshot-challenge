@@ -28,5 +28,5 @@ end
 if default_login_mode == "on" then
 	composer.gotoScene( "welcome" )
 else
-	composer.gotoScene( "menu" )	
+	composer.gotoScene( "welcome" )	
 end
