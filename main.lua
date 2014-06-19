@@ -1,7 +1,7 @@
 -------------------------------------------
 -- LIBs
 -------------------------------------------
-require( "includeall" )
+require( "src.infra.includeall" )
 
 math.randomseed( os.time() )
 
@@ -25,8 +25,4 @@ end
 -------------------------------------------
 -- NEXT SCENE
 -------------------------------------------
-if default_login_mode == "on" then
-	composer.gotoScene( "gameplay" )
-else
-	composer.gotoScene( "gameplay" )	
-end
+composer.gotoScene('src.tutorial.welcome', "fade", 0 )
