@@ -83,14 +83,18 @@ function scene:destroy( event )
     removeAll()
 end
 
-
 function removeAll( sceneGroup )
-    util.removeObject( background , sceneGroup)  -- destroi imagem de fundo
-    util.removeObject( btnPlay , sceneGroup)  -- destroi botao back
-    util.removeObject( btnCredits , sceneGroup)  -- destroi botao
-    util.removeObject( btnAbout , sceneGroup)  -- destroi botao
-    util.removeObject( btnSettings , sceneGroup)  -- destroi botao
-    util.removeObject( onOffSwitch , sceneGroup)  -- destroi botao
+    background = util.removeObject( background , sceneGroup)  -- destroi imagem de fundo
+    btnPlay = util.removeObject( btnPlay , sceneGroup)  -- destroi botao back
+
+    btnCredits:removeEventListener( "touch" , onBtnCreditsEvent )
+    btnCredits = util.removeObject( btnCredits , sceneGroup)  -- destroi botao
+
+    btnAbout:removeEventListener( "touch" , onBtnAboutEvent )
+    btnAbout = util.removeObject( btnAbout , sceneGroup)  -- destroi botao
+
+    btnSettings:removeEventListener( "touch" , onBtnSettingsEvent )
+    btnSettings = util.removeObject( btnSettings , sceneGroup)  -- destroi botao
 end
 
 -- Events for Button Play
@@ -100,6 +104,7 @@ end
 
 -- Events for Button Play
 function onBtnCreditsEvent( event )
+    composer.removeScene('src.management.menu')
     composer.gotoScene( "src.management.credits", "fade", 400)
 end
 

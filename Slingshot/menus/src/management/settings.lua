@@ -15,7 +15,7 @@ local scene = composer.newScene()
 -- -------------------------------------------------------------------------------
 
 local sceneGroup , background
-local btnBack
+local btnBack, onOffSwitch
 -- Metodos
 local removeAll, onBtnBackPress, onSwitchPress
 
@@ -29,7 +29,7 @@ function scene:create( event )
     -- Buttons
     btnBack     = display.newImage( "resources/images/buttons/back.png",  200, ( display.contentHeight - 100) , true  )
     -- Create the widget
-    local onOffSwitch = widget.newSwitch
+    onOffSwitch = widget.newSwitch
     {
         left = 250,
         top = 200,
@@ -65,16 +65,19 @@ function scene:hide( event )
 
     local sceneGroup = self.view
     local phase = event.phase
-
+  --  removeAll()
     if ( phase == "will" ) then
     elseif ( phase == "did" ) then
     end
 end
 
+
 function removeAll( sceneGroup )
     util.removeObject( background , sceneGroup)  -- destroi imagem de fundo
+
+    btnBack:removeEventListener( "touch" , onBtnBackPress )
     util.removeObject( btnBack , sceneGroup)  -- destroi botao back
-    util.removeObject( onOffSwitch , sceneGroup)  -- destroi botao
+    
     util.removeObject( onOffSwitch , sceneGroup)  -- destroi botao
 end
 

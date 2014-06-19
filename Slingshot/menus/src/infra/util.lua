@@ -11,6 +11,7 @@ module(..., package.seeall)
 function removeObject(object, group)
 	if group then group:remove( object ); end
   	if object then object:removeSelf(); object = nil; end 
+  	return nil
 end
 
 -- --------------------------------------------------------------------------

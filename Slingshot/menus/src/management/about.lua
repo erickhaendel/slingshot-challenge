@@ -69,6 +69,8 @@ end
 
 function removeAll( sceneGroup )
     util.removeObject( background , sceneGroup)  -- destroi imagem de fundo
+
+    btnBack:removeEventListener( "touch" , onBtnBackPress )
     util.removeObject( btnBack , sceneGroup)  -- destroi botao back
 end
 
