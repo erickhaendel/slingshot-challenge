@@ -1,4 +1,5 @@
 local composer = require( "composer" )
+local util =  require( "src.infra.util" )
 
 local scene = composer.newScene()
 
@@ -10,22 +11,22 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
-local btnVisitor -- type newImage
-local btnSignup  -- type newImage
+local  btnSettings , btnPlay, btnCredits, btnAbout
+-- Metodos
+local onBtnAboutEvent, onBtnCreditsEvent, onBtnPlayEvent, onBtnPlayEvent
+
+
 
 -- "scene:create()"
 function scene:create( event )
-    print("erick")
     local sceneGroup = self.view
 
     -- Create elements
     -- Background & box  welcome
     local background = display.newImage( "resources/images/backgrounds/menu.png", display.contentCenterX , display.contentCenterY , true )
-    
     -- Buttons
     btnX = display.contentCenterX / 2  + display.contentCenterX + 100
     btnY = ( display.contentCenterY  ) 
-    
     btnPlay     = display.newImage( "resources/images/buttons/play.png", display.contentCenterX / 2  , display.contentCenterY / 2  + display.contentCenterY , true  )
     btnSettings = display.newImage( "resources/images/buttons/settings.png", btnX , btnY + 100, true  )
     btnAbout    = display.newImage( "resources/images/buttons/about.png", btnX , btnY + 200, true  )
@@ -33,11 +34,10 @@ function scene:create( event )
 
     --Insert elements to scene
     sceneGroup:insert( background ) -- insert background to group
-
     sceneGroup:insert( btnPlay ) 
     sceneGroup:insert( btnAbout ) 
     sceneGroup:insert( btnCredits ) 
-    sceneGroup:insert( btnSettings ) 
+    sceneGroup:insert( btnSettings )
 
 end
 
@@ -53,9 +53,9 @@ function scene:show( event )
     elseif ( phase == "did" ) then
 
         -- Eventos
-        btnSettings:addEventListener( "touch" , btnSettingsEvent )
-        btnCredits:addEventListener( "touch" , btnCreditsEvent )
-        btnAbout:addEventListener( "touch" , btnAboutEvent )
+        btnSettings:addEventListener( "touch" , onBtnSettingsEvent )
+        btnCredits:addEventListener( "touch" , onBtnCreditsEvent )
+        btnAbout:addEventListener( "touch" , onBtnAboutEvent )
 
     end
 end
@@ -79,35 +79,43 @@ end
 
 -- "scene:destroy()"
 function scene:destroy( event )
-
     local sceneGroup = self.view
+    removeAll()
+end
 
-    -- Called prior to the removal of scene's view ("sceneGroup").
-    -- Insert code here to clean up the scene.
-    -- Example: remove display objects, save state, etc.
+
+function removeAll( sceneGroup )
+    util.removeObject( background , sceneGroup)  -- destroi imagem de fundo
+    util.removeObject( btnPlay , sceneGroup)  -- destroi botao back
+    util.removeObject( btnCredits , sceneGroup)  -- destroi botao
+    util.removeObject( btnAbout , sceneGroup)  -- destroi botao
+    util.removeObject( btnSettings , sceneGroup)  -- destroi botao
+    util.removeObject( onOffSwitch , sceneGroup)  -- destroi botao
 end
 
 -- Events for Button Play
-function btnPlayEvent( event )
+function onBtnPlayEvent( event )
     -- body
 end
 
 -- Events for Button Play
-function btnCreditsEvent( event )
-    composer.gotoScene( "src.management.credits", "slideLeft", 400)
+function onBtnCreditsEvent( event )
+    composer.gotoScene( "src.management.credits", "fade", 400)
 end
 
 -- Events for Button Play
-function btnAboutEvent( event )
-   composer.gotoScene( "src.management.about", "slideLeft", 400)
+function onBtnAboutEvent( event )
+    composer.removeScene('src.management.menu')
+    composer.gotoScene( "src.management.about", "fade", 400)
 end
 
 -- Events for Button Play
-function btnSettingsEvent( event )
-      composer.removeScene('src.management.menu')
-    composer.gotoScene( "src.management.settings", "slideLeft", 400)
+function onBtnSettingsEvent( event )
+    if( event.phase == "began") then
+        composer.removeScene('src.management.menu')
+        composer.gotoScene( "src.management.settings", "fade", 400)
+    end
 end
-
 
 -- -------------------------------------------------------------------------------
 
@@ -119,6 +127,11 @@ scene:addEventListener( "destroy", scene )
 
 -- -------------------------------------------------------------------------------
 
-
+local function checkMemory()
+   collectgarbage( "collect" )
+   local memUsage_str = string.format( "MEMORY = %.3f KB", collectgarbage( "count" ) )
+   print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
+end
+timer.performWithDelay( 1000, checkMemory, 0 )
 
 return scene
