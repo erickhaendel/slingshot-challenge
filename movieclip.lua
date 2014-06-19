@@ -5,7 +5,7 @@
 --
 -- Version: 2.1
 -- 
--- Copyright (C) 2010 Corona Labs Inc. All Rights Reserved.
+-- Copyright (C) 2010 ANSCA Inc. All Rights Reserved.
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy of 
 -- this software and associated documentation files (the "Software"), to deal in the 

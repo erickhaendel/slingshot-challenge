@@ -1,3 +1,7 @@
+-------------------------------------------
+-- LIBs
+-------------------------------------------
+require( "includeall" )
 
 -- Global vars set up
 _W = display.contentWidth;
@@ -66,7 +70,9 @@ local rightWall = display.newImage('resources/images/objects/rightWall.png', dis
 physics.addBody( rightWall, "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
 
 local cansPlayer1 = {}
-function loadCansPlayer1()
+local cansPlayer2 = {}
+
+function loadCansPlayers()
 	local M = 2; local N = 2
 	for i = 1, N do
 		for j = 1, M do
@@ -74,17 +80,13 @@ function loadCansPlayer1()
 		physics.addBody( cansPlayer1[M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 } )
 		end
 	end
-end
 
-local cansPlayer2 = {}
-function loadCansPlayer2()
-	local M = 2; local N = 2
 	for i = 1, N do
 		for j = 1, M do
 		cansPlayer2[M*(i-1) + j] = display.newImage( "resources/images/objects/can.png", display.contentCenterX + 320 + (i*24), display.contentCenterY - 100 - (j*40) )
 		physics.addBody( cansPlayer2[M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 } )
 		end
-	end
+	end	
 end
 
 local background = display.newGroup();
@@ -132,7 +134,7 @@ local function moveSky()
 	end
 end
 
-function unloadCansPlayer1()
+function unloadCansPlayers()
 	local M = 2; local N = 2	
 	for i = 1, N do
 		for j = 1, M do
@@ -140,28 +142,23 @@ function unloadCansPlayer1()
 		cansPlayer1[M*(i-1) + j] = nil		
 		end
 	end	
-end
-
-function unloadCansPlayer2()
-	local M = 2; local N = 2	
+	
 	for i = 1, N do
 		for j = 1, M do
 		display.remove( cansPlayer2[M*(i-1) + j] )
 		cansPlayer2[M*(i-1) + j] = nil		
 		end
-	end	
+	end		
 end
 
 function resetGameplay()
 	hit = 0
 	background:remove(leftWall);	
 	background:remove(rightWall);		
-	unloadCansPlayer1()
-	unloadCansPlayer2()	
+	unloadCansPlayers()	
 	cansPlayer1 = {}	
 	cansPlayer2 = {}
-	loadCansPlayer1()	
-	loadCansPlayer2()
+	loadCansPlayers()	
 	background = display.newGroup();
 	physics.addBody( leftWall, "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
 	physics.addBody( rightWall, "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
@@ -421,3 +418,65 @@ projectile.ready = true;
 spawnProjectile();
 -- Create listnener for state changes in the game
 state:addEventListener("change", state);
+
+---------------------------------------------------------------------------------
+local scene = composer.newScene()
+
+function scene:create( event )
+	local sceneGroup = self.view
+
+	-- Called when the scene's view does not exist.
+	-- 
+	-- INSERT code here to initialize the scene
+	-- e.g. add display objects to 'sceneGroup', add touch listeners, etc.
+end
+
+function scene:show( event )
+	local sceneGroup = self.view
+	local phase = event.phase
+	
+	if phase == "will" then
+		-- Called when the scene is still off screen and is about to move on screen
+	elseif phase == "did" then
+		-- Called when the scene is now on screen
+		-- 
+		-- INSERT code here to make the scene come alive
+		-- e.g. start timers, begin animation, play audio, etc.
+	end	
+end
+
+function scene:hide( event )
+	local sceneGroup = self.view
+	local phase = event.phase
+	
+	if event.phase == "will" then
+		-- Called when the scene is on screen and is about to move off screen
+		--
+		-- INSERT code here to pause the scene
+		-- e.g. stop timers, stop animation, unload sounds, etc.)
+	elseif phase == "did" then
+		-- Called when the scene is now off screen
+	end	
+end
+
+
+function scene:destroy( event )
+	local sceneGroup = self.view
+	
+	-- Called prior to the removal of scene's "view" (sceneGroup)
+	-- 
+	-- INSERT code here to cleanup the scene
+	-- e.g. remove display objects, remove touch listeners, save state, etc.
+end
+
+---------------------------------------------------------------------------------
+
+-- Listener setup
+scene:addEventListener( "create", scene )
+scene:addEventListener( "show", scene )
+scene:addEventListener( "hide", scene )
+scene:addEventListener( "destroy", scene )
+
+---------------------------------------------------------------------------------
+
+return scene

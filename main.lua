@@ -26,7 +26,7 @@ end
 -- NEXT SCENE
 -------------------------------------------
 if default_login_mode == "on" then
-	composer.gotoScene( "welcome" )
+	composer.gotoScene( "gameplay" )
 else
-	composer.gotoScene( "welcome" )	
+	composer.gotoScene( "gameplay" )	
 end
