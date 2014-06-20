@@ -18,7 +18,6 @@ function scene:create( event )
 
     local sceneGroup = self.view
 
-
     local menu_song = audio.loadStream( "resources/audio/songs/menu.wav" )
 
     gameMusicChannel = audio.play( menu_song, { channel=1, loops=-1, fadein=5000 } )
