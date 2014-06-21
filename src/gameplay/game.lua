@@ -2,30 +2,45 @@
 -- LIBs
 -------------------------------------------
 require( "src.infra.includeall" )
-local projectile = require( "src.gameplay.projectile" )
-local physics = require("physics");
 
+-- corona libs
+local physics 		= require("physics");
 
-local scene = composer.newScene()
-
--------------------------------------------
--- METHODS
--------------------------------------------
-local loadCansPlayers, hitTestObjects, moveSky, unloadCansPlayers, resetGameplay, projectileTouchListener, spawnProjectile
+-- my libs
+local projectile 	= require( "src.gameplay.projectile" )
+local skyanimation 	= require( "src.gameplay.sky" )
+local assetsTile 	= require( "src.gameplay.assets" )
 
 -------------------------------------------
 -- GROUPS
 -------------------------------------------
-local background, state, skyGroup
+local background, state
 
 state = display.newGroup();
-skyGroup = display.newGroup();
 
 m = {}
 m.random = math.random;
 
--- Imports
+-- fisica ligado
 physics.start();
+
+-- Animacao do ceu
+skyanimation.start();
+
+-- carrega a casa
+local houseTile = assetsTile.newHouseTile()
+
+-- carrega a parede no cenario
+local walltiles =assetsTile.newWallTile();
+
+-- carrega as latas em cima da parede
+local can_tiles1, can_tiles2 = assetsTile.newCanTile()
+
+-- carrega o chao
+local grassTile = assetsTile.newGrassTile()
+
+-- carrega a imagem do slingshot
+local slingshot = assetsTile.newSlingshotTile()
 
 -- Variables setup
 local projectiles_container = nil;
@@ -33,7 +48,6 @@ local force_multiplier = 10;
 local velocity = m.random(50,100);
 
 -- Variables
-local scoreTF
 local scale = 1.1
 local variation = 0.03
 local stoneX = 0
@@ -59,52 +73,8 @@ gameMusicChannel = audio.play( gameplay_song, { channel=1, loops=-1, fadein=5000
 projectile.shot = shot;
 projectile.band_stretch = band_stretch;
 
-
-local sky = display.newImage( "resources/images/objects/sky.png", true )
-skyGroup:insert( sky )
-sky.x = -50
-sky.y = display.contentCenterY-280
-
-local sky2 = display.newImage( "resources/images/objects/sky.png", true )
-skyGroup:insert( sky2 )
-sky2.x = 1230 
-sky2.y = display.contentCenterY-280
-
-local sky3 = display.newImage( "resources/images/objects/sky.png", true )
-skyGroup:insert( sky3 )
-sky3.x = 2510 
-sky3.y = display.contentCenterY-280
-
-local house = display.newImage( "resources/images/objects/house.png", true )
-house.x = display.contentCenterX-540 
-house.y = display.contentCenterY-280
-
-local grass = display.newImage('resources/images/objects/grass.png')
-grass.x = display.contentCenterX
-grass.y = display.contentCenterY + 254
-physics.addBody( grass, "static", { friction=0.5, bounce=0.3 } )
-
-local leftWall = display.newImage('resources/images/objects/leftWall.png', display.contentCenterX-350, display.contentCenterY+10)	
-physics.addBody( leftWall, "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
-
-local rightWall = display.newImage('resources/images/objects/rightWall.png', display.contentCenterX+512, display.contentCenterY+10)	
-physics.addBody( rightWall, "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
-
-local cansPlayer1 = {}
-local cansPlayer2 = {}
-
 local slingshot_container = display.newGroup();
 
--- Build the catapult
-local slingshot = display.newImage("resources/images/objects/slingshot.png",true);
-slingshot.x = display.contentCenterX
-slingshot.y = _H - 100;
-
--- Score
-score = display.newImage('resources/images/objects/score.png', display.contentCenterX*1.30, display.contentCenterY*0.07)
-scoreTF = display.newText('0', display.contentCenterX*1.70, display.contentCenterY*0.07, 'Marker Felt', 30)
-scoreTF:setFillColor(238, 238, 238)
-	
 local stone = nil
 local hit = 0
 
@@ -112,20 +82,34 @@ local hit = 0
 -- METHODS
 ----------------------------------------------
 
-function loadCansPlayers()
-	local M = 2; local N = 2
-	for i = 1, N do
-		for j = 1, M do
-		cansPlayer1[M*(i-1) + j] = display.newImage( "resources/images/objects/can.png", display.contentCenterX - 280 + (i*24), display.contentCenterY - 100 - (j*40) )
-		physics.addBody( cansPlayer1[M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 } )
+local  hitTestObjects, projectileTouchListener, spawnProjectile
+
+function spawnProjectile()
+	
+	if(projectile.ready)then -- If there is a projectile available then...
+	
+		projectiles_container = projectile.newProjectile();
+		-- Flag projectiles for removal
+		projectiles_container.ready = true;
+		projectiles_container.remove = true;
 		
-		cansPlayer2[M*(i-1) + j] = display.newImage( "resources/images/objects/can.png", display.contentCenterX + 280 + (i*24), display.contentCenterY - 100 - (j*40) )
-		physics.addBody( cansPlayer2[M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 } )		
-		end
+		-- Reset the indexing for the visual attributes of the catapult.
+		slingshot_container:insert(projectiles_container);
+		slingshot_container:insert(slingshot);
+
+		-- Add an event listener to the projectile.
+		projectiles_container:addEventListener("touch", projectileTouchListener);
 	end
 end
 
--- descobri a direcao da bola em relacao a raquete
+-- GAME STATE CHANGE FUNCTION
+function state:change(e)
+	if(e.state == "fire") then
+		-- You fired...
+		spawnProjectile(); -- new projectile please
+	end
+end
+
 function hitTestObjects(obj1, obj2)
     local left = obj1.contentBounds.xMin <= obj2.contentBounds.xMin and obj1.contentBounds.xMax >= obj2.contentBounds.xMin
     local right = obj1.contentBounds.xMin >= obj2.contentBounds.xMin and obj1.contentBounds.xMin <= obj2.contentBounds.xMax
@@ -134,63 +118,31 @@ function hitTestObjects(obj1, obj2)
     return (left or right) and (up or down)
 end
 
--- Camera follows bolder automatically
-function moveSky()
-	if (skyGroup.x > -1270) then
-		skyGroup.x = skyGroup.x -0.2
-	else
-		skyGroup.x = 0
-	end
-end
-
-function unloadCansPlayers()
-	local M = 2; local N = 2	
-	for i = 1, N do
-		for j = 1, M do
-		display.remove( cansPlayer1[M*(i-1) + j] )
-		cansPlayer1[M*(i-1) + j] = nil	
-
-		display.remove( cansPlayer2[M*(i-1) + j] )
-		cansPlayer2[M*(i-1) + j] = nil	
-		end
-	end		
-end
-
-function startGameplay()
-	loadCansPlayers()
-	background = display.newGroup();
-end
-
 function projectileTouchListener(e)
 
 	-- The current projectile on screen
 	local t = e.target;
 	-- If the projectile is 'ready' to be used
 	if(t.ready) then
-		-- if the touch event has started...
-		if(e.phase == "began") then
+		
+		if(e.phase == "began") then -- if the touch event has started...
 
-			-- Play the band stretch
-			audio.play(band_stretch);
-			-- Set the stage focus to the touched projectile
-			display.getCurrentStage():setFocus( t );
-			t.isFocus = true;
-			t.bodyType = "kinematic";
+			audio.play(band_stretch); -- Play the band stretch
 			
-			-- Stop current physics motion, if any
-			t:setLinearVelocity(0,0);
+			display.getCurrentStage():setFocus( t ); -- Set the stage focus to the touched projectile
+			t.isFocus = true;
+			t.bodyType = "kinematic";			
+			
+			t:setLinearVelocity(0,0); -- Stop current physics motion, if any
 			t.angularVelocity = 0;
 			
 			-- Init the elastic band.
 			local myLine = nil;
 			local myLineBack = nil;
 		
-		-- If the target of the touch event is the focus...
-		elseif(t.isFocus) then
-			-- If the target of the touch event moves...
-			--
-
-			if(e.phase == "moved") then
+		elseif(t.isFocus) then -- If the target of the touch event is the focus...
+			
+			if(e.phase == "moved") then -- If the target of the touch event moves...
 				
 				-- If the band exists... refresh the drawing of the line on the stage.
 				if(myLine) then
@@ -290,33 +242,24 @@ function projectileTouchListener(e)
 						-- Scale Balls
 						if scale > 0 then
 							scale = scale - variation	
-							t.xScale = scale
-							t.yScale = scale
+							t.xScale = scale; t.yScale = scale
 							local vx, vy = t:getLinearVelocity()
-							vx = vx*0.94
-							vy = vy*0.94
-							t:setLinearVelocity(vx,vy)
-						else
-							--if (hitTestObjects(t, leftWall)) then
-							--	local smoke = display.newImage('resources/images/objects/smoke.png', display.contentCenterX, display.contentCenterY)
-							--end
+							t:setLinearVelocity(vx*0.94,vy*0.94)
 						end	
 
 					if hit == 0 then
 						local M = 2; local N = 2;
 						for i=1,(M*N) do
-							if (hitTestObjects(t, cansPlayer1[i])) then
+							if (hitTestObjects(t, can_tiles1["left"][i])) then
 								t.isSensor = false
-								physics.removeBody( leftWall )
-								background:insert(leftWall);								
-	
+								walltiles[1]:toFront()								
+								physics.removeBody( walltiles[1] )							
 								hit = 1	
 							end						
-							if (hitTestObjects(t, cansPlayer2[i])) then
+							if (hitTestObjects(t, can_tiles1["right"][i])) then
 								t.isSensor = false
-								physics.removeBody( rightWall )
-								background:insert(rightWall);								
-
+								walltiles[2]:toFront()
+								physics.removeBody( walltiles[2] )
 								hit = 1
 							end							
 						end
@@ -325,11 +268,6 @@ function projectileTouchListener(e)
 				end				
 
 				Runtime:addEventListener('enterFrame', update)
-
-				--if needReset == 2 then
-				--	needReset = 0
-				--	resetGameplay()
-				--end
 
 				-- Wait a second before the catapult is reloaded (Avoids conflicts).
 				t.timer = timer.performWithDelay(1000, 
@@ -351,67 +289,19 @@ function projectileTouchListener(e)
 
 end
 
---[[
+projectile.ready = true; -- Tell the projectile it's good to go!
 
-SPAWN projectile FUNCTION
+spawnProjectile(); -- Spawn the first projectile.
 
-]]--
-local function spawnProjectile()
+state:addEventListener("change", state); -- Create listnener for state changes in the game
 
-	-- If there is a projectile available then...
-	if(projectile.ready)then
-	
-		projectiles_container = projectile.newProjectile();
-		-- Flag projectiles for removal
-		projectiles_container.ready = true;
-		projectiles_container.remove = true;
-		
-		-- Reset the indexing for the visual attributes of the catapult.
-		slingshot_container:insert(projectiles_container);
-		slingshot_container:insert(slingshot);
-
-		-- Add an event listener to the projectile.
-		projectiles_container:addEventListener("touch", projectileTouchListener);
-		
-	end
-
-end
---[[
-
-GAME STATE CHANGE FUNCTION
-
-]]--
-function state:change(e)
-
-	if(e.state == "fire") then
-	
-		-- You fired...
-		-- new projectile please
-		spawnProjectile();
-			
-	end
-
-end
-
-startGameplay()
-
-needReset = 0
-
-Runtime:addEventListener( "enterFrame", moveSky )
-	
--- Tell the projectile it's good to go!
-projectile.ready = true;
--- Spawn the first projectile.
-spawnProjectile();
--- Create listnener for state changes in the game
-state:addEventListener("change", state);
 
 ---------------------------------------------------------------------------------
+
 local scene = composer.newScene()
 
 function scene:create( event )
 	local sceneGroup = self.view
-
 end
 
 function scene:show( event )
@@ -419,12 +309,8 @@ function scene:show( event )
 	local phase = event.phase
 	
 	if phase == "will" then
-		-- Called when the scene is still off screen and is about to move on screen
+
 	elseif phase == "did" then
-		-- Called when the scene is now on screen
-		-- 
-		-- INSERT code here to make the scene come alive
-		-- e.g. start timers, begin animation, play audio, etc.
 	end	
 end
 
@@ -433,23 +319,12 @@ function scene:hide( event )
 	local phase = event.phase
 	
 	if event.phase == "will" then
-		-- Called when the scene is on screen and is about to move off screen
-		--
-		-- INSERT code here to pause the scene
-		-- e.g. stop timers, stop animation, unload sounds, etc.)
 	elseif phase == "did" then
-		-- Called when the scene is now off screen
 	end	
 end
 
-
 function scene:destroy( event )
 	local sceneGroup = self.view
-	
-	-- Called prior to the removal of scene's "view" (sceneGroup)
-	-- 
-	-- INSERT code here to cleanup the scene
-	-- e.g. remove display objects, remove touch listeners, save state, etc.
 end
 
 ---------------------------------------------------------------------------------

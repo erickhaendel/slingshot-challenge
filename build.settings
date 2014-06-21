@@ -3,7 +3,7 @@ settings =
     orientation =
     {
         default = "landscapeRight",
-        supported =  { "landscapeLeft", "landscapeRight" },
+        supported = { "landscapeLeft", "landscapeRight" },
     },
     android =
     {
