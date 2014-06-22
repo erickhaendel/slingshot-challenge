@@ -156,12 +156,22 @@ function removeBandLine( )
 	end
 end
 
-function newTrajectory(x,y)
+function newTrajectory(x,y,r,g,b)
 	local myCircle = display.newCircle( x, y, 5 )
-	myCircle:setFillColor( 0.2 )
-	myCircle:setStrokeColor( 0, 1, 0 )	
+	myCircle:setFillColor(r, g, b) 
+	--myCircle:setStrokeColor(140, 140, 140) 
+	--myCircle.strokeWidth = 5
+	--myCircle:setStrokeColor( .255, .0, .0 )	
 
 	assetsGroup:insert( myCircle )
 
 	return myCircle
 end
+
+function newTargetTile(x,y)
+	local target = display.newImage('resources/images/objects/target.png')
+	target.x = x
+	target.y = y
+
+	return target
+end	

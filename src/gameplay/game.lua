@@ -44,8 +44,13 @@ local hit = 0
 -- contador de pontos da trajetoria
 local circle_id = 1
 local trajetory = {}
-local projectile_wall_flag = 0
 
+-- flag mira
+local cronometro_inicio = 0
+local cronometro_ligado = 1
+
+local s_circle_id = 1
+local s_trajetory = {}
 
 ----------------------------------------------
 -- METHODS
@@ -62,7 +67,7 @@ function createGameplayScenario()
 	houseTile = assetsTile.newHouseTile()
 
 	-- carrega a parede no cenario
-	walltiles =assetsTile.newWallTile();
+	walltiles = assetsTile.newWallTile();
 
 	-- carrega as latas em cima da parede
 	can_tiles1, can_tiles2 = assetsTile.newCanTile()
@@ -92,6 +97,52 @@ function spawnProjectile()
 	end
 end
 
+local lastTargettile
+function previsaoColisao(t)
+
+	local ps = projectile.newSpecialProjectile(t.x,t.y)
+	ps:localToContent( t.x,t.y )
+	ps.isVisible = false	
+
+	local s_scale = 1.1
+
+	-- Launch projectile
+	ps.bodyType = "dynamic";
+	--t:applyForce((display.contentCenterX - e.x)*force_multiplier, (_H - 160 - e.y)*force_multiplier, t.x, t.y);
+	ps:applyForce((slingshot.x - ps.x)*0.4*10, (slingshot.y - ps.y)*0.4*10, ps.x, ps.y);
+	ps.isFixedRotation = false;
+
+	-- Register to call t's timer method an infinite number of times
+	local timer1 = timer.performWithDelay( 1, function ( event )	
+	
+			-- remove a mira caso tenha lançado a pedra
+			if lastTargettile then
+				lastTargettile:removeSelf( );
+				lastTargettile = nil
+			end		
+
+			if s_scale > 0.6 then
+			
+				s_scale = s_scale - variation	
+
+				local vx, vy = ps:getLinearVelocity()
+				ps:setLinearVelocity(vx*0.94,vy*0.94)
+
+			else
+	    		timer.cancel( event.source ) 
+				ps.isFocus = true;
+				ps.isVisible = true	
+				ps.bodyType = "static";			
+				
+				ps:setLinearVelocity(0,0); -- Stop current physics motion, if any
+				ps.angularVelocity = 0;
+				lastTargettile = ps
+			end	
+		end
+	, 0 )
+
+end
+
 -- GAME STATE CHANGE FUNCTION
 function state:change(e)
 
@@ -105,11 +156,6 @@ function projectileTouchListener(e)
 
 	-- The current projectile on screen
 	local t = e.target;
-
-	--print( t.text )
-	--print( t.phase )
-	--print( t.type )
-	--print( t.target )
 
 	-- If the projectile is 'ready' to be used
 	if(t.ready) then
@@ -131,9 +177,9 @@ function projectileTouchListener(e)
 			local myLineBack = nil;
 		
 		elseif(t.isFocus) then -- If the target of the touch event is the focus...
-			
+
 			if(e.phase == "moved") then -- If the target of the touch event moves...
-				
+
 				-- If the band exists... refresh the drawing of the line on the stage.
 				assetsTile.removeBandLine( )
 
@@ -148,9 +194,25 @@ function projectileTouchListener(e)
 				-- Boundary for the projectile when grabbed	
 				-- evita que estique o elastico infinitamente	
 				t.x,t.y = gamelib.getBoundaryProjectile( e, t )
-			
+
+				if cronometro_ligado == 0 then				
+					cronometro_inicio = system.getTimer()
+					cronometro_ligado = 1
+				end
+
+				-- intervalo de um segundo para iniciar o calculo da mira
+				if system.getTimer() > cronometro_inicio + 1000 then
+					previsaoColisao(t)		
+					cronometro_ligado = 0	
+				end	
+
 			-- If the projectile touch event ends (player lets go)...
 			elseif(e.phase == "ended" or e.phase == "cancelled") then
+
+				if lastTargettile then
+					lastTargettile:removeSelf( );
+					lastTargettile = nil
+				end	
 
 				-- Remove projectile touch so player can't grab it back and re-use after firing.
 				projectiles_container:removeEventListener("touch", projectileTouchListener);
@@ -175,8 +237,11 @@ function projectileTouchListener(e)
 
 				Runtime:removeEventListener('enterFrame', update)	
 				
+				-- remove a trajetoria anterior
 				for i=1,#trajetory do
-					trajetory[i]:removeSelf( )
+					if trajetory[i] then
+						trajetory[i]:removeSelf( )
+					end
 				end
 				circle_id = 1
 
@@ -192,7 +257,7 @@ function projectileTouchListener(e)
 							t:setLinearVelocity(vx*0.94,vy*0.94)
 
 							-- exibe trajetoria
-							trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y)					
+							trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
 							circle_id = circle_id + 1								
 						end	
 

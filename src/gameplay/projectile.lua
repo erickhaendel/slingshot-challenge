@@ -39,3 +39,31 @@ function newProjectile()
 	return bullet;
 	
 end
+
+
+function newSpecialProjectile(x,y)
+
+	-- Bullet properties
+	local bun_bullet = {
+		name = "target",
+		type = "bullet",
+		density=0.15,
+		friction=0.2,
+		bounce=0.5,
+		size = 20,
+		rotation = 100
+	}
+
+	-- Init bullet
+	local bullet = display.newImage("resources/images/objects/ammo/" .. bun_bullet.name .. ".png");
+	-- Place bullet
+	bullet.x = x; bullet.y = y;
+	
+	physics.addBody(bullet, "static", {density=bun_bullet.density, friction=bun_bullet.friction, bounce=bun_bullet.bounce, radius=bun_bullet.size});
+	
+	bullet.linearDamping = 0.3;
+	bullet.angularDamping = 0.8;
+	bullet.isSensor = true;
+
+	return bullet;
+end
