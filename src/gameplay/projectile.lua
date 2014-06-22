@@ -5,9 +5,6 @@ module(..., package.seeall)
 state = {};
 -- Bullet starts off in-active
 ready = false;
--- Pass audio references
-shot = {};
-band_stretch = {};
 
 function newProjectile()
 

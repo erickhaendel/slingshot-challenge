@@ -10,79 +10,69 @@ local physics 		= require("physics");
 local projectile 	= require( "src.gameplay.projectile" )
 local skyanimation 	= require( "src.gameplay.sky" )
 local assetsTile 	= require( "src.gameplay.assets" )
+local gamelib 		= require( "src.gameplay.gamelib" )
 
 -------------------------------------------
 -- GROUPS
 -------------------------------------------
-local background, state
+local state
 
 state = display.newGroup();
 
-m = {}
-m.random = math.random;
-
--- fisica ligado
-physics.start();
-
--- Animacao do ceu
-skyanimation.start();
-
--- carrega a casa
-local houseTile = assetsTile.newHouseTile()
-
--- carrega a parede no cenario
-local walltiles =assetsTile.newWallTile();
-
--- carrega as latas em cima da parede
-local can_tiles1, can_tiles2 = assetsTile.newCanTile()
-
--- carrega o chao
-local grassTile = assetsTile.newGrassTile()
-
--- carrega a imagem do slingshot
-local slingshot = assetsTile.newSlingshotTile()
+-- objetos de cenario
+local houseTile, walltiles, can_tiles1, can_tiles2, grassTile, slingshot
 
 -- Variables setup
 local projectiles_container = nil;
 local force_multiplier = 10;
-local velocity = m.random(50,100);
 
--- Variables
+-- Variables - usado para calcular a escala da pedra lançada
 local scale = 1.1
 local variation = 0.03
 local stoneX = 0
 local stoneY = 0
 local stoneVar = 0.5
 local update = nil
-
 local state_value = nil;
 
--- Audio
-local gameplay_song = audio.loadStream( "resources/audio/songs/gameplay.wav" )
-local shot = audio.loadSound("resources/audio/effects/band-release.wav");
-local band_stretch = audio.loadSound("resources/audio/effects/stretch-1.wav");
-
-audio.stop( 1 )
-gameMusicChannel = audio.play( gameplay_song, { channel=1, loops=-1, fadein=5000 } )
-
-----------------------------------
--- SCENARIO
----------------------------------
-
--- Transfer variables to the projectile classes
-projectile.shot = shot;
-projectile.band_stretch = band_stretch;
 
 local slingshot_container = display.newGroup();
 
-local stone = nil
+-- flag de colisao
 local hit = 0
+
+-- contador de pontos da trajetoria
+local circle_id = 1
+local trajetory = {}
+local projectile_wall_flag = 0
+
 
 ----------------------------------------------
 -- METHODS
 ----------------------------------------------
 
-local  hitTestObjects, projectileTouchListener, spawnProjectile
+local  projectileTouchListener, spawnProjectile, createGameplayScenario
+
+function createGameplayScenario()
+
+	-- Animacao do ceu
+	skyanimation.start();
+
+	-- carrega a casa
+	houseTile = assetsTile.newHouseTile()
+
+	-- carrega a parede no cenario
+	walltiles =assetsTile.newWallTile();
+
+	-- carrega as latas em cima da parede
+	can_tiles1, can_tiles2 = assetsTile.newCanTile()
+
+	-- carrega o chao
+	grassTile = assetsTile.newGrassTile()
+
+	-- carrega a imagem do slingshot
+	slingshot = assetsTile.newSlingshotTile()
+end
 
 function spawnProjectile()
 	
@@ -104,30 +94,30 @@ end
 
 -- GAME STATE CHANGE FUNCTION
 function state:change(e)
+
 	if(e.state == "fire") then
 		-- You fired...
 		spawnProjectile(); -- new projectile please
 	end
 end
 
-function hitTestObjects(obj1, obj2)
-    local left = obj1.contentBounds.xMin <= obj2.contentBounds.xMin and obj1.contentBounds.xMax >= obj2.contentBounds.xMin
-    local right = obj1.contentBounds.xMin >= obj2.contentBounds.xMin and obj1.contentBounds.xMin <= obj2.contentBounds.xMax
-    local up = obj1.contentBounds.yMin <= obj2.contentBounds.yMin and obj1.contentBounds.yMax >= obj2.contentBounds.yMin
-    local down = obj1.contentBounds.yMin >= obj2.contentBounds.yMin and obj1.contentBounds.yMin <= obj2.contentBounds.yMax
-    return (left or right) and (up or down)
-end
-
 function projectileTouchListener(e)
 
 	-- The current projectile on screen
 	local t = e.target;
+
+	--print( t.text )
+	--print( t.phase )
+	--print( t.type )
+	--print( t.target )
+
 	-- If the projectile is 'ready' to be used
 	if(t.ready) then
-		
+
 		if(e.phase == "began") then -- if the touch event has started...
 
-			audio.play(band_stretch); -- Play the band stretch
+			-- Play the band stretch
+			gamelib.playBandStretch()
 			
 			display.getCurrentStage():setFocus( t ); -- Set the stage focus to the touched projectile
 			t.isFocus = true;
@@ -145,47 +135,9 @@ function projectileTouchListener(e)
 			if(e.phase == "moved") then -- If the target of the touch event moves...
 				
 				-- If the band exists... refresh the drawing of the line on the stage.
-				if(myLine) then
-					myLine.parent:remove(myLine); -- erase previous line
-					myLineBack.parent:remove(myLineBack); -- erase previous line
-					myLine = nil;
-					myLineBack = nil;
-				end
+				assetsTile.removeBandLine( )
 
-				local myLine_x2 = display.contentCenterX - 49
-				local myLine_y2 = _H - 180
-
-				local myLineBack_x2 = display.contentCenterX + 49
-				local myLineBack_y2 = _H - 180
-				
-				-- If the projectile is in the top left position
-				if(t.x < display.contentCenterX and t.y < _H - 165)then
-					myLineBack = display.newLine(t.x - 30, t.y, myLineBack_x2, myLineBack_y2);
-					myLine = display.newLine(t.x - 30, t.y, myLine_x2, myLine_y2);
-				-- If the projectile is in the top right position
-				elseif(t.x > display.contentCenterX and t.y < _H - 165)then
-					myLineBack = display.newLine(t.x + 10, t.y - 25,  myLineBack_x2, myLineBack_y2);
-					myLine = display.newLine(t.x + 10, t.y - 25,  myLine_x2, myLine_y2);
-				-- If the projectile is in the bottom left position
-				elseif(t.x < display.contentCenterX and t.y > _H - 165)then
-					myLineBack = display.newLine(t.x - 25, t.y + 20,  myLineBack_x2, myLineBack_y2);
-					myLine = display.newLine(t.x - 25, t.y + 20,  myLine_x2, myLine_y2);
-				-- If the projectile is in the bottom right position
-				elseif(t.x > display.contentCenterX and t.y > _H - 165)then
-					myLineBack = display.newLine(t.x - 15, t.y + 30,  myLineBack_x2, myLineBack_y2);
-					myLine = display.newLine(t.x - 15, t.y + 30,  myLine_x2, myLine_y2);
-				else
-				-- Default position (just in case).
-					myLineBack = display.newLine(t.x - 25, t.y, myLineBack_x2, myLineBack_y2);
-					myLine = display.newLine(t.x - 25, t.y,   myLine_x2, myLine_y2);
-				end
-				
-				-- Set the elastic band's visual attributes
-				myLineBack:setStrokeColor(255,255,255);
-				myLineBack.strokeWidth = 9;
-
-				myLine:setStrokeColor(255,255,255);
-				myLine.strokeWidth = 11;
+				myLineBack, myLine = assetsTile.newBandLine( t )
 				
 				-- Insert the components of the catapult into a group.
 				slingshot_container:insert(slingshot);
@@ -193,18 +145,9 @@ function projectileTouchListener(e)
 				slingshot_container:insert(t);
 				slingshot_container:insert(myLine);
 
-				-- Boundary for the projectile when grabbed			
-				local bounds = e.target.stageBounds;
-				bounds.xMin = 250
-				bounds.yMin = display.contentHeight - 5;
-				bounds.xMax = display.contentWidth -250;
-				bounds.yMax = display.contentHeight - 250;
-				
-				-- limita a corda do estilingue para não puxar infinitamente
-				if(e.y > bounds.yMax) then t.y = e.y; end	 -- limita na parte 		
-				if(e.x < bounds.xMax) then t.x = e.x; end	 -- limita a direita
-				if(e.y > bounds.yMin) then t.y = bounds.yMin; end -- limita na parte
-				if(e.x < bounds.xMin) then t.x = bounds.xMin; end -- limita a esquerda
+				-- Boundary for the projectile when grabbed	
+				-- evita que estique o elastico infinitamente	
+				t.x,t.y = gamelib.getBoundaryProjectile( e, t )
 			
 			-- If the projectile touch event ends (player lets go)...
 			elseif(e.phase == "ended" or e.phase == "cancelled") then
@@ -216,19 +159,15 @@ function projectileTouchListener(e)
 				t.isFocus = false;
 				
 				-- Play the release sound
-				audio.play(shot);
+				gamelib.playProjecttileShot()
 				
 				-- Remove the elastic band
-				if(myLine) then
-					myLine.parent:remove(myLine); -- erase previous line
-					myLineBack.parent:remove(myLineBack); -- erase previous line
-					myLine = nil;
-					myLineBack = nil;
-				end
+				assetsTile.removeBandLine( )
 				
 				-- Launch projectile
 				t.bodyType = "dynamic";
-				t:applyForce((display.contentCenterX - e.x)*force_multiplier, (_H - 160 - e.y)*force_multiplier, t.x, t.y);
+				--t:applyForce((display.contentCenterX - e.x)*force_multiplier, (_H - 160 - e.y)*force_multiplier, t.x, t.y);
+				t:applyForce((slingshot.x - t.x)*0.4*10, (slingshot.y - t.y)*0.4*10, t.x, t.y);
 				t:applyTorque( 100 )
 				t.isFixedRotation = false;
 				
@@ -236,7 +175,13 @@ function projectileTouchListener(e)
 
 				Runtime:removeEventListener('enterFrame', update)	
 				
+				for i=1,#trajetory do
+					trajetory[i]:removeSelf( )
+				end
+				circle_id = 1
+
 				scale = 1.1
+
 				update = function(e)
 
 						-- Scale Balls
@@ -245,24 +190,29 @@ function projectileTouchListener(e)
 							t.xScale = scale; t.yScale = scale
 							local vx, vy = t:getLinearVelocity()
 							t:setLinearVelocity(vx*0.94,vy*0.94)
+
+							-- exibe trajetoria
+							trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y)					
+							circle_id = circle_id + 1								
 						end	
 
 					if hit == 0 then
 						local M = 2; local N = 2;
 						for i=1,(M*N) do
-							if (hitTestObjects(t, can_tiles1["left"][i])) then
+							if (gamelib.hitTestObjects(t, can_tiles1["left"][i])) then
 								t.isSensor = false
 								walltiles[1]:toFront()								
 								physics.removeBody( walltiles[1] )							
 								hit = 1	
 							end						
-							if (hitTestObjects(t, can_tiles1["right"][i])) then
+							if (gamelib.hitTestObjects(t, can_tiles1["right"][i])) then
 								t.isSensor = false
 								walltiles[2]:toFront()
 								physics.removeBody( walltiles[2] )
 								hit = 1
 							end							
 						end
+			
 					end
 					
 				end				
@@ -289,19 +239,26 @@ function projectileTouchListener(e)
 
 end
 
-projectile.ready = true; -- Tell the projectile it's good to go!
-
-spawnProjectile(); -- Spawn the first projectile.
-
-state:addEventListener("change", state); -- Create listnener for state changes in the game
-
-
 ---------------------------------------------------------------------------------
 
 local scene = composer.newScene()
 
 function scene:create( event )
 	local sceneGroup = self.view
+
+	-- fisica ligado
+	physics.start();	
+
+	createGameplayScenario() -- carrega objetos do cenario
+
+	projectile.ready = true; -- Tell the projectile it's good to go!
+
+	spawnProjectile(); -- Spawn the first projectile.
+
+	state:addEventListener("change", state); -- Create listnener for state changes in the game
+
+	-- Inicia a musica do gameplay
+	gamelib.startBackgroundMusic( )
 end
 
 function scene:show( event )
