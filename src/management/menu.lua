@@ -29,12 +29,13 @@ function scene:create( event )
     -- Background & box  welcome
     local background = display.newImage( "resources/images/backgrounds/menu.png", display.contentCenterX , display.contentCenterY , true )
     -- Buttons
-    btnX = display.contentCenterX / 2  + display.contentCenterX + 100
+    btnX = display.contentCenterX / 2  
     btnY = ( display.contentCenterY  ) 
-    btnPlay     = display.newImage( "resources/images/buttons/play.png", display.contentCenterX / 2  , display.contentCenterY / 2  + display.contentCenterY , true  )
-    btnSettings = display.newImage( "resources/images/buttons/settings.png", btnX , btnY + 100, true  )
-    btnAbout    = display.newImage( "resources/images/buttons/about.png", btnX , btnY + 200, true  )
-    btnCredits  = display.newImage( "resources/images/buttons/credits.png", btnX , btnY + 300, true  )
+    btnPlay     = display.newImage( "resources/images/buttons/play.png", display.contentCenterX , display.contentCenterY - 100, true  )
+
+    btnAbout    = display.newImage( "resources/images/buttons/about.png", btnX - 100, btnY + 30, true  )
+    btnCredits  = display.newImage( "resources/images/buttons/credits.png", btnX + 20, btnY + 140, true  )
+    btnSettings = display.newImage( "resources/images/buttons/settings.png", btnX + 170, btnY + 280, true  )
 
     --Insert elements to scene
     sceneGroup:insert( background ) -- insert background to group
