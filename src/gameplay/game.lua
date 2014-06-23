@@ -154,7 +154,7 @@ function previsaoColisao(t)
 				lastTargettile = nil
 			end		
 
-			if s_scale > 0.6 then
+			if s_scale > 0.5 then
 			
 				s_scale = s_scale - variation	
 
@@ -234,7 +234,7 @@ function projectileTouchListener(e)
 				end
 
 				-- intervalo de um segundo para iniciar o calculo da mira
-				if system.getTimer() > cronometro_inicio + 125 then
+				if system.getTimer() > cronometro_inicio + 4 then
 					previsaoColisao(t)		
 					cronometro_ligado = 0	
 				end	
