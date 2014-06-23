@@ -8,7 +8,6 @@ local physics 		= require("physics");
 
 -- my libs
 local projectile 	= require( "src.gameplay.projectile" )
-local skyanimation 	= require( "src.gameplay.sky" )
 local assetsTile 	= require( "src.gameplay.assets" )
 local gamelib 		= require( "src.gameplay.gamelib" )
 
@@ -20,7 +19,7 @@ local state
 state = display.newGroup();
 
 -- objetos de cenario
-local houseTile, walltiles, can_tiles1, can_tiles2, grassTile, slingshot
+local houseTile, walltiles, can_tiles1, can_tiles2, grassTile, slingshot, labels
 
 -- Variables setup
 local projectiles_container = nil;
@@ -49,19 +48,40 @@ local trajetory = {}
 local cronometro_inicio = 0
 local cronometro_ligado = 1
 
-local s_circle_id = 1
-local s_trajetory = {}
+-- INFO PLAYER
+current_player = 1
 
 ----------------------------------------------
 -- METHODS
 ----------------------------------------------
 
-local  projectileTouchListener, spawnProjectile, createGameplayScenario
+local  projectileTouchListener, spawnProjectile, createGameplayScenario, moveCamera
+
+function moveCamera()
+
+	local p = current_player
+
+	local assetsGroup = assetsTile.getAssetsGroup()
+	local velocity = 4
+
+	-- Vai do cenario 1 para o 2
+	if p == 2 then
+		if (assetsGroup.x > -1450) then
+			assetsGroup.x = assetsGroup.x - velocity
+		end
+
+	-- vai do cenario 2 para o 1
+	elseif p == 1 then		
+		if (assetsGroup.x < 0) then
+			assetsGroup.x = assetsGroup.x + velocity
+		end
+	end
+end
 
 function createGameplayScenario()
 
 	-- Animacao do ceu
-	skyanimation.start();
+	skyTile = assetsTile.startSky();
 
 	-- carrega a casa
 	houseTile = assetsTile.newHouseTile()
@@ -77,6 +97,19 @@ function createGameplayScenario()
 
 	-- carrega a imagem do slingshot
 	slingshot = assetsTile.newSlingshotTile()
+
+	-- carrega as labels identificando os cenários
+	label1, label2 = assetsTile.newPlayerLabel()
+	timer.performWithDelay( 13500, function ( event )	
+		label1:removeSelf( );label1=nil;
+		label2:removeSelf( );label2=nil;
+		end)
+
+	if current_player == 1 then
+		assetsTile.setAssetsGroupPosition(display.contentCenterX - 2100, nil)
+	end
+
+	Runtime:addEventListener( "enterFrame", moveCamera )		
 end
 
 function spawnProjectile()
@@ -228,7 +261,7 @@ function projectileTouchListener(e)
 				
 				-- Launch projectile
 				t.bodyType = "dynamic";
-				--t:applyForce((display.contentCenterX - e.x)*force_multiplier, (_H - 160 - e.y)*force_multiplier, t.x, t.y);
+
 				t:applyForce((slingshot.x - t.x)*0.4*10, (slingshot.y - t.y)*0.4*10, t.x, t.y);
 				t:applyTorque( 100 )
 				t.isFixedRotation = false;
@@ -255,6 +288,14 @@ function projectileTouchListener(e)
 							t.xScale = scale; t.yScale = scale
 							local vx, vy = t:getLinearVelocity()
 							t:setLinearVelocity(vx*0.94,vy*0.94)
+
+							local nw, nh 
+							local myScaleX, myScaleY = scale, scale
+
+							nw = t.width*myScaleX*0.5;
+							nh = t.height*myScaleY*0.5;
+
+							physics.addBody( t, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )
 
 							-- exibe trajetoria
 							trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
@@ -324,6 +365,7 @@ function scene:create( event )
 
 	-- Inicia a musica do gameplay
 	gamelib.startBackgroundMusic( )
+
 end
 
 function scene:show( event )

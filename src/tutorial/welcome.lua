@@ -38,7 +38,7 @@ function scene:create( event )
     btnX = display.contentCenterX / 2 
     btnY = ( display.contentCenterY  + display.contentCenterY / 2 ) 
     
-    btnVisitor = display.newImage( "resources/images/buttons/visitor.png", btnX , btnY , true  )
+    btnVisitor = display.newImage( "resources/images/buttons/login.png", btnX , btnY , true  )
     btnSignup = display.newImage( "resources/images/buttons/signup.png", btnX + display.contentCenterX , btnY , true  )
 
 
