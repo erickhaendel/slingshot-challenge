@@ -39,7 +39,7 @@ function newWallTile(  )
 
 	local walls = {}
 
-	walls[1] = display.newImage('resources/images/objects/wall.png', display.contentCenterX - 320 , display.contentCenterY+10)	
+	walls[1] = display.newImage('resources/images/objects/wall.png', display.contentCenterX - 360 , display.contentCenterY+10)	
 	physics.addBody( walls[1], "static",{ density=882.0, friction=880.3, bounce=0.4 } )
 	assetsGroup:insert( walls[1] )		
 

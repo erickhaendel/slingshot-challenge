@@ -201,7 +201,7 @@ function projectileTouchListener(e)
 				end
 
 				-- intervalo de um segundo para iniciar o calculo da mira
-				if system.getTimer() > cronometro_inicio + 1000 then
+				if system.getTimer() > cronometro_inicio + 125 then
 					previsaoColisao(t)		
 					cronometro_ligado = 0	
 				end	
