@@ -10,6 +10,7 @@ local physics 		= require("physics");
 local projectile 	= require( "src.gameplay.projectile" )
 local assetsTile 	= require( "src.gameplay.assets" )
 local gamelib 		= require( "src.gameplay.gamelib" )
+local configuration = require( "src.gameplay.configuration" )
 
 -------------------------------------------
 -- GROUPS
@@ -19,7 +20,7 @@ local state
 state = display.newGroup();
 
 -- objetos de cenario
-local houseTile, walltiles, can_tiles1, can_tiles2, grassTile, slingshot, labels
+local houseTile, walltiles, can_tiles, grassTile, slingshot, labels
 
 -- Variables setup
 local projectiles_container = nil;
@@ -69,7 +70,8 @@ function createGameplayScenario()
 	walltiles = assetsTile.newWallTile();
 
 	-- carrega as latas em cima da parede
-	can_tiles1, can_tiles2 = assetsTile.newCanTile()
+	can_tiles = {};
+	can_tiles[1], can_tiles[2], can_tiles[3], can_tiles[4] = assetsTile.newCanTile()
 
 	-- carrega o chao
 	grassTile = assetsTile.newGrassTile()
@@ -99,7 +101,7 @@ function moveCamera()
 	local p = current_player
 
 	local assetsGroup = assetsTile.getAssetsGroup()
-	local velocity = 4
+	local velocity = configuration.camera_velocity
 
 	-- Vai do cenario 1 para o 2
 	if p == 2 then
@@ -144,7 +146,6 @@ function previsaoColisao(t)
 
 	-- Launch projectile
 	ps.bodyType = "dynamic";
-	--t:applyForce((display.contentCenterX - e.x)*force_multiplier, (_H - 160 - e.y)*force_multiplier, t.x, t.y);
 	ps:applyForce((slingshot.x - ps.x)*0.4*10, (slingshot.y - ps.y)*0.4*10, ps.x, ps.y);
 	ps.isFixedRotation = false;
 
@@ -217,8 +218,8 @@ local function new_projectile_animation(t)
 		physics.addBody( t, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )
 
 		-- exibe trajetoria
-		trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
-		circle_id = circle_id + 1								
+		--trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
+		--circle_id = circle_id + 1								
 	end	
 end
 
@@ -251,29 +252,35 @@ end
 local function can_collision_proccess(t)
 
 	local M = 2; local N = 2;	
-	local side = nil				
+
+	local side = nil	
+
 	if hit == 0 then
-		for i=1,(M*N) do
-			if (gamelib.hitTestObjects(t, can_tiles1["left"][i])) then
-				-- Play the hit can
-				gamelib.playHitCan()
+		for i = 1, N do
+			for j = 1, M do
+				print( can_tiles[1][M * (i-1) + j] )
+				if (gamelib.hitTestObjects( t, can_tiles[1][M * (i-1) + j]) ) then
+					-- Play the hit can
+					gamelib.playHitCan()
 
-				t.isSensor = false
-				--walltiles[1]:toFront()								
-				physics.removeBody( walltiles[1] )							
-				hit = 1
-				side = "left"
-			end						
-			if (gamelib.hitTestObjects(t, can_tiles1["right"][i])) then
-				-- Play the hit can
-				gamelib.playHitCan()
+					t.isSensor = false
+					--walltiles[1]:toFront()								
+					physics.removeBody( walltiles[1] )							
+					hit = 1
+					side = "left"
+				end
 
-				t.isSensor = false
-				--walltiles[2]:toFront()
-				physics.removeBody( walltiles[2] )
-				hit = 1
-				side = "right"
-			end							
+				if (gamelib.hitTestObjects( t, can_tiles[2][M * (i-1) + j]) ) then
+					-- Play the hit can
+					gamelib.playHitCan()
+
+					t.isSensor = false
+					--walltiles[2]:toFront()
+					physics.removeBody( walltiles[2] )
+					hit = 1
+					side = "right"
+				end							
+			end
 		end
 	end
 
@@ -285,7 +292,7 @@ local function can_collision_proccess(t)
 			for i = 1, N do
 				for j = 1, M do
 
-					local current_can = can_tiles1["left"][M*(i-1) + j]	
+					local current_can = can_tiles[1][M*(i-1) + j]	
 
 					local px = display.contentCenterX - 450 + (i*48)
 					local py = display.contentCenterY + 400 - (j*80)
@@ -300,7 +307,7 @@ local function can_collision_proccess(t)
 			for i = 1, N do
 				for j = 1, M do
 
-					local current_can = can_tiles1["right"][M*(i-1) + j]	
+					local current_can = can_tiles[2][M*(i-1) + j]	
 
 					local px = display.contentCenterX + 400 + (i*48)
 					local py = display.contentCenterY + 400 - (j*80)

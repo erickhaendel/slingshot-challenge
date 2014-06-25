@@ -1,6 +1,8 @@
 
 module(..., package.seeall)
 
+local configuration = require( "src.gameplay.configuration" )
+
 -- Pass state reference
 state = {};
 -- Bullet starts off in-active
@@ -25,7 +27,7 @@ function newProjectile()
 	-- Init bullet
 	local bullet = display.newImage("resources/images/objects/ammo/" .. bun_bullet.name .. ".png");
 	-- Place bullet
-	bullet.x = display.contentCenterX; bullet.y = _H + 20;
+	bullet.x = configuration.stone_position_x; bullet.y = _H + 20;
 	-- Set up physical properties	
 	physics.addBody(bullet, "static", {density=bun_bullet.density, friction=bun_bullet.friction, bounce=bun_bullet.bounce, radius=bun_bullet.size});
 	
@@ -34,7 +36,7 @@ function newProjectile()
 	--bullet.isBullet = true;
 	bullet.isSensor = true;
 	-- Transition the bullet into position each time it's spawned	
-	transition.to(bullet, {time=600, y=_H - 180, transition = easingx.easeOutElastic});
+	transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 
 	return bullet;
 	

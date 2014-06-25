@@ -103,7 +103,7 @@ end
 function onBtnPlayEvent( event )
     removeAll()
     composer.removeScene('src.management.menu')
-    composer.gotoScene( "src.gameplay.game", "fade", 400)
+    composer.gotoScene( "src.management.multiplayer", "fade", 400)
     print( "lets play" )
 end
 

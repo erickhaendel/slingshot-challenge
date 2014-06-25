@@ -1,6 +1,8 @@
 
 module(..., package.seeall)
 
+local configuration = require( "src.gameplay.configuration" )
+
 local assetsGroup = display.newGroup();
 
 function getAssetsGroup()
@@ -19,9 +21,8 @@ end
 
 function newHouseTile()
 
-	local house = display.newImage( "resources/images/objects/house.png", true )
-	house.x = display.contentCenterX-540 
-	house.y = display.contentCenterY-280
+	local house = display.newImage( configuration.house_image_filename, true )
+	house.x = configuration.house_position_x; house.y = configuration.house_position_y
 	assetsGroup:insert( house )
 	return house
 end
@@ -34,17 +35,12 @@ function newGrassTile()
 
 	local grassTable = {}
 
-	grassTable[1] = display.newImage('resources/images/objects/grass.png')
-	grassTable[1].x = display.contentCenterX
-	grassTable[1].y = display.contentCenterY + 254
-	physics.addBody( grassTable[1], "static", { friction=0.5, bounce=0.3 } )
-	assetsGroup:insert( grassTable[1] )
-
-	grassTable[2] = display.newImage('resources/images/objects/grass.png')
-	grassTable[2].x = display.contentCenterX + 1439
-	grassTable[2].y = display.contentCenterY + 254
-	physics.addBody( grassTable[2], "static", { friction=0.5, bounce=0.3 } )
-	assetsGroup:insert( grassTable[2] )	
+	for i=1,2 do
+		grassTable[i] = display.newImage(configuration.grass_image_filename)
+		grassTable[i].x = configuration.grass_position_x[i]; grassTable[i].y = configuration.grass_position_y[i]
+		physics.addBody( grassTable[i], "static", grassBody )
+		assetsGroup:insert( grassTable[i] )
+	end
 
 	return grassTable
 end	
@@ -54,14 +50,9 @@ end
 ----------------------------------------------------------
 
 function newSlingshotTile()
-	local slingshot = display.newImage("resources/images/objects/slingshot.png",true);
-	slingshot.x = display.contentCenterX
-	slingshot.y = _H - 100;
+	local slingshot = display.newImage(configuration.slingshot_image_filename,true);
+	slingshot.x = configuration.slingshot_position_x[1]; slingshot.y = configuration.slingshot_position_y[1]
 	assetsGroup:insert( slingshot )
-
-	--local slingshot2 = display.newImage("resources/images/objects/slingshot.png",true);
-	--slingshot2.x = display.contentCenterX
-	--slingshot2.y = _H - 100;	
 
 	return slingshot
 end
@@ -74,22 +65,12 @@ function newWallTile(  )
 
 	local walls = {}
 
-	walls[1] = display.newImage('resources/images/objects/wall.png', display.contentCenterX - 360 , display.contentCenterY+10)	
-	physics.addBody( walls[1], "static",{ density=882.0, friction=880.3, bounce=0.4 } )
-	assetsGroup:insert( walls[1] )		
-
-	walls[2] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 360, display.contentCenterY+10)	
-	physics.addBody( walls[2], "static",{ density=882.0, friction=880.3, bounce=0.4 } )
-	assetsGroup:insert( walls[2] )	
-
-	walls[3] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 1080 , display.contentCenterY+10)	
-	physics.addBody( walls[3], "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
-	assetsGroup:insert( walls[3] )	
-
-	walls[4] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 1800, display.contentCenterY+10)	
-	physics.addBody( walls[4], "static",{ density=882.0, friction=880.3, bounce=0.4 } )
-	assetsGroup:insert( walls[4] )	
-
+	for i=1,4 do
+		walls[i] = display.newImage(configuration.wall_image_filename, configuration.wall_x[i] , configuration.wall_y[i] )	
+		physics.addBody( walls[i], "static", configuration.wallBody )
+		assetsGroup:insert( walls[i] )		
+	end
+	
 	return walls
 end
 
@@ -104,65 +85,46 @@ function newScoreCanTile(color, px, py)
 end
 
 function newCanTile()
-	
-	local yellowCanImageFile = "resources/images/objects/yellow-can.png"
-	local greenCanImageFile = "resources/images/objects/green-can.png"
-	local whiteCanImageFile = "resources/images/objects/white-can.png"
-	local blueCanImageFile = "resources/images/objects/blue-can.png"
-	local redCanImageFile = "resources/images/objects/red-can.png"
 				
-	local cans1 = {}
-	cans1["left"] = {}; cans1["right"] = {}
-
-	local cans2 = {}	
-	cans2["left"] = {}; cans2["right"] = {}
+	local cans = {}
+	cans[1] = {}; cans[2] = {}
+	cans[3] = {}; cans[4] = {}
 
 	local myScaleX, myScaleY = 0.5, 0.5
 	local M = 2 ; local N = 2
 
+	filename = {}
+	filename[1] = configuration.can_image_dir..configuration.player1_can; filename[4] = filename[1]
+	filename[2] = configuration.can_image_dir..configuration.player2_can; filename[3] = filename[2]
+
+	local current_can = {}
 	for i = 1, N do
 		for j = 1, M do
-			local nw, nh 
-			-- Player1 left
-			cans1["left"][M*(i-1) + j] = display.newImage( yellowCanImageFile, display.contentCenterX - 280 + (i*24), display.contentCenterY - 100 - (j*40) )
-			cans1["left"][M*(i-1) + j].xScale = 0.50; 
-			cans1["left"][M*(i-1) + j].yScale = 0.50;
-			nw = cans1["left"][M*(i-1) + j].width*myScaleX*0.5;
-			nh = cans1["left"][M*(i-1) + j].height*myScaleY*0.5;
-			physics.addBody( cans1["left"][M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )
-			assetsGroup:insert( cans1["left"][M*(i-1) + j] )			
+			local nw, nh 	
+			
+			for k=1,4 do
+				current_can[k] = cans[k][M * (i-1) + j]
+				current_can[k] = display.newImage( filename[k], configuration.cans_x[k] + (i*24), configuration.cans_y[k] - (j*40) )
 
-			-- Player1 right
-			cans1["right"][M*(i-1) + j] = display.newImage( greenCanImageFile, display.contentCenterX + 280 + (i*24), display.contentCenterY - 100 - (j*40) )		
-			cans1["right"][M*(i-1) + j].xScale = 0.50; 
-			cans1["right"][M*(i-1) + j].yScale = 0.50;
-			nw = cans1["right"][M*(i-1) + j].width*myScaleX*0.5;
-			nh = cans1["right"][M*(i-1) + j].height*myScaleY*0.5;
-			physics.addBody( cans1["right"][M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )	
-			assetsGroup:insert( cans1["right"][M*(i-1) + j] )
+				current_can[k].xScale = configuration.can_xScale
+				current_can[k].yScale = configuration.can_yScale
 
-			-- Player2 left
-			cans2["left"][M*(i-1) + j] = display.newImage( greenCanImageFile, display.contentCenterX + 1280 - 280 + (i*24), display.contentCenterY - 100 - (j*40) )
-			cans2["left"][M*(i-1) + j].xScale = 0.50; 
-			cans2["left"][M*(i-1) + j].yScale = 0.50;
-			nw = cans2["left"][M*(i-1) + j].width*myScaleX*0.5;
-			nh = cans2["left"][M*(i-1) + j].height*myScaleY*0.5;		
-			physics.addBody( cans2["left"][M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )	
-			assetsGroup:insert( cans2["left"][M*(i-1) + j] )
+				nw = current_can[k].width * myScaleX * 0.5
+				nh = current_can[k].height * myScaleY * 0.5
 
-			-- Player2 right
-			cans2["right"][M*(i-1) + j] = display.newImage( yellowCanImageFile, display.contentCenterX + 1280 + 280 + (i*24), display.contentCenterY - 100 - (j*40) )
-			cans2["right"][M*(i-1) + j].xScale = 0.50; 
-			cans2["right"][M*(i-1) + j].yScale = 0.50;
-			nw = cans2["right"][M*(i-1) + j].width*myScaleX*0.5;
-			nh = cans2["right"][M*(i-1) + j].height*myScaleY*0.5;			
-			physics.addBody( cans2["right"][M*(i-1) + j], { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )		
-			assetsGroup:insert( cans2["right"][M*(i-1) + j] )
+				local cansBody = { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}}
+
+				physics.addBody( current_can[k], cansBody )
+
+				cans[k][M * (i-1) + j] = current_can[k]
+				
+				assetsGroup:insert( current_can[k] )	
+			end
 
 		end
 	end
 
-	return cans1, cans2
+	return cans[1], cans[2], cans[3], cans[4]
 end
 
 ----------------------------------------------------------
@@ -171,11 +133,6 @@ end
 
 -- insere o elastico no cenario
 function newBandLine( t )
-	local myLine_x2 = display.contentCenterX - 49
-	local myLine_y2 = _H - 180
-
-	local myLineBack_x2 = display.contentCenterX + 49
-	local myLineBack_y2 = _H - 180	
 
 	-- Init the elastic band.
 	local myLine = nil;
@@ -183,24 +140,24 @@ function newBandLine( t )
 
 	-- If the projectile is in the top left position
 	if(t.x < display.contentCenterX and t.y < _H - 165)then
-		myLineBack = display.newLine(t.x - 30, t.y, myLineBack_x2, myLineBack_y2);
-		myLine = display.newLine(t.x - 30, t.y, myLine_x2, myLine_y2);
+		myLineBack = display.newLine(t.x - 30, t.y, configuration.myLineBack_x2, configuration.myLineBack_y2);
+		myLine = display.newLine(t.x - 30, t.y, configuration.myLine_x2, configuration.myLine_y2);
 	-- If the projectile is in the top right position
 	elseif(t.x > display.contentCenterX and t.y < _H - 165)then
-		myLineBack = display.newLine(t.x + 10, t.y - 25,  myLineBack_x2, myLineBack_y2);
-		myLine = display.newLine(t.x + 10, t.y - 25,  myLine_x2, myLine_y2);
+		myLineBack = display.newLine(t.x + 10, t.y - 25,  configuration.myLineBack_x2, configuration.myLineBack_y2);
+		myLine = display.newLine(t.x + 10, t.y - 25,  configuration.myLine_x2, configuration.myLine_y2);
 	-- If the projectile is in the bottom left position
 	elseif(t.x < display.contentCenterX and t.y > _H - 165)then
-		myLineBack = display.newLine(t.x - 25, t.y + 20,  myLineBack_x2, myLineBack_y2);
-		myLine = display.newLine(t.x - 25, t.y + 20,  myLine_x2, myLine_y2);
+		myLineBack = display.newLine(t.x - 25, t.y + 20,  configuration.myLineBack_x2, configuration.myLineBack_y2);
+		myLine = display.newLine(t.x - 25, t.y + 20,  configuration.myLine_x2, configuration.myLine_y2);
 	-- If the projectile is in the bottom right position
 	elseif(t.x > display.contentCenterX and t.y > _H - 165)then
-		myLineBack = display.newLine(t.x - 15, t.y + 30,  myLineBack_x2, myLineBack_y2);
-		myLine = display.newLine(t.x - 15, t.y + 30,  myLine_x2, myLine_y2);
+		myLineBack = display.newLine(t.x - 15, t.y + 30,  configuration.myLineBack_x2, configuration.myLineBack_y2);
+		myLine = display.newLine(t.x - 15, t.y + 30,  configuration.myLine_x2, configuration.myLine_y2);
 	else
 	-- Default position (just in case).
-		myLineBack = display.newLine(t.x - 25, t.y, myLineBack_x2, myLineBack_y2);
-		myLine = display.newLine(t.x - 25, t.y,   myLine_x2, myLine_y2);
+		myLineBack = display.newLine(t.x - 25, t.y, configuration.myLineBack_x2, configuration.myLineBack_y2);
+		myLine = display.newLine(t.x - 25, t.y,   configuration.myLine_x2, configuration.myLine_y2);
 	end
 
 	-- Set the elastic band's visual attributes
@@ -256,28 +213,17 @@ local function moveSky()
 	end
 end
 
---display.contentCenterX
+-- load the sky animation
 function startSky()
 
-	local sky = display.newImage( "resources/images/objects/sky.png", true )
-	skyGroup:insert( sky )
-	sky.x = display.contentCenterX - 1210
-	sky.y = display.contentCenterY-280
+	local skys = {}
 
-	local sky2 = display.newImage( "resources/images/objects/sky.png", true )
-	skyGroup:insert( sky2 )
-	sky2.x = display.contentCenterX + 70
-	sky2.y = display.contentCenterY-280
-
-	local sky3 = display.newImage( "resources/images/objects/sky.png", true )
-	skyGroup:insert( sky3 )
-	sky3.x = display.contentCenterX +1350
-	sky3.y = display.contentCenterY-280
-
-	local sky4 = display.newImage( "resources/images/objects/sky.png", true )
-	skyGroup:insert( sky4 )
-	sky4.x = display.contentCenterX + 2630
-	sky4.y = display.contentCenterY-280
+	for i=1,4 do
+		skys[i] = display.newImage( configuration.sky_image_filename, true )
+		skyGroup:insert( skys[i] )
+		skys[i].x = configuration.sky_x[i]
+		skys[i].y = configuration.sky_y[i]
+	end
 
 	Runtime:addEventListener( "enterFrame", moveSky )	
 
@@ -286,44 +232,31 @@ function startSky()
 	return skyGroup
 end
 
+-- 
 function newTitlePlayerLabel()
 
 	local labels = {}
 
-	labels[1] = display.newText( "Player 1", display.contentCenterX, display.contentCenterY-280, native.systemFont, 72 )
-	labels[1]:setFillColor( .82, .35 , .35 )
-	assetsGroup:insert( labels[1] )
-
-	labels[2] = display.newText( "Player 2", display.contentCenterX + 1400, display.contentCenterY-280, native.systemFont, 72 )
-	labels[2]:setFillColor( .82, .35 , .35 )
-	assetsGroup:insert( labels[2] )
+	for i=1,2 do
+		labels[i] = display.newText( "Player "..i, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
+		labels[i]:setFillColor( .82, .35 , .35 )
+		assetsGroup:insert( labels[i] )
+	end
 
 	return labels[1], labels[2]
 end
 
+-- 
 function newScorePlayerLabel()
 
 	local scoreLabels = {}
 
-	scoreLabels[1] = display.newText( "Player 1", display.contentCenterX - 575, display.contentCenterY + 375, native.systemFont, 30 )
-	scoreLabels[1]:setFillColor( 1, 1 , 1 )
-	assetsGroup:insert( scoreLabels[1] )
-	scoreLabels[1]:toFront( )
-
-	scoreLabels[2] = display.newText( "Player 2", display.contentCenterX + 430, display.contentCenterY + 375, native.systemFont, 30 )
-	scoreLabels[2]:setFillColor( 1, 1 , 1 )
-	assetsGroup:insert( scoreLabels[2] )
-	scoreLabels[2]:toFront( )
-
-	scoreLabels[3] = display.newText( "Player 2", display.contentCenterX + 865, display.contentCenterY + 375, native.systemFont, 30 )
-	scoreLabels[3]:setFillColor( 1, 1 , 1 )
-	assetsGroup:insert( scoreLabels[3] )
-	scoreLabels[3]:toFront( )
-
-	scoreLabels[4] = display.newText( "Player 1", display.contentCenterX + 1870, display.contentCenterY + 375, native.systemFont, 30 )
-	scoreLabels[4]:setFillColor( 1, 1 , 1 )
-	assetsGroup:insert( scoreLabels[4] )
-	scoreLabels[4]:toFront( )
+	for i=1,4 do
+		scoreLabels[i] = display.newText( "Player "..i, configuration.score_player_label_x[i], configuration.score_player_label_y[i], native.systemFont, 30 )
+		scoreLabels[i]:setFillColor( 1, 1 , 1 )
+		assetsGroup:insert( scoreLabels[i] )
+		scoreLabels[i]:toFront( )
+	end
 
 	return scoreLabels[1], scoreLabels[2], scoreLabels[3], scoreLabels[4]
 end
