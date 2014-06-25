@@ -57,27 +57,6 @@ current_player = 1
 
 local  projectileTouchListener, spawnProjectile, createGameplayScenario, moveCamera
 
-function moveCamera()
-
-	local p = current_player
-
-	local assetsGroup = assetsTile.getAssetsGroup()
-	local velocity = 4
-
-	-- Vai do cenario 1 para o 2
-	if p == 2 then
-		if (assetsGroup.x > -1450) then
-			assetsGroup.x = assetsGroup.x - velocity
-		end
-
-	-- vai do cenario 2 para o 1
-	elseif p == 1 then		
-		if (assetsGroup.x < 0) then
-			assetsGroup.x = assetsGroup.x + velocity
-		end
-	end
-end
-
 function createGameplayScenario()
 
 	-- Animacao do ceu
@@ -110,6 +89,27 @@ function createGameplayScenario()
 	end
 
 	Runtime:addEventListener( "enterFrame", moveCamera )		
+end
+
+function moveCamera()
+
+	local p = current_player
+
+	local assetsGroup = assetsTile.getAssetsGroup()
+	local velocity = 4
+
+	-- Vai do cenario 1 para o 2
+	if p == 2 then
+		if (assetsGroup.x > -1450) then
+			assetsGroup.x = assetsGroup.x - velocity
+		end
+
+	-- vai do cenario 2 para o 1
+	elseif p == 1 then		
+		if (assetsGroup.x < 0) then
+			assetsGroup.x = assetsGroup.x + velocity
+		end
+	end
 end
 
 function spawnProjectile()
@@ -183,6 +183,123 @@ function state:change(e)
 		-- You fired...
 		spawnProjectile(); -- new projectile please
 	end
+end
+
+local function remove_projectile_animation()
+	-- remove a trajetoria anterior
+	for i=1,#trajetory do
+		if trajetory[i] then
+			trajetory[i]:removeSelf( )
+		end
+	end
+
+	circle_id = 1
+	scale = 1.1
+end
+
+local function new_projectile_animation(t)
+	-- Scale Balls
+	if scale > 0 then
+		scale = scale - variation	
+		t.xScale = scale; t.yScale = scale
+		local vx, vy = t:getLinearVelocity()
+		t:setLinearVelocity(vx*0.94,vy*0.94)
+
+		local nw, nh 
+		local myScaleX, myScaleY = scale, scale
+
+		nw = t.width*myScaleX*0.5;
+		nh = t.height*myScaleY*0.5;
+
+		physics.addBody( t, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )
+
+		-- exibe trajetoria
+		trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
+		circle_id = circle_id + 1								
+	end	
+end
+
+local function score_animation(current_can,px,py)
+
+	timer.performWithDelay(1000, function(e)	
+			current_can:toFront()	
+			current_can.isFocus = true;
+			current_can.bodyType = "static";			
+			current_can:setLinearVelocity(0,0); -- Stop current physics motion, if any
+			current_can.angularVelocity = 0;
+			local MAX = 6		
+			for i=1,MAX do
+				transition.to(current_can, {time=500, x = ((current_can.x + px)/2), y = ((current_can.y + py)/2), transition=easingx._easeOutElastic})
+				current_can.xScale = current_can.xScale + current_can.xScale * 0.1
+				current_can.yScale = current_can.yScale + current_can.yScale * 0.1
+			end	
+			transition.to(current_can, {time=500, x = px, y = py, transition=easingx._easeOutElastic})
+			timer.performWithDelay(650, function(e) current_can:removeSelf( ); end)
+		end
+	);
+end
+
+local function can_collision_proccess(t)
+
+	local M = 2; local N = 2;					
+	if hit == 0 then
+		for i=1,(M*N) do
+			if (gamelib.hitTestObjects(t, can_tiles1["left"][i])) then
+				-- Play the hit can
+				gamelib.playHitCan()
+
+				t.isSensor = false
+				--walltiles[1]:toFront()								
+				physics.removeBody( walltiles[1] )							
+				hit = 1
+				side = "left"
+			end						
+			if (gamelib.hitTestObjects(t, can_tiles1["right"][i])) then
+				-- Play the hit can
+				gamelib.playHitCan()
+
+				t.isSensor = false
+				--walltiles[2]:toFront()
+				physics.removeBody( walltiles[2] )
+				hit = 1
+				side = "right"
+			end							
+		end
+	end
+
+	-- atualiza a grade de score
+	if hit == 1 then
+		if side == "left" then
+			hit = 2
+			
+			for i = 1, N do
+				for j = 1, M do
+
+					local current_can = can_tiles1["left"][M*(i-1) + j]	
+
+					local px = display.contentCenterX - 450 + (i*48)
+					local py = display.contentCenterY + 400 - (j*80)
+
+					score_animation(current_can,px,py)
+				end							
+			end
+		end
+		if side == "right" then
+			hit = 2
+			
+			for i = 1, N do
+				for j = 1, M do
+
+					local current_can = can_tiles1["right"][M*(i-1) + j]	
+
+					local px = display.contentCenterX + 400 + (i*48)
+					local py = display.contentCenterY + 400 - (j*80)
+
+					score_animation(current_can,px,py)
+				end							
+			end
+		end						
+	end	
 end
 
 function projectileTouchListener(e)
@@ -266,61 +383,17 @@ function projectileTouchListener(e)
 				t:applyTorque( 100 )
 				t.isFixedRotation = false;
 				
-				-- atualiza o ponteiro para a pedra atual para obedecer a escala
-
 				Runtime:removeEventListener('enterFrame', update)	
 				
-				-- remove a trajetoria anterior
-				for i=1,#trajetory do
-					if trajetory[i] then
-						trajetory[i]:removeSelf( )
-					end
-				end
-				circle_id = 1
-
-				scale = 1.1
+				-- remove a animacao da trajetoria da pedra anterior
+				remove_projectile_animation()
 
 				update = function(e)
+					-- diminui a escala da pedra e traça sua trajetoria
+					new_projectile_animation(t)
 
-						-- Scale Balls
-						if scale > 0 then
-							scale = scale - variation	
-							t.xScale = scale; t.yScale = scale
-							local vx, vy = t:getLinearVelocity()
-							t:setLinearVelocity(vx*0.94,vy*0.94)
-
-							local nw, nh 
-							local myScaleX, myScaleY = scale, scale
-
-							nw = t.width*myScaleX*0.5;
-							nh = t.height*myScaleY*0.5;
-
-							physics.addBody( t, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )
-
-							-- exibe trajetoria
-							trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
-							circle_id = circle_id + 1								
-						end	
-
-					if hit == 0 then
-						local M = 2; local N = 2;
-						for i=1,(M*N) do
-							if (gamelib.hitTestObjects(t, can_tiles1["left"][i])) then
-								t.isSensor = false
-								walltiles[1]:toFront()								
-								physics.removeBody( walltiles[1] )							
-								hit = 1	
-							end						
-							if (gamelib.hitTestObjects(t, can_tiles1["right"][i])) then
-								t.isSensor = false
-								walltiles[2]:toFront()
-								physics.removeBody( walltiles[2] )
-								hit = 1
-							end							
-						end
-			
-					end
-					
+					-- monitora colisao com as latas
+					can_collision_proccess(t)					
 				end				
 
 				Runtime:addEventListener('enterFrame', update)
@@ -357,11 +430,12 @@ function scene:create( event )
 
 	createGameplayScenario() -- carrega objetos do cenario
 
-	projectile.ready = true; -- Tell the projectile it's good to go!
-
-	spawnProjectile(); -- Spawn the first projectile.
-
-	state:addEventListener("change", state); -- Create listnener for state changes in the game
+	-- carrega a imagem do slingshot
+	timer.performWithDelay(12000, function ( event )	
+		projectile.ready = true; -- Tell the projectile it's good to go!
+		state:addEventListener("change", state); -- Create listnener for state changes in the game
+		spawnProjectile(); -- Spawn the first projectile.
+		end)
 
 	-- Inicia a musica do gameplay
 	gamelib.startBackgroundMusic( )

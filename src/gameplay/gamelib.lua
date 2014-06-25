@@ -21,6 +21,12 @@ function playProjecttileShot()
 	audio.play(shot);
 end
 
+-- som do elastico sendo esticado
+function playHitCan()
+	local shot = audio.loadSound("resources/audio/effects/tinhit.wav");
+	audio.play(shot);
+end
+
 -- verifica se houve colisao entre dois objetos
 function hitTestObjects(obj1, obj2)
     local left = obj1.contentBounds.xMin <= obj2.contentBounds.xMin and obj1.contentBounds.xMax >= obj2.contentBounds.xMin
@@ -47,3 +53,4 @@ function getBoundaryProjectile( e, t )
 
 	return t.x, t.y
 end
+

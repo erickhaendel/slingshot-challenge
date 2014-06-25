@@ -41,7 +41,7 @@ function newGrassTile()
 	assetsGroup:insert( grassTable[1] )
 
 	grassTable[2] = display.newImage('resources/images/objects/grass.png')
-	grassTable[2].x = display.contentCenterX + 1445
+	grassTable[2].x = display.contentCenterX + 1439
 	grassTable[2].y = display.contentCenterY + 254
 	physics.addBody( grassTable[2], "static", { friction=0.5, bounce=0.3 } )
 	assetsGroup:insert( grassTable[2] )	
@@ -82,11 +82,11 @@ function newWallTile(  )
 	physics.addBody( walls[2], "static",{ density=882.0, friction=880.3, bounce=0.4 } )
 	assetsGroup:insert( walls[2] )	
 
-	walls[3] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 1085 , display.contentCenterY+10)	
+	walls[3] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 1080 , display.contentCenterY+10)	
 	physics.addBody( walls[3], "static",{ density=882.0, friction=880.3, bounce=0.4 } )	
 	assetsGroup:insert( walls[3] )	
 
-	walls[4] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 1805, display.contentCenterY+10)	
+	walls[4] = display.newImage('resources/images/objects/wall.png', display.contentCenterX + 1800, display.contentCenterY+10)	
 	physics.addBody( walls[4], "static",{ density=882.0, friction=880.3, bounce=0.4 } )
 	assetsGroup:insert( walls[4] )	
 
