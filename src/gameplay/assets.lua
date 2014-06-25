@@ -96,6 +96,12 @@ end
 ----------------------------------------------------------
 -- CAN TILES											--
 ----------------------------------------------------------
+function newScoreCanTile(color, px, py)
+
+	local can = display.newImage( "resources/images/objects/"..color.."-can-score.png", px, py )
+	assetsGroup:insert( can )	
+	return can
+end
 
 function newCanTile()
 	
@@ -280,7 +286,7 @@ function startSky()
 	return skyGroup
 end
 
-function newPlayerLabel()
+function newTitlePlayerLabel()
 
 	local labels = {}
 
@@ -293,4 +299,31 @@ function newPlayerLabel()
 	assetsGroup:insert( labels[2] )
 
 	return labels[1], labels[2]
+end
+
+function newScorePlayerLabel()
+
+	local scoreLabels = {}
+
+	scoreLabels[1] = display.newText( "Player 1", display.contentCenterX - 575, display.contentCenterY + 375, native.systemFont, 30 )
+	scoreLabels[1]:setFillColor( 1, 1 , 1 )
+	assetsGroup:insert( scoreLabels[1] )
+	scoreLabels[1]:toFront( )
+
+	scoreLabels[2] = display.newText( "Player 2", display.contentCenterX + 430, display.contentCenterY + 375, native.systemFont, 30 )
+	scoreLabels[2]:setFillColor( 1, 1 , 1 )
+	assetsGroup:insert( scoreLabels[2] )
+	scoreLabels[2]:toFront( )
+
+	scoreLabels[3] = display.newText( "Player 2", display.contentCenterX + 865, display.contentCenterY + 375, native.systemFont, 30 )
+	scoreLabels[3]:setFillColor( 1, 1 , 1 )
+	assetsGroup:insert( scoreLabels[3] )
+	scoreLabels[3]:toFront( )
+
+	scoreLabels[4] = display.newText( "Player 1", display.contentCenterX + 1870, display.contentCenterY + 375, native.systemFont, 30 )
+	scoreLabels[4]:setFillColor( 1, 1 , 1 )
+	assetsGroup:insert( scoreLabels[4] )
+	scoreLabels[4]:toFront( )
+
+	return scoreLabels[1], scoreLabels[2], scoreLabels[3], scoreLabels[4]
 end

@@ -78,11 +78,14 @@ function createGameplayScenario()
 	slingshot = assetsTile.newSlingshotTile()
 
 	-- carrega as labels identificando os cenários
-	label1, label2 = assetsTile.newPlayerLabel()
+	label1, label2 = assetsTile.newTitlePlayerLabel()
 	timer.performWithDelay( 13500, function ( event )	
 		label1:removeSelf( );label1=nil;
 		label2:removeSelf( );label2=nil;
 		end)
+
+	-- carrega as labels identificando os cenários
+	scoreLabel1, scoreLabel2 = assetsTile.newScorePlayerLabel()
 
 	if current_player == 1 then
 		assetsTile.setAssetsGroupPosition(display.contentCenterX - 2100, nil)
@@ -234,14 +237,21 @@ local function score_animation(current_can,px,py)
 				current_can.yScale = current_can.yScale + current_can.yScale * 0.1
 			end	
 			transition.to(current_can, {time=500, x = px, y = py, transition=easingx._easeOutElastic})
-			timer.performWithDelay(650, function(e) current_can:removeSelf( ); end)
+			timer.performWithDelay(650, function(e) 
+				current_can:removeSelf( ); 
+				-- tela 01
+				assetsTile.newScoreCanTile("green", display.contentCenterX + 360, display.contentCenterY + 250)
+				-- tela 02
+				assetsTile.newScoreCanTile("green", display.contentCenterX + 960, display.contentCenterY + 250)					
+				end)		
 		end
 	);
 end
 
 local function can_collision_proccess(t)
 
-	local M = 2; local N = 2;					
+	local M = 2; local N = 2;	
+	local side = nil				
 	if hit == 0 then
 		for i=1,(M*N) do
 			if (gamelib.hitTestObjects(t, can_tiles1["left"][i])) then
