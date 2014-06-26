@@ -208,7 +208,7 @@ local function new_projectile_animation(t)
 
 		physics.addBody( t, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )
 
-		-- exibe trajetoria
+		-- exibe trajetoria 
 		--trajetory[circle_id] = assetsTile.newTrajectory(t.x,t.y,.255,.0,.0)					
 		--circle_id = circle_id + 1								
 	end	
@@ -255,7 +255,7 @@ local function can_collision_proccess(t)
 					gamelib.playHitCan()
 
 					t.isSensor = false
-					--walltiles[1]:toFront()								
+					walltiles[1]:toFront()								
 					physics.removeBody( walltiles[1] )							
 					hit = 1
 					side = "left"
@@ -266,7 +266,7 @@ local function can_collision_proccess(t)
 					gamelib.playHitCan()
 
 					t.isSensor = false
-					--walltiles[2]:toFront()
+					walltiles[2]:toFront()
 					physics.removeBody( walltiles[2] )
 					hit = 1
 					side = "right"
@@ -288,7 +288,7 @@ local function can_collision_proccess(t)
 					local px = display.contentCenterX - 450 + (i*48)
 					local py = display.contentCenterY + 400 - (j*80)
 
-					score_animation(current_can,px,py)
+					--score_animation(current_can,px,py)
 				end							
 			end
 		end
@@ -303,7 +303,7 @@ local function can_collision_proccess(t)
 					local px = display.contentCenterX + 400 + (i*48)
 					local py = display.contentCenterY + 400 - (j*80)
 
-					score_animation(current_can,px,py)
+					--score_animation(current_can,px,py)
 				end							
 			end
 		end						
@@ -359,10 +359,10 @@ function projectileTouchListener(e)
 				end
 
 				-- intervalo de um segundo para iniciar o calculo da mira
-				if system.getTimer() > cronometro_inicio + 4 then
-					previsaoColisao(t)		
-					cronometro_ligado = 0	
-				end	
+--				if system.getTimer() > cronometro_inicio + 4 then
+--					previsaoColisao(t)		
+--					cronometro_ligado = 0	
+--				end	
 
 			-- If the projectile touch event ends (player lets go)...
 			elseif(e.phase == "ended" or e.phase == "cancelled") then
@@ -387,17 +387,22 @@ function projectileTouchListener(e)
 				-- Launch projectile
 				t.bodyType = "dynamic";
 
-				t:applyForce((slingshot.x - t.x)*0.4*configuration.projecttile_force_multiplier, (slingshot.y - t.y)*0.4*configuration.projecttile_force_multiplier, t.x, t.y);
+				--
+				t:applyForce((display.contentCenterX - e.x)*configuration.projecttile_force_multiplier, (slingshot.y - e.y)*configuration.projecttile_force_multiplier, t.x, t.y);				
+				--t:applyForce((slingshot.x - t.x)*0.4*configuration.projecttile_force_multiplier, (slingshot.y - t.y)*0.4*configuration.projecttile_force_multiplier, t.x, t.y);
 				t:applyTorque( configuration.projecttile_torque )
 				t.isFixedRotation = false;
 				
 				Runtime:removeEventListener('enterFrame', update)	
 				
 				-- remove a animacao da trajetoria da pedra anterior
-				remove_projectile_animation()
+				--remove_projectile_animation()
+
+				configuration.projecttile_scale = 1.1
 
 				update = function(e)
 					-- diminui a escala da pedra e traça sua trajetoria
+
 					new_projectile_animation(t)
 
 					-- monitora colisao com as latas
