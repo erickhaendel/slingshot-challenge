@@ -8,8 +8,18 @@ _W = display.contentWidth;
 _H = display.contentHeight;
 
 -- ANIMATION CONFIG
-camera_velocity = 4
+camera_velocity = 10
+time_hide_title_player_label = 64000 / camera_velocity
+time_delay_toshow_slingshot = 48000 / camera_velocity
 
+time_cantile_animation_delay = 1000
+time_cantile_transition_delay = 500
+
+-- Projecttile
+projecttile_torque = 100
+projecttile_scale = 1.1
+projecttile_variation = 0.03
+projecttile_force_multiplier = 10
 -----------------------
 -- ASSETS
 -----------------------

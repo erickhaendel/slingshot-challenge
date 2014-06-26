@@ -24,17 +24,8 @@ local houseTile, walltiles, can_tiles, grassTile, slingshot, labels
 
 -- Variables setup
 local projectiles_container = nil;
-local force_multiplier = 10;
 
--- Variables - usado para calcular a escala da pedra lançada
-local scale = 1.1
-local variation = 0.03
-local stoneX = 0
-local stoneY = 0
-local stoneVar = 0.5
 local update = nil
-local state_value = nil;
-
 
 local slingshot_container = display.newGroup();
 
@@ -81,7 +72,7 @@ function createGameplayScenario()
 
 	-- carrega as labels identificando os cenários
 	label1, label2 = assetsTile.newTitlePlayerLabel()
-	timer.performWithDelay( 13500, function ( event )	
+	timer.performWithDelay( configuration.time_hide_title_player_label, function ( event )	
 		label1:removeSelf( );label1=nil;
 		label2:removeSelf( );label2=nil;
 		end)
@@ -160,7 +151,7 @@ function previsaoColisao(t)
 
 			if s_scale > 0.5 then
 			
-				s_scale = s_scale - variation	
+				s_scale = s_scale - configuration.projecttile_variation
 
 				local vx, vy = ps:getLinearVelocity()
 				ps:setLinearVelocity(vx*0.94,vy*0.94)
@@ -198,19 +189,19 @@ local function remove_projectile_animation()
 	end
 
 	circle_id = 1
-	scale = 1.1
+	configuration.projecttile_scale = 1.1
 end
 
 local function new_projectile_animation(t)
 	-- Scale Balls
-	if scale > 0 then
-		scale = scale - variation	
-		t.xScale = scale; t.yScale = scale
+	if configuration.projecttile_scale > 0 then
+		configuration.projecttile_scale = configuration.projecttile_scale - configuration.projecttile_variation	
+		t.xScale = configuration.projecttile_scale; t.yScale = configuration.projecttile_scale
 		local vx, vy = t:getLinearVelocity()
 		t:setLinearVelocity(vx*0.94,vy*0.94)
 
 		local nw, nh 
-		local myScaleX, myScaleY = scale, scale
+		local myScaleX, myScaleY = configuration.projecttile_scale, configuration.projecttile_scale
 
 		nw = t.width*myScaleX*0.5;
 		nh = t.height*myScaleY*0.5;
@@ -225,7 +216,7 @@ end
 
 local function score_animation(current_can,px,py)
 
-	timer.performWithDelay(1000, function(e)	
+	timer.performWithDelay(configuration.time_cantile_animation_delay, function(e)	
 			current_can:toFront()	
 			current_can.isFocus = true;
 			current_can.bodyType = "static";			
@@ -233,11 +224,11 @@ local function score_animation(current_can,px,py)
 			current_can.angularVelocity = 0;
 			local MAX = 6		
 			for i=1,MAX do
-				transition.to(current_can, {time=500, x = ((current_can.x + px)/2), y = ((current_can.y + py)/2), transition=easingx._easeOutElastic})
+				transition.to(current_can, {time=configuration.time_cantile_transition_delay, x = ((current_can.x + px)/2), y = ((current_can.y + py)/2), transition=easingx._easeOutElastic})
 				current_can.xScale = current_can.xScale + current_can.xScale * 0.1
 				current_can.yScale = current_can.yScale + current_can.yScale * 0.1
 			end	
-			transition.to(current_can, {time=500, x = px, y = py, transition=easingx._easeOutElastic})
+			transition.to(current_can, {time=configuration.time_cantile_transition_delay, x = px, y = py, transition=easingx._easeOutElastic})
 			timer.performWithDelay(650, function(e) 
 				current_can:removeSelf( ); 
 				-- tela 01
@@ -396,8 +387,8 @@ function projectileTouchListener(e)
 				-- Launch projectile
 				t.bodyType = "dynamic";
 
-				t:applyForce((slingshot.x - t.x)*0.4*10, (slingshot.y - t.y)*0.4*10, t.x, t.y);
-				t:applyTorque( 100 )
+				t:applyForce((slingshot.x - t.x)*0.4*configuration.projecttile_force_multiplier, (slingshot.y - t.y)*0.4*configuration.projecttile_force_multiplier, t.x, t.y);
+				t:applyTorque( configuration.projecttile_torque )
 				t.isFixedRotation = false;
 				
 				Runtime:removeEventListener('enterFrame', update)	
@@ -448,7 +439,7 @@ function scene:create( event )
 	createGameplayScenario() -- carrega objetos do cenario
 
 	-- carrega a imagem do slingshot
-	timer.performWithDelay(12000, function ( event )	
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 		projectile.ready = true; -- Tell the projectile it's good to go!
 		state:addEventListener("change", state); -- Create listnener for state changes in the game
 		spawnProjectile(); -- Spawn the first projectile.
