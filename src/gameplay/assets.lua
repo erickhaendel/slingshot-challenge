@@ -250,13 +250,78 @@ end
 function newScorePlayerLabel()
 
 	local scoreLabels = {}
-
+	local j = 1
 	for i=1,4 do
-		scoreLabels[i] = display.newText( "Player "..i, configuration.score_player_label_x[i], configuration.score_player_label_y[i], native.systemFont, 30 )
+		scoreLabels[i] = display.newText( "Player "..j.." >> 0", configuration.score_player_label_x[i], configuration.score_player_label_y[i], native.systemFont, 30 )
 		scoreLabels[i]:setFillColor( 1, 1 , 1 )
 		assetsGroup:insert( scoreLabels[i] )
 		scoreLabels[i]:toFront( )
+		if j == 2 then j = 1; else j = j + 1; end
 	end
 
 	return scoreLabels[1], scoreLabels[2], scoreLabels[3], scoreLabels[4]
+end
+
+-- cria todos os objetos de score dos scoreboards
+function new_scoreboard()
+
+	local score_cans = {}
+	score_cans[1] = {}; score_cans[2] = {}
+	score_cans[3] = {}; score_cans[4] = {}
+
+	filename = {}
+	filename[1] = configuration.can_image_dir..configuration.player1_score_can; filename[4] = filename[1]
+	filename[2] = configuration.can_image_dir..configuration.player2_score_can; filename[3] = filename[2]
+
+	-- define a inclinacao da matriz de latas
+	local offset_inclination_right = 50 -- se mudar a imagem de grass vai ter que ajustar esses valores
+	local offset_inclination_left = -27	-- se mudar a imagem de grass vai ter que ajustar esses valores
+
+	-- define a distancia entre as latas
+	local offset_between_cans_x = 60
+	local offset_between_cans_y = 40
+	local offset_proportional_vertical_distance1 = {} -- player 1
+	local offset_proportional_vertical_distance2 = {} -- player2
+
+	for i=1,4 do	
+		offset_proportional_vertical_distance1[i] = 1
+		offset_proportional_vertical_distance2[i] = 1		
+	end
+
+	local offset_can_scale = 1
+
+	local M = 4 ; local N = 5
+
+	for k = 1, 4 do	
+		for j = 1, M do
+			for i = 1, N do
+				-- fix the correct offset of the can on the scoreboard
+				local offset_inclination
+				local offset_p_v_d
+				if k % 2 == 0 then -- player 2
+					offset_inclination = offset_inclination_left; 
+					offset_p_v_d = offset_proportional_vertical_distance2[k]
+				else -- player 1
+					offset_inclination = offset_inclination_right; 
+					offset_p_v_d = offset_proportional_vertical_distance1[k]
+				end
+
+				-- load the can image
+				score_cans[k][M * (i-1) + j] = display.newImage( 
+					filename[k], 
+					configuration.score_cans_x[k] + (i*offset_between_cans_x*offset_p_v_d) + j*offset_inclination, 
+					configuration.score_cans_y[k] - (j*offset_between_cans_y*offset_p_v_d) )
+
+				score_cans[k][M * (i-1) + j].isVisible = false
+
+				-- insert the image in a group
+				assetsGroup:insert( score_cans[k][M * (i-1) + j] )	
+			end
+
+			offset_proportional_vertical_distance1[k] = offset_proportional_vertical_distance1[k] - 0.082
+			offset_proportional_vertical_distance2[k] = offset_proportional_vertical_distance2[k] - 0.088
+		end
+	end
+	
+	return score_cans[1], score_cans[2], score_cans[3], score_cans[4]
 end

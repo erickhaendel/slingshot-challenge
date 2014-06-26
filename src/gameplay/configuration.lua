@@ -2,13 +2,24 @@
 module(..., package.seeall)
 
 require( "src.infra.includeall" )
-local configuration = require( "src.gameplay.configuration" )
 
 _W = display.contentWidth;
 _H = display.contentHeight;
 
+-- PLAYERS
+game_score_player = {}
+game_score_player[1] = 0
+game_score_player[2] = 0
+game_turn = 1
+game_round = 0
+
+-- NETWORK
+port = 80
+player1_ip = "127.1.1.1"
+player2_ip = "127.1.1.1"
+
 -- ANIMATION CONFIG
-camera_velocity = 10
+camera_velocity = 12
 time_hide_title_player_label = 64000 / camera_velocity
 time_delay_toshow_slingshot = 48000 / camera_velocity
 
@@ -72,7 +83,6 @@ cans_x[1] = display.contentCenterX - 280
 cans_y[1] = display.contentCenterY - 100
 cans_x[2] = display.contentCenterX + 280
 cans_y[2] = display.contentCenterY - 100
-
 cans_x[3] = display.contentCenterX + 1080
 cans_y[3] = display.contentCenterY - 100
 cans_x[4] = display.contentCenterX + 1680
@@ -81,7 +91,19 @@ cans_y[4] = display.contentCenterY - 100
 can_image_dir = "resources/images/objects/"
 can_xScale = 0.50; can_yScale =can_xScale
 player1_can = "yellow-can.png"
-player2_can = "green-can.png"	
+player2_can = "green-can.png"
+
+score_cans_x = {}; score_cans_y = {}
+score_cans_x[1] = display.contentCenterX - 720 -- scoreboard 1 - tela 01
+score_cans_y[1] = display.contentCenterY + 367
+score_cans_x[2] = display.contentCenterX + 340 -- scoreboard 2 - tela 01
+score_cans_y[2] = display.contentCenterY + 367
+score_cans_x[3] = display.contentCenterX + 720 -- scoreboard 3 - tela 02
+score_cans_y[3] = display.contentCenterY + 367
+score_cans_x[4] = display.contentCenterX + 1780 -- scoreboard 4 - tela 02
+score_cans_y[4] = display.contentCenterY + 367
+player1_score_can = "yellow-can-score.png"
+player2_score_can = "green-can-score.png"	
 
 -- SKY
 sky_x = {}; sky_y = {}

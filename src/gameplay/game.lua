@@ -77,16 +77,23 @@ function createGameplayScenario()
 		label2:removeSelf( );label2=nil;
 		end)
 
-	-- carrega as labels identificando os cenários
-	scoreLabel1, scoreLabel2 = assetsTile.newScorePlayerLabel()
+	-- as latas de scores dos scoreboards
+	score_cans = {};	
+	score_cans[1], score_cans[2], score_cans[3], score_cans[4] = assetsTile.new_scoreboard()
+
+	-- carrega as labels identificando os scoreboards
+	scoreLabel = {}
+	scoreLabel[1], scoreLabel[2], scoreLabel[3], scoreLabel[4] = assetsTile.newScorePlayerLabel()
 
 	if current_player == 1 then
 		assetsTile.setAssetsGroupPosition(display.contentCenterX - 2100, nil)
 	end
 
-	Runtime:addEventListener( "enterFrame", moveCamera )		
+	Runtime:addEventListener( "enterFrame", moveCamera )	
+
 end
 
+-- animation between of thw two players screen
 function moveCamera()
 
 	local p = current_player
@@ -108,6 +115,7 @@ function moveCamera()
 	end
 end
 
+-- gera uma nova pedra
 function spawnProjectile()
 	
 	if(projectile.ready)then -- If there is a projectile available then...
@@ -126,6 +134,7 @@ function spawnProjectile()
 	end
 end
 
+-- nao esta sendo usado, pode ignorar nesse momento
 local lastTargettile
 function previsaoColisao(t)
 
@@ -180,6 +189,7 @@ function state:change(e)
 	end
 end
 
+-- nao esta sendo usado por enquanto, pode ignorar
 local function remove_projectile_animation()
 	-- remove a trajetoria anterior
 	for i=1,#trajetory do
@@ -192,6 +202,7 @@ local function remove_projectile_animation()
 	configuration.projecttile_scale = 1.1
 end
 
+-- processa a emulacao gráfica do eixo Z para dar impressão de profundidade
 local function new_projectile_animation(t)
 	-- Scale Balls
 	if configuration.projecttile_scale > 0 then
@@ -214,32 +225,26 @@ local function new_projectile_animation(t)
 	end	
 end
 
-local function score_animation(current_can,px,py)
+-- processa o score dos players e atualiza o scoreboard
+local function score_proccess(player)
 
-	timer.performWithDelay(configuration.time_cantile_animation_delay, function(e)	
-			current_can:toFront()	
-			current_can.isFocus = true;
-			current_can.bodyType = "static";			
-			current_can:setLinearVelocity(0,0); -- Stop current physics motion, if any
-			current_can.angularVelocity = 0;
-			local MAX = 6		
-			for i=1,MAX do
-				transition.to(current_can, {time=configuration.time_cantile_transition_delay, x = ((current_can.x + px)/2), y = ((current_can.y + py)/2), transition=easingx._easeOutElastic})
-				current_can.xScale = current_can.xScale + current_can.xScale * 0.1
-				current_can.yScale = current_can.yScale + current_can.yScale * 0.1
-			end	
-			transition.to(current_can, {time=configuration.time_cantile_transition_delay, x = px, y = py, transition=easingx._easeOutElastic})
-			timer.performWithDelay(650, function(e) 
-				current_can:removeSelf( ); 
-				-- tela 01
-				assetsTile.newScoreCanTile("green", display.contentCenterX + 360, display.contentCenterY + 250)
-				-- tela 02
-				assetsTile.newScoreCanTile("green", display.contentCenterX + 960, display.contentCenterY + 250)					
-				end)		
-		end
-	);
+	configuration.game_score_player[player] = configuration.game_score_player[player] + 4*player
+
+	for i=1,configuration.game_score_player[player] do
+		timer.performWithDelay(10+i*110, function(e)
+
+		score_cans[player][i].isVisible = true -- could index 1 or 2 - i did this to not write an if/else statemment
+		score_cans[5 - player][i].isVisible = true -- could be index 4 or 3		
+		scoreLabel[player].text = "Player "..player.." >> "..i -- could index 1 or 2 - i did this to not write an if/else statemment
+		scoreLabel[5 - player].text = "Player "..player.." >> "..i-- could be index 4 or 3							
+			
+		-- Play increasing score
+		gamelib.playIncreasingScore()							
+		end)
+	end
 end
 
+-- detecta colisao da pedra com com as latas e atualiza a gui
 local function can_collision_proccess(t)
 
 	local M = 2; local N = 2;	
@@ -258,10 +263,12 @@ local function can_collision_proccess(t)
 					walltiles[1]:toFront()								
 					physics.removeBody( walltiles[1] )							
 					hit = 1
-					side = "left"
-				end
+					side = 1
 
-				if (gamelib.hitTestObjects( t, can_tiles[2][M * (i-1) + j]) ) then
+					break; -- stop checking hit cans						
+				--end
+
+				elseif (gamelib.hitTestObjects( t, can_tiles[2][M * (i-1) + j]) ) then
 					-- Play the hit can
 					gamelib.playHitCan()
 
@@ -269,7 +276,9 @@ local function can_collision_proccess(t)
 					walltiles[2]:toFront()
 					physics.removeBody( walltiles[2] )
 					hit = 1
-					side = "right"
+					side = 2
+
+					break; -- stop checking hit cans									
 				end							
 			end
 		end
@@ -277,39 +286,12 @@ local function can_collision_proccess(t)
 
 	-- atualiza a grade de score
 	if hit == 1 then
-		if side == "left" then
-			hit = 2
-			
-			for i = 1, N do
-				for j = 1, M do
-
-					local current_can = can_tiles[1][M*(i-1) + j]	
-
-					local px = display.contentCenterX - 450 + (i*48)
-					local py = display.contentCenterY + 400 - (j*80)
-
-					--score_animation(current_can,px,py)
-				end							
-			end
-		end
-		if side == "right" then
-			hit = 2
-			
-			for i = 1, N do
-				for j = 1, M do
-
-					local current_can = can_tiles[2][M*(i-1) + j]	
-
-					local px = display.contentCenterX + 400 + (i*48)
-					local py = display.contentCenterY + 400 - (j*80)
-
-					--score_animation(current_can,px,py)
-				end							
-			end
-		end						
+		hit = 2		
+		score_proccess(side)					
 	end	
 end
 
+-- processa os eventos de toque do dedo em cima da pedra
 function projectileTouchListener(e)
 
 	-- The current projectile on screen
