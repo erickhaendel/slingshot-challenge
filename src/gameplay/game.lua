@@ -20,7 +20,7 @@ local state
 state = display.newGroup();
 
 -- objetos de cenario
-local houseTile, walltiles, can_tiles, grassTile, slingshot, labels
+local houseTile, walltiles, can_tiles, grassTile, slingshot, labels, roundLabel, score_cans
 
 -- Variables setup
 local projectiles_container = nil;
@@ -44,10 +44,39 @@ local cronometro_ligado = 1
 current_player = 1
 
 ----------------------------------------------
--- METHODS
+-- PROTOTYPE METHODS
 ----------------------------------------------
 
-local  projectileTouchListener, spawnProjectile, createGameplayScenario, moveCamera
+local projectileTouchListener, spawnProjectile, createGameplayScenario, moveCamera, can_collision_proccess
+local previsaoColisao, remove_projectile_animation, new_projectile_animation, score_proccess, next_round
+local removeGameplayScenario
+
+---------------------------------------------
+-- METHODS
+---------------------------------------------
+
+function removeGameplayScenario()
+
+	hit = 2
+
+	state:removeEventListener("change", state);	
+
+	assetsTile.removeSky( skyTile )
+
+	assetsTile.removeHouseTile(houseTile)
+
+	assetsTile.removeWallTiles( walltiles )
+
+	assetsTile.removeCanTiles(can_tiles)
+
+	assetsTile.removeGrassTile( grassTile )
+
+	if slingshot then slingshot:removeSelf( ); slingshot = nil; end
+
+	assetsTile.removeScoreboard(score_cans)
+
+	assetsTile.removeScoreLabels(scoreLabel)
+end
 
 function createGameplayScenario()
 
@@ -77,6 +106,17 @@ function createGameplayScenario()
 		label2:removeSelf( );label2=nil;
 		end)
 
+	roundLabel = {}
+	timer.performWithDelay( configuration.time_show_round_label, function ( event )	
+		
+		roundLabel[1], roundLabel[2] = assetsTile.newRoundLabel()
+
+		timer.performWithDelay( configuration.time_hide_round_label, function ( event )	
+				roundLabel[1]:removeSelf( );roundLabel[1] = nil;
+				roundLabel[2]:removeSelf( );roundLabel[2] = nil;
+			end)
+		end)
+
 	-- as latas de scores dos scoreboards
 	score_cans = {};	
 	score_cans[1], score_cans[2], score_cans[3], score_cans[4] = assetsTile.new_scoreboard()
@@ -87,7 +127,7 @@ function createGameplayScenario()
 
 	if current_player == 1 then
 		assetsTile.setAssetsGroupPosition(display.contentCenterX - 2100, nil)
-	end
+	end	
 
 	Runtime:addEventListener( "enterFrame", moveCamera )	
 
@@ -184,13 +224,17 @@ end
 function state:change(e)
 
 	if(e.state == "fire") then
-		-- You fired...
-		spawnProjectile(); -- new projectile please
+		
+		--
+		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
+				next_round()
+			end)
+
 	end
 end
 
 -- nao esta sendo usado por enquanto, pode ignorar
-local function remove_projectile_animation()
+function remove_projectile_animation()
 	-- remove a trajetoria anterior
 	for i=1,#trajetory do
 		if trajetory[i] then
@@ -203,7 +247,7 @@ local function remove_projectile_animation()
 end
 
 -- processa a emulacao gráfica do eixo Z para dar impressão de profundidade
-local function new_projectile_animation(t)
+function new_projectile_animation(t)
 	-- Scale Balls
 	if configuration.projecttile_scale > 0 then
 		configuration.projecttile_scale = configuration.projecttile_scale - configuration.projecttile_variation	
@@ -226,7 +270,7 @@ local function new_projectile_animation(t)
 end
 
 -- processa o score dos players e atualiza o scoreboard
-local function score_proccess(player)
+function score_proccess(player)
 
 	configuration.game_score_player[player] = configuration.game_score_player[player] + 4*player
 
@@ -245,7 +289,7 @@ local function score_proccess(player)
 end
 
 -- detecta colisao da pedra com com as latas e atualiza a gui
-local function can_collision_proccess(t)
+function can_collision_proccess(t)
 
 	local M = 2; local N = 2;	
 
@@ -254,7 +298,6 @@ local function can_collision_proccess(t)
 	if hit == 0 then
 		for i = 1, N do
 			for j = 1, M do
-				print( can_tiles[1][M * (i-1) + j] )
 				if (gamelib.hitTestObjects( t, can_tiles[1][M * (i-1) + j]) ) then
 					-- Play the hit can
 					gamelib.playHitCan()
@@ -289,6 +332,54 @@ local function can_collision_proccess(t)
 		hit = 2		
 		score_proccess(side)					
 	end	
+end
+
+-- prepare the gameplay to the next round
+function next_round()
+
+	if configuration.game_total_rounds > configuration.game_current_round then
+
+		-- next round
+		configuration.game_current_round = configuration.game_current_round + 1
+
+		-- collision detection mode on
+		hit = 0 
+
+		-- deal with scores
+		configuration.game_final_score_player[1] = configuration.game_score_player[1]
+		configuration.game_final_score_player[2] = configuration.game_score_player[2]
+		configuration.game_score_player[1] = 0
+		configuration.game_score_player[2] = 0	
+
+		-- reload scoreboards
+		score_cans = assetsTile.hidePointsScoreboards(score_cans)
+
+		-- adiciona fisica novamente ao muro para sustentar as novas latas
+		physics.addBody( walltiles[1], "static", configuration.wallBody )
+		physics.addBody( walltiles[2], "static", configuration.wallBody )
+
+		-- cria o label de novo round
+		roundLabel[1], roundLabel[2] = assetsTile.newRoundLabel()
+
+		-- remove as latas do round anterior
+		assetsTile.removeCanTiles(can_tiles)
+
+		-- cria novas latas
+		can_tiles[1], can_tiles[2], can_tiles[3], can_tiles[4] = assetsTile.newCanTile()
+
+		timer.performWithDelay( configuration.time_hide_round_label, function ( event )	
+				roundLabel[1]:removeSelf( );roundLabel[1] = nil;
+				roundLabel[2]:removeSelf( );roundLabel[2] = nil;
+			end)
+
+
+		spawnProjectile(); -- new projectile please		
+
+	else
+    	removeGameplayScenario()
+	    composer.removeScene('src.gameplay.game')
+	    composer.gotoScene( "src.gameplay.results", "fade", 400)
+	end
 end
 
 -- processa os eventos de toque do dedo em cima da pedra
@@ -427,9 +518,16 @@ function scene:create( event )
 
 	-- carrega a imagem do slingshot
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+
+		configuration.game_total_rounds = math.random( 1, configuration.game_max_allowed_rounds )
+		print( "Total de rounds a ser disputados: "..configuration.game_total_rounds )
+
 		projectile.ready = true; -- Tell the projectile it's good to go!
+
 		state:addEventListener("change", state); -- Create listnener for state changes in the game
+
 		spawnProjectile(); -- Spawn the first projectile.
+
 		end)
 
 	-- Inicia a musica do gameplay

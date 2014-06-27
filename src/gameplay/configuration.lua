@@ -7,11 +7,16 @@ _W = display.contentWidth;
 _H = display.contentHeight;
 
 -- PLAYERS
-game_score_player = {}
-game_score_player[1] = 0
-game_score_player[2] = 0
-game_turn = 1
-game_round = 0
+game_score_player = {}			-- READONLY
+game_score_player[1] = 0 		-- READONLY
+game_score_player[2] = 0 		-- READONLY
+game_final_score_player = {} 	-- READONLY
+game_final_score_player[1] = 0 	-- READONLY
+game_final_score_player[2] = 0 	-- READONLY
+game_turn = 1 					-- ???
+game_current_round = 1 			-- rodada atual - READONLY
+game_total_rounds = 1 		 	-- guarda o numero sorteado de rounds - READONLY
+game_max_allowed_rounds = 5 	-- numero maximo de rounds em um sorteio - READ/WRITE
 
 -- NETWORK
 port = 80
@@ -19,26 +24,29 @@ player1_ip = "127.1.1.1"
 player2_ip = "127.1.1.1"
 
 -- ANIMATION CONFIG
-camera_velocity = 12
-time_hide_title_player_label = 64000 / camera_velocity
-time_delay_toshow_slingshot = 48000 / camera_velocity
+camera_velocity = 12 									-- velocidade da animcao de transicao de tela
+time_hide_title_player_label = 64000 / camera_velocity	-- tempo de duracao de exibicao do nome player
+time_delay_toshow_slingshot = 72000 / camera_velocity   -- tempo de espera para que o estilingue fique pronto para uso
+time_show_round_label =  64000 / camera_velocity 		-- tempo de espera para que apareca o titulo do round atual
+time_hide_round_label = 2000							-- tempo de espera para ocultar o titulo de round atual
+time_start_next_round = 4000 							-- espera 5 segundos para iniciar a proxima rodada
 
-time_cantile_animation_delay = 1000
-time_cantile_transition_delay = 500
+time_cantile_animation_delay = 1000						-- 
+time_cantile_transition_delay = 500						--
 
 -- Projecttile
-projecttile_torque = 100
-projecttile_scale = 1.1
-projecttile_variation = 0.03
-projecttile_force_multiplier = 10
+projecttile_torque = 100 								-- força de rotacao da pedra
+projecttile_scale = 1.1 								-- escala da pedra
+projecttile_variation = 0.03 							-- variacao da escala da pedra ao ser lancada
+projecttile_force_multiplier = 10 						-- valor que multiplica a forca em cada eixo
 -----------------------
 -- ASSETS
 -----------------------
 
 -- HOUSE
-house_position_x = display.contentCenterX - 540 
-house_position_y = display.contentCenterY - 280
-house_image_filename = "resources/images/objects/house.png"
+house_position_x = display.contentCenterX - 540 				-- posicao do tile casa
+house_position_y = display.contentCenterY - 280 				-- poiscao do tile casa
+house_image_filename = "resources/images/objects/house.png"		-- nome de arquivo da imagem casa
 
 -- GRASS
 grass_position_x = {}

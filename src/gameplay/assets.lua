@@ -27,6 +27,11 @@ function newHouseTile()
 	return house
 end
 
+function removeHouseTile(house)
+	assetsGroup:remove(house)
+	house:removeSelf( ); house = nil
+end
+
 ----------------------------------------------------------
 -- GROUND TILES											--
 ----------------------------------------------------------
@@ -45,6 +50,14 @@ function newGrassTile()
 	return grassTable
 end	
 
+function removeGrassTile( grass )
+	
+	for i=1,2 do
+		assetsGroup:remove(grass[i])
+		grass[i]:removeSelf( ); grass[i] = nil
+	end
+end
+
 ----------------------------------------------------------
 -- SLINGSHOT TILES										--
 ----------------------------------------------------------
@@ -56,6 +69,7 @@ function newSlingshotTile()
 
 	return slingshot
 end
+
 
 ----------------------------------------------------------
 -- WALL TILES											--
@@ -72,6 +86,14 @@ function newWallTile(  )
 	end
 	
 	return walls
+end
+
+function removeWallTiles( walls )
+
+	for i=1,4 do
+		walls[i]:removeSelf( ); walls[i] = nil;
+		assetsGroup:remove(walls[i])
+	end
 end
 
 ----------------------------------------------------------
@@ -125,6 +147,22 @@ function newCanTile()
 	end
 
 	return cans[1], cans[2], cans[3], cans[4]
+end
+
+function removeCanTiles(cans)
+
+	local M = 2 ; local N = 2
+
+	for i = 1, N do
+		for j = 1, M do
+			for k=1,4 do
+				
+				assetsGroup:remove( cans[k][M * (i-1) + j] )
+
+ 				cans[k][M * (i-1) + j]:removeSelf( ); cans[k][M * (i-1) + j] = nil;
+			end
+		end
+	end
 end
 
 ----------------------------------------------------------
@@ -203,7 +241,7 @@ end
 -- SKY ANIMATION										--
 ----------------------------------------------------------
 -- Camera follows bolder automatically
-local skyGroup = display.newGroup();
+local skyGroup
 
 local function moveSky()
 	if (skyGroup.x > -960) then
@@ -218,6 +256,8 @@ function startSky()
 
 	local skys = {}
 
+	skyGroup = display.newGroup();
+
 	for i=1,4 do
 		skys[i] = display.newImage( configuration.sky_image_filename, true )
 		skyGroup:insert( skys[i] )
@@ -229,7 +269,18 @@ function startSky()
 
 	assetsGroup:insert( skyGroup )	
 
-	return skyGroup
+	return skys
+end
+
+function removeSky( sky )
+
+	assetsGroup:remove( skyGroup )
+
+	for i=1,4 do
+		sky[i]:removeSelf( ); sky[i] = nil
+	end
+
+	Runtime:removeEventListener( "enterFrame", moveSky )		
 end
 
 -- 
@@ -260,6 +311,12 @@ function newScorePlayerLabel()
 	end
 
 	return scoreLabels[1], scoreLabels[2], scoreLabels[3], scoreLabels[4]
+end
+
+function removeScoreLabels(score_labels)
+	for i=1,4 do
+		score_labels[i]:removeSelf( ); score_labels[i] = nil
+	end
 end
 
 -- cria todos os objetos de score dos scoreboards
@@ -324,4 +381,48 @@ function new_scoreboard()
 	end
 	
 	return score_cans[1], score_cans[2], score_cans[3], score_cans[4]
+end
+
+function removeScoreboard(score_cans)
+
+	local M = 4 ; local N = 5
+
+	for k = 1, 4 do	
+		for j = 1, M do
+			for i = 1, N do
+				score_cans[k][M * (i-1) + j]:removeSelf( ); score_cans[k][M * (i-1) + j] = nil
+			end
+		end
+	end
+end
+
+
+-- hide all scores from all scoreboards
+function hidePointsScoreboards(scores)
+
+	local M = 4 ; local N = 5
+
+	for k = 1, 4 do	
+		for j = 1, M do
+			for i = 1, N do
+				scores[k][M * (i-1) + j].isVisible = false
+			end
+		end
+	end
+
+	return scores
+end
+
+-- 
+function newRoundLabel()
+
+	local labels = {}
+
+	for i=1,2 do
+		labels[i] = display.newText( "Round "..configuration.game_current_round, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
+		labels[i]:setFillColor( .82, .35 , .35 )
+		assetsGroup:insert( labels[i] )
+	end
+
+	return labels[1], labels[2]
 end
