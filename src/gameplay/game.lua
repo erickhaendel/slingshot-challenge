@@ -3,9 +3,6 @@
 -------------------------------------------
 require( "src.infra.includeall" )
 
--- corona libs
-local physics 		= require("physics");
-
 -- my libs
 local projectile 	= require( "src.gameplay.projectile" )
 local assetsTile 	= require( "src.gameplay.assets" )
@@ -40,16 +37,13 @@ local trajetory = {}
 local cronometro_inicio = 0
 local cronometro_ligado = 1
 
--- INFO PLAYER
-current_player = 1
-
 ----------------------------------------------
 -- PROTOTYPE METHODS
 ----------------------------------------------
 
 local projectileTouchListener, spawnProjectile, createGameplayScenario, moveCamera, can_collision_proccess
 local previsaoColisao, remove_projectile_animation, new_projectile_animation, score_proccess, next_round
-local removeGameplayScenario
+local removeGameplayScenario, debug_gameplay, next_turn
 
 ---------------------------------------------
 -- METHODS
@@ -136,21 +130,29 @@ end
 -- animation between of thw two players screen
 function moveCamera()
 
-	local p = current_player
+	local p = configuration.game_current_player
 
 	local assetsGroup = assetsTile.getAssetsGroup()
 	local velocity = configuration.camera_velocity
+
+	slingshot.isVisible = false
 
 	-- Vai do cenario 1 para o 2
 	if p == 2 then
 		if (assetsGroup.x > -1450) then
 			assetsGroup.x = assetsGroup.x - velocity
+		else
+			slingshot.isVisible = true
+			spawnProjectile(); -- new projectile please		
 		end
 
 	-- vai do cenario 2 para o 1
 	elseif p == 1 then		
 		if (assetsGroup.x < 0) then
 			assetsGroup.x = assetsGroup.x + velocity
+		else
+			slingshot.isVisible = true
+			spawnProjectile(); -- new projectile please		
 		end
 	end
 end
@@ -227,7 +229,14 @@ function state:change(e)
 		
 		--
 		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
-				next_round()
+
+				if configuration.game_current_turn == 1 then
+					-- avança um turno
+					next_turn()
+				elseif configuration.game_current_turn == 2 then
+					-- avanca um round
+					next_round()
+				end
 			end)
 
 	end
@@ -335,9 +344,33 @@ function can_collision_proccess(t)
 end
 
 -- prepare the gameplay to the next round
+function next_turn()
+
+	if configuration.game_current_turn == 1 then 
+		configuration.game_current_turn = 2
+
+		-- change the current player
+		gamelib.changeCurrentPlayer()
+	end
+
+	-- collision detection mode on
+	hit = 0 
+
+	moveCamera()
+
+	debug_gameplay()	
+end
+
+-- prepare the gameplay to the next round
 function next_round()
 
 	if configuration.game_total_rounds > configuration.game_current_round then
+
+		-- reset turn
+		configuration.game_current_turn = 1
+
+		-- change the current player
+		gamelib.changeCurrentPlayer()
 
 		-- next round
 		configuration.game_current_round = configuration.game_current_round + 1
@@ -372,14 +405,15 @@ function next_round()
 				roundLabel[2]:removeSelf( );roundLabel[2] = nil;
 			end)
 
-
-		spawnProjectile(); -- new projectile please		
-
+		debug_gameplay()
 	else
+		
+		debug_gameplay()
+
     	removeGameplayScenario()
 	    composer.removeScene('src.gameplay.game')
 	    composer.gotoScene( "src.gameplay.results", "fade", 400)
-	end
+	end	
 end
 
 -- processa os eventos de toque do dedo em cima da pedra
@@ -520,7 +554,14 @@ function scene:create( event )
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
 		configuration.game_total_rounds = math.random( 1, configuration.game_max_allowed_rounds )
-		print( "Total de rounds a ser disputados: "..configuration.game_total_rounds )
+		
+		-- sempre inicia pelo primeiro turno, independente do jogador
+		configuration.game_current_turn = 1
+
+		-- escolher entre o jogador 1 ou 2 quem vai iniciar primeiro o jogo
+		configuration.game_current_player = math.random( 1, 2 )
+
+		debug_gameplay()
 
 		projectile.ready = true; -- Tell the projectile it's good to go!
 
@@ -533,6 +574,15 @@ function scene:create( event )
 	-- Inicia a musica do gameplay
 	gamelib.startBackgroundMusic( )
 
+end
+
+-- debug console
+function debug_gameplay()
+	print( "Current player: "..configuration.game_current_player )
+	print( "Current round: "..configuration.game_current_round )
+	print( "Player 1 Score: "..configuration.game_final_score_player[1])
+	print( "Player 2 Score: "..configuration.game_final_score_player[2])		
+	print( "Total de rounds a ser disputados: "..configuration.game_total_rounds )
 end
 
 function scene:show( event )

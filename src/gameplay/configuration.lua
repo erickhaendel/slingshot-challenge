@@ -7,16 +7,18 @@ _W = display.contentWidth;
 _H = display.contentHeight;
 
 -- PLAYERS
-game_score_player = {}			-- READONLY
-game_score_player[1] = 0 		-- READONLY
-game_score_player[2] = 0 		-- READONLY
-game_final_score_player = {} 	-- READONLY
-game_final_score_player[1] = 0 	-- READONLY
-game_final_score_player[2] = 0 	-- READONLY
-game_turn = 1 					-- ???
-game_current_round = 1 			-- rodada atual - READONLY
-game_total_rounds = 1 		 	-- guarda o numero sorteado de rounds - READONLY
-game_max_allowed_rounds = 5 	-- numero maximo de rounds em um sorteio - READ/WRITE
+game_score_player = {}			-- NAO_MODIFICAR_VALOR
+game_score_player[1] = 0 		-- NAO_MODIFICAR_VALOR
+game_score_player[2] = 0 		-- NAO_MODIFICAR_VALOR
+game_final_score_player = {} 	-- NAO_MODIFICAR_VALOR
+game_final_score_player[1] = 0 	-- NAO_MODIFICAR_VALOR
+game_final_score_player[2] = 0 	-- NAO_MODIFICAR_VALOR
+game_current_turn = 1 			-- 1 rodada possui dois turnos, um para cada player  - NAO_MODIFICAR_VALOR
+game_max_allowed_turns = 2 		-- numero maximo de turnos por rodada - PODE_MODIFICAR_VALOR
+game_current_player = 1 		-- identifica o jogador que esta jogando no momento  - NAO_MODIFICAR_VALOR
+game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
+game_total_rounds = 1 		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
+game_max_allowed_rounds = 5 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
 
 -- NETWORK
 port = 80

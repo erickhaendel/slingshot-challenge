@@ -1,6 +1,8 @@
 
 module(..., package.seeall)
 
+local configuration = require( "src.gameplay.configuration" )
+
 -- musica de fundo gameplay
 function startBackgroundMusic( )
 	local gameplay_song = audio.loadStream( "resources/audio/songs/gameplay.wav" )
@@ -60,3 +62,11 @@ function getBoundaryProjectile( e, t )
 	return t.x, t.y
 end
 
+function changeCurrentPlayer()
+		-- change the current player
+	if configuration.game_current_player == 1 then 
+		configuration.game_current_player = 2; 
+	else 
+		configuration.game_current_player = 1; 
+	end
+end

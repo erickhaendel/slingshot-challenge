@@ -14,7 +14,7 @@ local scene = composer.newScene()
 function scene:create( event )
 	local sceneGroup = self.view
 
-	background = display.newImageRect( "resources/images/backgrounds/results.png",  display.contentCenterX , display.contentCenterY   )
+	background = display.newImageRect( "resources/images/backgrounds/results.png",  display.contentCenterX , display.contentCenterY , true  )
 
 	btnMenu = display.newImage( "resources/images/buttons/back.png", display.contentCenterX , display.contentCenterY , true  )
 
