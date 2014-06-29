@@ -41,6 +41,11 @@ projecttile_torque = 100 								-- força de rotacao da pedra
 projecttile_scale = 1.1 								-- escala da pedra
 projecttile_variation = 0.03 							-- variacao da escala da pedra ao ser lancada
 projecttile_force_multiplier = 10 						-- valor que multiplica a forca em cada eixo
+
+-- PROJECT TILE TRAJECTORY
+local circle_id = 1 									-- contador de pontos da trajetoria
+local trajetory = {} 									-- contador de pontos da trajetoria
+
 -----------------------
 -- ASSETS
 -----------------------

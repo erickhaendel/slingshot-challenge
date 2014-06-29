@@ -70,3 +70,25 @@ function changeCurrentPlayer()
 		configuration.game_current_player = 1; 
 	end
 end
+
+-- debug console
+function debug_gameplay()
+	print( "Current player: "..configuration.game_current_player )
+	print( "Current round: "..configuration.game_current_round )
+	print( "Player 1 Score: "..configuration.game_final_score_player[1])
+	print( "Player 2 Score: "..configuration.game_final_score_player[2])		
+	print( "Total de rounds a ser disputados: "..configuration.game_total_rounds )
+end
+
+-- trajectory of project tile
+function remove_projectile_trajectory()
+	-- remove a trajetoria anterior
+	for i=1,#trajetory do
+		if trajetory[i] then
+			trajetory[i]:removeSelf( )
+		end
+	end
+
+	circle_id = 1
+	configuration.projecttile_scale = 1.1
+end

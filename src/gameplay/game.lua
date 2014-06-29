@@ -29,10 +29,6 @@ local slingshot_container = display.newGroup();
 -- flag de colisao
 local hit = 0
 
--- contador de pontos da trajetoria
-local circle_id = 1
-local trajetory = {}
-
 -- flag mira
 local cronometro_inicio = 0
 local cronometro_ligado = 1
@@ -43,7 +39,7 @@ local cronometro_ligado = 1
 
 local projectileTouchListener, spawnProjectile, createGameplayScenario, moveCamera, can_collision_proccess
 local previsaoColisao, remove_projectile_animation, new_projectile_animation, score_proccess, next_round
-local removeGameplayScenario, debug_gameplay, next_turn
+local removeGameplayScenario, next_turn
 
 ---------------------------------------------
 -- METHODS
@@ -123,12 +119,12 @@ function createGameplayScenario()
 		assetsTile.setAssetsGroupPosition(display.contentCenterX - 2100, nil)
 	end	
 
-	Runtime:addEventListener( "enterFrame", moveCamera )	
+	--Runtime:addEventListener( "enterFrame", moveCamera )	
 
 end
 
 -- animation between of thw two players screen
-function moveCamera()
+function moveCamera( )
 
 	local p = configuration.game_current_player
 
@@ -242,19 +238,6 @@ function state:change(e)
 	end
 end
 
--- nao esta sendo usado por enquanto, pode ignorar
-function remove_projectile_animation()
-	-- remove a trajetoria anterior
-	for i=1,#trajetory do
-		if trajetory[i] then
-			trajetory[i]:removeSelf( )
-		end
-	end
-
-	circle_id = 1
-	configuration.projecttile_scale = 1.1
-end
-
 -- processa a emulacao gráfica do eixo Z para dar impressão de profundidade
 function new_projectile_animation(t)
 	-- Scale Balls
@@ -356,9 +339,9 @@ function next_turn()
 	-- collision detection mode on
 	hit = 0 
 
-	moveCamera()
+	--moveCamera()
 
-	debug_gameplay()	
+	gamelib.debug_gameplay()	
 end
 
 -- prepare the gameplay to the next round
@@ -405,10 +388,10 @@ function next_round()
 				roundLabel[2]:removeSelf( );roundLabel[2] = nil;
 			end)
 
-		debug_gameplay()
+		gamelib.debug_gameplay()
 	else
 		
-		debug_gameplay()
+		gamelib.debug_gameplay()
 
     	removeGameplayScenario()
 	    composer.removeScene('src.gameplay.game')
@@ -550,6 +533,8 @@ function scene:create( event )
 
 	createGameplayScenario() -- carrega objetos do cenario
 
+	--moveCamera()
+
 	-- carrega a imagem do slingshot
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
@@ -561,7 +546,7 @@ function scene:create( event )
 		-- escolher entre o jogador 1 ou 2 quem vai iniciar primeiro o jogo
 		configuration.game_current_player = math.random( 1, 2 )
 
-		debug_gameplay()
+		gamelib.debug_gameplay()
 
 		projectile.ready = true; -- Tell the projectile it's good to go!
 
@@ -574,15 +559,6 @@ function scene:create( event )
 	-- Inicia a musica do gameplay
 	gamelib.startBackgroundMusic( )
 
-end
-
--- debug console
-function debug_gameplay()
-	print( "Current player: "..configuration.game_current_player )
-	print( "Current round: "..configuration.game_current_round )
-	print( "Player 1 Score: "..configuration.game_final_score_player[1])
-	print( "Player 2 Score: "..configuration.game_final_score_player[2])		
-	print( "Total de rounds a ser disputados: "..configuration.game_total_rounds )
 end
 
 function scene:show( event )
