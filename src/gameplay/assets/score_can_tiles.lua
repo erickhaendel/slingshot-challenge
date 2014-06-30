@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- score_can_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,36 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- SCORE CAN TILES											--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+function newScoreCanTile(color, px, py)
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+	local can = display.newImage( "resources/images/objects/"..color.."-can-score.png", px, py )
+	return can
+end
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+function hideScoreCanTile( score_can_tiles_obj )
 
+	for i = 1,#score_can_tiles_obj[i] do
+		for j = 1,#score_can_tiles_obj[i][j] do
+			score_can_tiles_obj[i][j].isVisible = false
+		end
+	end
+end
+
+function removeScoreCanTitle( score_can_tiles_obj )
+
+	for i = 1,#score_can_tiles_obj[i] do
+		for j = 1,#score_can_tiles_obj[i][j] do
+			score_can_tiles_obj[i][j]:removeSelf( );
+			score_can_tiles_obj[i][j] = nil
+		end
+	end
+
+end

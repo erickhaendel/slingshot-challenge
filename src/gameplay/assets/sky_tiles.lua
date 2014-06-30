@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- sky_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,54 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- TARGET TILES											--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+-----------------------------------------------------
+-- SKY ANIMATION										--
+----------------------------------------------------------
+-- Camera follows bolder automatically
+local skyGroup
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+local function moveSky()
+	if (skyGroup.x > -960) then
+		skyGroup.x = skyGroup.x -0.2
+	else
+		skyGroup.x = 0
+	end
+end
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+-- load the sky animation
+function startSky()
 
+	local skys = {}
+
+	skyGroup = display.newGroup();
+
+	for i=1,4 do
+		skys[i] = display.newImage( configuration.sky_image_filename, true )
+		skyGroup:insert( skys[i] )
+		skys[i].x = configuration.sky_x[i]
+		skys[i].y = configuration.sky_y[i]
+	end
+
+	Runtime:addEventListener( "enterFrame", moveSky )	
+
+	return skyGroup
+end
+
+function removeSky( sky )
+
+	assetsGroup:remove( skyGroup )
+
+	for i=1,4 do
+		sky[i]:removeSelf( ); sky[i] = nil
+	end
+
+	Runtime:removeEventListener( "enterFrame", moveSky )		
+end

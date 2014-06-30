@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- house_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,21 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- HOUSE TILES											--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+function newHouseTile()
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+	local house = display.newImage( configuration.house_image_filename, true )
+	house.x = configuration.house_position_x; house.y = configuration.house_position_y
+	return house
+end
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
-
+function removeHouseTile(house)
+	house:removeSelf( ); house = nil
+end

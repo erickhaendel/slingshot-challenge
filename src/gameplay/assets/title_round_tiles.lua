@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- title_round_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,35 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- TITLE TILES											--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+function newRoundLabel()
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+	local labels = {}
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+	for i=1,2 do
+		labels[i] = display.newText( "Round "..configuration.game_current_round, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
+		labels[i]:setFillColor( .82, .35 , .35 )
+
+	end
+
+	return labels
+end
+
+function removeRoundLabel( title_round_tiles_obj )
+
+	for i=1,#title_round_tiles_obj do
+
+		if title_round_tiles_obj[i] then
+			title_round_tiles_obj[i]:removeSelf( ); 
+			title_round_tiles_obj[i] = nil;
+		end
+	end	
+end
 

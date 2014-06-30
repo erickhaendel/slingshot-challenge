@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- ground_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,30 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- GROUND TILES											--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+function newGrassTile()
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+	local grassTable = {}
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+	for i=1,2 do
+		grassTable[i] = display.newImage(configuration.grass_image_filename)
+		grassTable[i].x = configuration.grass_position_x[i]; grassTable[i].y = configuration.grass_position_y[i]
+		physics.addBody( grassTable[i], "static", grassBody )
+	end
 
+	return grassTable
+end	
+
+function removeGrassTile( grass )
+	
+	for i=1,2 do
+		grass[i]:removeSelf( ); grass[i] = nil
+	end
+end

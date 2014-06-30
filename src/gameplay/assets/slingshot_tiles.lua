@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- slingshot_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,27 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- SLINGSHOT TILES										--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+function newSlingshotTile()
+	local slingshot = {}
+	slingshot[1] = display.newImage(configuration.slingshot_image_filename,true);
+	slingshot[1].x = configuration.slingshot_position_x[1]; 
+	slingshot[1].y = configuration.slingshot_position_y[1]
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+	slingshot[2] = display.newImage(configuration.slingshot_image_filename,true);
+	slingshot[2].x = configuration.slingshot_position_x[2]; 
+	slingshot[2].y = configuration.slingshot_position_y[2]	
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+	return slingshot
+end
 
+function removeSlingshotTile( slingshot )
+	if slingshot then slingshot:removeSelf( ); slingshot = nil; end
+end

@@ -1,7 +1,8 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- score_player_tiles.lua
+-- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
 -- @version 1.00
 -- @date 06/29/2014
 -- @website http://www.psyfun.com.br
@@ -31,31 +32,38 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
+----------------------------------------------------------
+-- TITLE TILES											--
+----------------------------------------------------------
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+function newScorePlayerLabel()
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+	local scoreLabels = {}
+	local j = 1
+	for i=1,4 do
+		scoreLabels[i] = display.newText( "Player "..j.." >> 0", configuration.score_player_label_x[i], configuration.score_player_label_y[i], native.systemFont, 30 )
+		
+		scoreLabels[i]:setFillColor( 1, 1 , 1 ) -- branco
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+		scoreLabels[i]:toFront( ) -- para ficar por cima do grass image
 
+		-- Para mostrar o numero do player correto sendo 1 ou 2 apenas em display.newText
+		if j == 2 then 
+			j = 1; 
+		else 
+			j = j + 1; 
+		end
+	end
+
+	return scoreLabels
+end
+
+function removeScoreLabels(score_labels)
+	for i=1,4 do
+		score_labels[i]:removeSelf( ); score_labels[i] = nil
+	end
+end

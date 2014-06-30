@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- main.lua
--- Dewcription: Lauch file
+-- assets_audio.lua
+-- Dewcription: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @version 1.00
 -- @date 06/29/2014
@@ -31,31 +31,39 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--------------------------------------------
--- LIBs
--------------------------------------------
-require( "src.infra.includeall" )
+module(..., package.seeall)
 
-math.randomseed( os.time() )
+local configuration = require( "src.gameplay.configuration" )
 
-display.setStatusBar( display.HiddenStatusBar )
 
------------------------------------------
--- DEBUG MODE
------------------------------------------
--- Determine if running on Corona Simulator
---
-isSimulator = "simulator" == system.getInfo("environment")
-if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
+-- musica de fundo gameplay
+function startBackgroundMusic( )
+	local gameplay_song = audio.loadStream( "resources/audio/songs/gameplay.wav" )
+	audio.stop( 1 )
+	gameMusicChannel = audio.play( gameplay_song, { channel=1, loops=-1, fadein=5000 } )
+	return gameMusicChannel
+end
 
--- Native Text Fields not supported on Simulator
---
-if isSimulator then
-    player_name = "Debug Player"  
-end 
+-- som de disparo do estilingue
+function playBandStretch()
+	local band_stretch = audio.loadSound("resources/audio/effects/stretch-1.wav");
+	audio.play(band_stretch); -- Play the band stretch
+end
 
--------------------------------------------
--- NEXT SCENE
--------------------------------------------
-composer.gotoScene('src.tutorial.welcome', "fade", 0 )
+-- som do elastico sendo esticado
+function playProjecttileShot()
+	local shot = audio.loadSound("resources/audio/effects/band-release.wav");
+	audio.play(shot);
+end
 
+-- som do elastico sendo esticado
+function playHitCan()
+	local shot = audio.loadSound("resources/audio/effects/tinhit.wav");
+	audio.play(shot);
+end
+
+-- som do elastico sendo esticado
+function playIncreasingScore()
+	local shot = audio.loadSound("resources/audio/effects/score.wav");
+	audio.play(shot);
+end

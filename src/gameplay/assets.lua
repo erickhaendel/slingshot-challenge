@@ -1,7 +1,80 @@
+------------------------------------------------------------------------------------------------------------------------------
+-- assets.lua
+-- Description: 
+-- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @modified 
+-- @version 1.00
+-- @date 06/29/2014
+-- @website http://www.psyfun.com.br
+-- @license MIT license
+--
+-- The MIT License (MIT)
+--
+-- Copyright (c) 2014 psyfun
+-- 
+-- Permission is hereby granted, free of charge, to any person obtaining a copy
+-- of this software and associated documentation files (the "Software"), to deal
+-- in the Software without restriction, including without limitation the rights
+-- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+-- copies of the Software, and to permit persons to whom the Software is
+-- furnished to do so, subject to the following conditions:
+-- 
+-- The above copyright notice and this permission notice shall be included in
+-- all copies or substantial portions of the Software.
+-- 
+-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+-- THE SOFTWARE.
+--
+------------------------------------------------------------------------------------------------------------------------------
 
 module(..., package.seeall)
 
 local configuration = require( "src.gameplay.configuration" )
+local gamelib 		= require( "src.gameplay.gamelib" )
+
+local assets_audio					= require( "src.gameplay.assets_audio" )
+
+local can_tiles_lib 				= require( "src.gameplay.assets.can_tiles" )
+local ground_tiles_lib 				= require( "src.gameplay.assets.ground_tiles" )
+local house_tiles_lib 				= require( "src.gameplay.assets.house_tiles" )
+local score_can_tiles_lib 			= require( "src.gameplay.assets.score_can_tiles" )
+local score_player_tiles_lib 		= require( "src.gameplay.assets.score_player_tiles" )
+local scoreboard_tiles_lib 			= require( "src.gameplay.assets.scoreboard_tiles" )
+local sky_tiles_lib 				= require( "src.gameplay.assets.sky_tiles" )
+local slingshot_tiles_lib 			= require( "src.gameplay.assets.slingshot_tiles" )
+local stone_trajectory_tiles_lib 	= require( "src.gameplay.assets.stone_trajectory_tiles" )
+local target_tiles_lib 				= require( "src.gameplay.assets.target_tiles" )
+local title_player_tiles_lib 		= require( "src.gameplay.assets.title_player_tiles" )
+local title_round_tiles_lib 		= require( "src.gameplay.assets.title_round_tiles" )
+local wall_tiles_lib 				= require( "src.gameplay.assets.wall_tiles" )
+
+---------------------------------------------------------------------------------------------------------------
+-- OBJECTS
+---------------------------------------------------------------------------------------------------------------
+project_tiles_obj			= nil;
+band_line_tiles_obj 		= nil; 
+can_tiles_obj 				= nil; 
+ground_tiles_obj 			= nil; 
+house_tiles_obj 			= nil; 
+score_can_tiles_obj 		= nil; 
+score_player_tiles_obj 		= nil;
+scoreboard_tiles_obj 		= nil; 
+sky_tiles_obj 				= nil; 
+slingshot_tiles_obj 		= nil; 
+stone_trajectory_tiles_obj 	= nil; 
+target_tiles_obj 			= nil;
+title_player_tiles_obj 		= nil; 
+score_round_tiles_obj 		= nil; 
+wall_tiles_obj 				= nil;
+
+---------------------------------------------------------------------------------------------------------------
+-- GROUPS
+---------------------------------------------------------------------------------------------------------------
 
 local assetsGroup = display.newGroup();
 
@@ -15,414 +88,357 @@ function setAssetsGroupPosition(x,y)
 	if y then assetsGroup.y = y; end
 end
 
-----------------------------------------------------------
--- HOUSE TILES											--
-----------------------------------------------------------
+-- Variables setup
+local projectiles_container = nil;
 
-function newHouseTile()
+---------------------------------------------------------------------------------------------------------------
+-- METHODS
+---------------------------------------------------------------------------------------------------------------
 
-	local house = display.newImage( configuration.house_image_filename, true )
-	house.x = configuration.house_position_x; house.y = configuration.house_position_y
-	assetsGroup:insert( house )
-	return house
+local function create_sky_tiles_obj()
+	sky_tiles_obj = sky_tiles_lib.startSky();
+	assetsGroup:insert( sky_tiles_obj )
 end
 
-function removeHouseTile(house)
-	assetsGroup:remove(house)
-	house:removeSelf( ); house = nil
+local function create_house_tiles_obj(  )
+	house_tiles_obj = house_tiles_lib.newHouseTile()
+	assetsGroup:insert( house_tiles_obj )	
 end
 
-----------------------------------------------------------
--- GROUND TILES											--
-----------------------------------------------------------
-
-function newGrassTile()
-
-	local grassTable = {}
-
-	for i=1,2 do
-		grassTable[i] = display.newImage(configuration.grass_image_filename)
-		grassTable[i].x = configuration.grass_position_x[i]; grassTable[i].y = configuration.grass_position_y[i]
-		physics.addBody( grassTable[i], "static", grassBody )
-		assetsGroup:insert( grassTable[i] )
-	end
-
-	return grassTable
-end	
-
-function removeGrassTile( grass )
-	
-	for i=1,2 do
-		assetsGroup:remove(grass[i])
-		grass[i]:removeSelf( ); grass[i] = nil
-	end
+local function create_wall_tiles_obj(  )
+	wall_tiles_obj = wall_tiles_lib.newWallTile();
+	for i=1, #wall_tiles_obj do
+		assetsGroup:insert( wall_tiles_obj[i] )	
+	end		
 end
 
-----------------------------------------------------------
--- SLINGSHOT TILES										--
-----------------------------------------------------------
-
-function newSlingshotTile()
-	local slingshot = display.newImage(configuration.slingshot_image_filename,true);
-	slingshot.x = configuration.slingshot_position_x[1]; slingshot.y = configuration.slingshot_position_y[1]
-	assetsGroup:insert( slingshot )
-
-	return slingshot
-end
-
-
-----------------------------------------------------------
--- WALL TILES											--
-----------------------------------------------------------
-
-function newWallTile(  )
-
-	local walls = {}
-
-	for i=1,4 do
-		walls[i] = display.newImage(configuration.wall_image_filename, configuration.wall_x[i] , configuration.wall_y[i] )	
-		physics.addBody( walls[i], "static", configuration.wallBody )
-		assetsGroup:insert( walls[i] )		
-	end
-	
-	return walls
-end
-
-function removeWallTiles( walls )
-
-	for i=1,4 do
-		walls[i]:removeSelf( ); walls[i] = nil;
-		assetsGroup:remove(walls[i])
-	end
-end
-
-----------------------------------------------------------
--- CAN TILES											--
-----------------------------------------------------------
-function newScoreCanTile(color, px, py)
-
-	local can = display.newImage( "resources/images/objects/"..color.."-can-score.png", px, py )
-	assetsGroup:insert( can )	
-	return can
-end
-
-function newCanTile()
-				
-	local cans = {}
-	cans[1] = {}; cans[2] = {}
-	cans[3] = {}; cans[4] = {}
-
-	local myScaleX, myScaleY = 0.5, 0.5
-	local M = 2 ; local N = 2
-
-	filename = {}
-	filename[1] = configuration.can_image_dir..configuration.player1_can; filename[4] = filename[1]
-	filename[2] = configuration.can_image_dir..configuration.player2_can; filename[3] = filename[2]
-
-	local current_can = {}
-	for i = 1, N do
-		for j = 1, M do
-			local nw, nh 	
-			
-			for k=1,4 do
-				current_can[k] = cans[k][M * (i-1) + j]
-				current_can[k] = display.newImage( filename[k], configuration.cans_x[k] + (i*24), configuration.cans_y[k] - (j*40) )
-
-				current_can[k].xScale = configuration.can_xScale
-				current_can[k].yScale = configuration.can_yScale
-
-				nw = current_can[k].width * myScaleX * 0.5
-				nh = current_can[k].height * myScaleY * 0.5
-
-				local cansBody = { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}}
-
-				physics.addBody( current_can[k], cansBody )
-
-				cans[k][M * (i-1) + j] = current_can[k]
-				
-				assetsGroup:insert( current_can[k] )	
-			end
-
+local function create_can_tiles_obj(  )
+	can_tiles_obj = can_tiles_lib.newCanTile()
+	for i=1, #can_tiles_obj do
+		for j=1, #can_tiles_obj do
+			assetsGroup:insert( can_tiles_obj[i][j] )	
 		end
-	end
-
-	return cans[1], cans[2], cans[3], cans[4]
+	end		
 end
 
-function removeCanTiles(cans)
-
-	local M = 2 ; local N = 2
-
-	for i = 1, N do
-		for j = 1, M do
-			for k=1,4 do
-				
-				assetsGroup:remove( cans[k][M * (i-1) + j] )
-
- 				cans[k][M * (i-1) + j]:removeSelf( ); cans[k][M * (i-1) + j] = nil;
-			end
-		end
-	end
+local function create_ground_tiles_obj(  )
+	ground_tiles_obj = ground_tiles_lib.newGrassTile()
+	for i=1, #ground_tiles_obj do
+		assetsGroup:insert( ground_tiles_obj[i] )	
+	end	
 end
 
-----------------------------------------------------------
--- BAND SLINGSHOT										--
-----------------------------------------------------------
+local function create_slingshot_tiles_obj(  )
+	slingshot_tiles_obj = slingshot_tiles_lib.newSlingshotTile()
+	for i=1, #slingshot_tiles_obj do
+		assetsGroup:insert( slingshot_tiles_obj[i] )	
+		slingshot_tiles_obj[i]:toFront( )		
+	end	
 
--- insere o elastico no cenario
-function newBandLine( t )
-
-	-- Init the elastic band.
-	local myLine = nil;
-	local myLineBack = nil;	
-
-	-- If the projectile is in the top left position
-	if(t.x < display.contentCenterX and t.y < _H - 165)then
-		myLineBack = display.newLine(t.x - 30, t.y, configuration.myLineBack_x2, configuration.myLineBack_y2);
-		myLine = display.newLine(t.x - 30, t.y, configuration.myLine_x2, configuration.myLine_y2);
-	-- If the projectile is in the top right position
-	elseif(t.x > display.contentCenterX and t.y < _H - 165)then
-		myLineBack = display.newLine(t.x + 10, t.y - 25,  configuration.myLineBack_x2, configuration.myLineBack_y2);
-		myLine = display.newLine(t.x + 10, t.y - 25,  configuration.myLine_x2, configuration.myLine_y2);
-	-- If the projectile is in the bottom left position
-	elseif(t.x < display.contentCenterX and t.y > _H - 165)then
-		myLineBack = display.newLine(t.x - 25, t.y + 20,  configuration.myLineBack_x2, configuration.myLineBack_y2);
-		myLine = display.newLine(t.x - 25, t.y + 20,  configuration.myLine_x2, configuration.myLine_y2);
-	-- If the projectile is in the bottom right position
-	elseif(t.x > display.contentCenterX and t.y > _H - 165)then
-		myLineBack = display.newLine(t.x - 15, t.y + 30,  configuration.myLineBack_x2, configuration.myLineBack_y2);
-		myLine = display.newLine(t.x - 15, t.y + 30,  configuration.myLine_x2, configuration.myLine_y2);
-	else
-	-- Default position (just in case).
-		myLineBack = display.newLine(t.x - 25, t.y, configuration.myLineBack_x2, configuration.myLineBack_y2);
-		myLine = display.newLine(t.x - 25, t.y,   configuration.myLine_x2, configuration.myLine_y2);
-	end
-
-	-- Set the elastic band's visual attributes
-	myLineBack:setStrokeColor(255,255,255);
-	myLineBack.strokeWidth = 9;
-
-	myLine:setStrokeColor(255,255,255);
-	myLine.strokeWidth = 11;
-
-	return myLineBack, myLine
 end
 
--- remove o elastico do cenario
-function removeBandLine( )
-	if(myLine and myLine.parent) then	
-		myLine.parent:remove(myLine); -- erase previous line
-		myLineBack.parent:remove(myLineBack); -- erase previous line
-		myLine = nil;
-		myLineBack = nil;
-	end
+local function create_title_player_tiles_obj(  )
+	title_player_tiles_obj = title_player_tiles_lib.newTitlePlayerLabel()
+	for i=1, #title_player_tiles_obj do
+		assetsGroup:insert( title_player_tiles_obj[i] )	
+	end		
 end
 
-function newTrajectory(x,y,r,g,b)
-	local myCircle = display.newCircle( x, y, 5 )
-	myCircle:setFillColor(r, g, b) 
-	--myCircle:setStrokeColor(140, 140, 140) 
-	--myCircle.strokeWidth = 5
-	--myCircle:setStrokeColor( .255, .0, .0 )	
-
-	assetsGroup:insert( myCircle )
-
-	return myCircle
+local function create_title_round_tiles_obj(  )	
+	title_round_tiles_obj = title_round_tiles_lib.newRoundLabel()
+	for i=1, #title_round_tiles_obj do
+		assetsGroup:insert( title_round_tiles_obj[i] )	
+	end	
 end
 
-function newTargetTile(x,y)
-	local target = display.newImage('resources/images/objects/target.png')
-	target.x = x
-	target.y = y
-
-	return target
-end	
-----------------------------------------------------------
--- SKY ANIMATION										--
-----------------------------------------------------------
--- Camera follows bolder automatically
-local skyGroup
-
-local function moveSky()
-	if (skyGroup.x > -960) then
-		skyGroup.x = skyGroup.x -0.2
-	else
-		skyGroup.x = 0
-	end
-end
-
--- load the sky animation
-function startSky()
-
-	local skys = {}
-
-	skyGroup = display.newGroup();
-
-	for i=1,4 do
-		skys[i] = display.newImage( configuration.sky_image_filename, true )
-		skyGroup:insert( skys[i] )
-		skys[i].x = configuration.sky_x[i]
-		skys[i].y = configuration.sky_y[i]
-	end
-
-	Runtime:addEventListener( "enterFrame", moveSky )	
-
-	assetsGroup:insert( skyGroup )	
-
-	return skys
-end
-
-function removeSky( sky )
-
-	assetsGroup:remove( skyGroup )
-
-	for i=1,4 do
-		sky[i]:removeSelf( ); sky[i] = nil
-	end
-
-	Runtime:removeEventListener( "enterFrame", moveSky )		
-end
-
--- 
-function newTitlePlayerLabel()
-
-	local labels = {}
-
-	for i=1,2 do
-		labels[i] = display.newText( "Player "..i, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
-		labels[i]:setFillColor( .82, .35 , .35 )
-		assetsGroup:insert( labels[i] )
-	end
-
-	return labels[1], labels[2]
-end
-
--- 
-function newScorePlayerLabel()
-
-	local scoreLabels = {}
-	local j = 1
-	for i=1,4 do
-		scoreLabels[i] = display.newText( "Player "..j.." >> 0", configuration.score_player_label_x[i], configuration.score_player_label_y[i], native.systemFont, 30 )
-		scoreLabels[i]:setFillColor( 1, 1 , 1 )
-		assetsGroup:insert( scoreLabels[i] )
-		scoreLabels[i]:toFront( )
-		if j == 2 then j = 1; else j = j + 1; end
-	end
-
-	return scoreLabels[1], scoreLabels[2], scoreLabels[3], scoreLabels[4]
-end
-
-function removeScoreLabels(score_labels)
-	for i=1,4 do
-		score_labels[i]:removeSelf( ); score_labels[i] = nil
-	end
-end
-
--- cria todos os objetos de score dos scoreboards
-function new_scoreboard()
-
-	local score_cans = {}
-	score_cans[1] = {}; score_cans[2] = {}
-	score_cans[3] = {}; score_cans[4] = {}
-
-	filename = {}
-	filename[1] = configuration.can_image_dir..configuration.player1_score_can; filename[4] = filename[1]
-	filename[2] = configuration.can_image_dir..configuration.player2_score_can; filename[3] = filename[2]
-
-	-- define a inclinacao da matriz de latas
-	local offset_inclination_right = 50 -- se mudar a imagem de grass vai ter que ajustar esses valores
-	local offset_inclination_left = -27	-- se mudar a imagem de grass vai ter que ajustar esses valores
-
-	-- define a distancia entre as latas
-	local offset_between_cans_x = 60
-	local offset_between_cans_y = 40
-	local offset_proportional_vertical_distance1 = {} -- player 1
-	local offset_proportional_vertical_distance2 = {} -- player2
-
-	for i=1,4 do	
-		offset_proportional_vertical_distance1[i] = 1
-		offset_proportional_vertical_distance2[i] = 1		
-	end
-
-	local offset_can_scale = 1
-
-	local M = 4 ; local N = 5
-
+-- GRADE DE PONTOS
+local function create_scoreboard_tiles_obj(  )
+	scoreboard_tiles_obj = scoreboard_tiles_lib.new_scoreboard()
+	-- matriz de 20 - 4 linhas da grade por 5 colunas
+	local M = 4 ; local N = 5	
 	for k = 1, 4 do	
 		for j = 1, M do
 			for i = 1, N do
-				-- fix the correct offset of the can on the scoreboard
-				local offset_inclination
-				local offset_p_v_d
-				if k % 2 == 0 then -- player 2
-					offset_inclination = offset_inclination_left; 
-					offset_p_v_d = offset_proportional_vertical_distance2[k]
-				else -- player 1
-					offset_inclination = offset_inclination_right; 
-					offset_p_v_d = offset_proportional_vertical_distance1[k]
+				assetsGroup:insert( scoreboard_tiles_obj[k][M * (i-1) + j] )
+			end
+		end
+	end	
+end
+
+-- LABEL DA GRADE
+local function create_score_player_tiles_obj(  )
+	score_player_tiles_obj = score_player_tiles_lib.newScorePlayerLabel()
+	for i=1, #score_player_tiles_obj do
+		assetsGroup:insert( score_player_tiles_obj[i] )	
+	end	
+end
+
+---------------------------------------------------------------------------------------------------------------
+
+local function remove_sky_tiles_obj()
+	if sky_tiles_obj then
+		assetsGroup:remove( sky_tiles_obj )
+		sky_tiles_lib.removeSky( sky_tiles_obj )
+	end
+end
+
+local function remove_house_tile_obj(  )
+	if house_tile_obj then
+		for i=1, #house_tile_obj do
+			assetsGroup:remove( house_tile_obj[i] )	
+		end	
+		house_tile_lib.removeHouseTile( house_tile_obj )
+	end
+end
+
+local function remove_wall_tiles_obj(  )
+	if wall_tiles_obj then
+		for i=1, #wall_tiles_obj do
+			assetsGroup:remove( wall_tiles_obj[i] )	
+		end	
+		wall_tiles_lib.removeWallTiles( wall_tiles_obj )
+	end
+end
+
+local function remove_can_tiles_obj(  )
+	if can_tiles_obj then
+		local M = 2 ; local N = 2
+
+		-- removendo as ltas do grupo
+		for i = 1, N do
+			for j = 1, M do
+				for k=1,4 do
+					assetsGroup:remove( can_tiles_obj[k][M * (i-1) + j] )	
 				end
-
-				-- load the can image
-				score_cans[k][M * (i-1) + j] = display.newImage( 
-					filename[k], 
-					configuration.score_cans_x[k] + (i*offset_between_cans_x*offset_p_v_d) + j*offset_inclination, 
-					configuration.score_cans_y[k] - (j*offset_between_cans_y*offset_p_v_d) )
-
-				score_cans[k][M * (i-1) + j].isVisible = false
-
-				-- insert the image in a group
-				assetsGroup:insert( score_cans[k][M * (i-1) + j] )	
 			end
+		end	
 
-			offset_proportional_vertical_distance1[k] = offset_proportional_vertical_distance1[k] - 0.082
-			offset_proportional_vertical_distance2[k] = offset_proportional_vertical_distance2[k] - 0.088
+		-- remove todas as latas
+		can_tiles_lib.removeCanTiles(can_tiles_obj)
+	end
+end
+
+local function remove_ground_tiles_obj(  )
+	if ground_tiles_obj then
+		for i=1, #ground_tiles_obj do
+			assetsGroup:remove( ground_tiles_obj[i] )	
+		end	
+		ground_tiles_lib.removeGrassTile( ground_tiles_obj )
+	end
+end
+
+local function remove_slingshot_tiles_obj(  )
+	if slingshot_tiles_obj then
+		for i=1, #slingshot_tiles_obj do
+			assetsGroup:remove( slingshot_tiles_obj[i] )	
+		end	
+		slingshot_tiles_lib.removeSlingshotTile( slingshot_tiles_obj )
+	end
+end
+
+local function remove_title_player_tiles_obj(  )
+	if title_player_tiles_obj then
+		for i=1, #title_player_tiles_obj do
+			assetsGroup:remove( title_player_tiles_obj[i] )	
+		end	
+		title_player_tiles_lib.removeTitlePlayerLabel( title_player_tiles_obj )
+	end
+end
+
+local function remove_title_round_tiles_obj(  )
+	if title_round_tiles_obj then
+		for i=1, #title_round_tiles_obj do
+			assetsGroup:remove( title_round_tiles_obj[i] )	
+		end	
+		title_round_tiles_lib.removeRoundLabel( title_round_tiles_obj )
+	end
+end
+
+local function remove_scoreboard_tiles_obj(  )
+	if scoreboard_tiles_obj then
+		-- matriz de 20 - 4 linhas da grade por 5 colunas
+		local M = 4 ; local N = 5
+		for k = 1, 4 do	
+			for j = 1, M do
+				for i = 1, N do
+					assetsGroup:remove( scoreboard_tiles_obj[i] )	
+				end	
+			end
+		end
+		scoreboard_tiles_lib.removeScoreboard( scoreboard_tiles_obj )
+	end
+end
+
+local function remove_score_player_tiles_obj(  )
+	if score_player_tiles_obj then 
+		for i=1, #score_player_tiles_obj do
+			assetsGroup:remove( score_player_tiles_obj[i] )	
+		end	
+		score_player_tiles_lib.removeScoreLabels( score_player_tiles_obj )
+	end
+end
+
+---------------------------------------------------------------------------------------------------------------
+
+-- remove all elements from scene
+function removeGameplayScenario()
+
+	remove_sky_tiles_obj()
+	remove_house_tiles_obj()
+	remove_wall_tiles_obj()
+	remove_can_tiles_obj()
+	remove_ground_tiles_obj()
+	remove_slingshot_tiles_obj()
+	remove_title_player_tiles_obj()
+	remove_score_round_tiles_obj()
+	remove_scoreboard_tiles_obj()
+	remove_score_player_tiles_obj()
+end
+
+-- create all basic elements to the scene
+function createGameplayScenario()
+
+
+	create_sky_tiles_obj() 	-- Animacao do ceu
+	create_house_tiles_obj()	-- carrega a casa
+	create_wall_tiles_obj()	-- carrega a parede no cenario
+	create_can_tiles_obj()	-- carrega as latas em cima da parede
+	create_ground_tiles_obj()	-- carrega o chao
+	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
+	create_title_player_tiles_obj()	-- carrega as labels identificando os cenários
+
+	timer.performWithDelay( configuration.time_hide_title_player_label, function ( event )	
+			remove_title_player_tiles_obj(  )
+		end)
+
+	-- carrega os titlos dos rounds
+	timer.performWithDelay( configuration.time_show_round_label, function ( event )	
+		create_title_round_tiles_obj(  )
+
+		timer.performWithDelay( configuration.time_hide_round_label, function ( event )	
+				remove_title_round_tiles_obj(  )
+			end)
+		end)
+
+	create_scoreboard_tiles_obj()	-- as latas de scores dos scoreboards
+
+	create_score_player_tiles_obj()	-- carrega as labels identificando os scoreboards
+
+	if configuration.game_current_player == 1 then
+		setAssetsGroupPosition(display.contentCenterX - 2100, nil)
+	end	
+end
+
+---------------------------------------------------------------------------------------------------------------
+
+-- animation between of thw two players screen
+function moveCamera( )
+
+	-- Vai do cenario 1 para o 2
+	if configuration.game_current_player == 2 then
+
+		if (assetsGroup.x > -1450) then	
+			assetsGroup.x = assetsGroup.x - configuration.camera_velocity		
+		end
+
+	-- vai do cenario 2 para o 1
+	elseif configuration.game_current_player == 1 then	
+
+		if (assetsGroup.x < 0) then		
+			assetsGroup.x = assetsGroup.x + configuration.camera_velocity
 		end
 	end
+end
+
+function score_animation( intend_to_hit )
 	
-	return score_cans[1], score_cans[2], score_cans[3], score_cans[4]
-end
+	for i=1,configuration.game_score_player[intend_to_hit] do
+		timer.performWithDelay(1+i*110, function(e)
 
-function removeScoreboard(score_cans)
+			if intend_to_hit == 1 then
+				-- cenario 1
+				scoreboard_tiles_obj[1][i].isVisible = true -- could index 1 or 2 - i did this to not write an if/else statemment
+				
+				-- cenario 2
+				scoreboard_tiles_obj[4][i].isVisible = true -- could be index 4 or 3	
 
-	local M = 4 ; local N = 5
+				-- cenario 1
+				score_player_tiles_obj[1].text = "Player 1 >> "..i -- could index 1 or 2 - i did this to not write an if/else statemment
+				
+				-- cenario 2
+				score_player_tiles_obj[4].text = "Player 1 >> "..i-- could be index 4 or 3							
+			else
+				-- cenario 1
+				scoreboard_tiles_obj[2][i].isVisible = true -- could index 1 or 2 - i did this to not write an if/else statemment
+				
+				-- cenario 2
+				scoreboard_tiles_obj[3][i].isVisible = true -- could be index 4 or 3	
 
-	for k = 1, 4 do	
-		for j = 1, M do
-			for i = 1, N do
-				score_cans[k][M * (i-1) + j]:removeSelf( ); score_cans[k][M * (i-1) + j] = nil
+				-- cenario 1
+				score_player_tiles_obj[2].text = "Player 2 >> "..i -- could index 1 or 2 - i did this to not write an if/else statemment
+				
+				-- cenario 2
+				score_player_tiles_obj[3].text = "Player 2 >> "..i-- could be index 4 or 3							
+
 			end
-		end
+
+			-- Play increasing score
+			assets_audio.playIncreasingScore()							
+		end)
 	end
 end
 
+function wall_tile_animation( id )
+	wall_tiles_obj[id]:toFront()								
+	physics.removeBody( wall_tiles_obj[ id ] )	
+end
+
+function reconfigure_wall_tile( id )
+	physics.addBody( wall_tiles_obj[ id ], "static", configuration.wallBody )
+end
+
+function reload_round_tiles( )
+
+	-- carrega os titulos dos rounds
+	timer.performWithDelay( configuration.time_show_round_label, function ( event )	
+		create_title_round_tiles_obj(  )
+
+		timer.performWithDelay( configuration.time_hide_round_label, function ( event )	
+				remove_title_round_tiles_obj(  )
+			end)
+		end)
+end
+
+function reload_can_tiles( )
+
+	-- remove as latas do round anterior
+	remove_can_tiles_obj(  )
+
+	-- carrega as latas em cima da parede
+	create_can_tiles_obj(  )
+end
+
+function reload_scoreboard_tiles()
+
+	-- remove
+	remove_scoreboard_tiles_obj(  )
+
+	-- as latas de scores dos scoreboards
+	create_scoreboard_tiles_obj(  )
+end
 
 -- hide all scores from all scoreboards
-function hidePointsScoreboards(scores)
+function hidePointsScoreboards()
 
 	local M = 4 ; local N = 5
 
 	for k = 1, 4 do	
 		for j = 1, M do
 			for i = 1, N do
-				scores[k][M * (i-1) + j].isVisible = false
+				scoreboard_tiles_obj[k][M * (i-1) + j].isVisible = false
 			end
 		end
 	end
 
-	return scores
-end
-
--- 
-function newRoundLabel()
-
-	local labels = {}
-
-	for i=1,2 do
-		labels[i] = display.newText( "Round "..configuration.game_current_round, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
-		labels[i]:setFillColor( .82, .35 , .35 )
-		assetsGroup:insert( labels[i] )
-	end
-
-	return labels[1], labels[2]
+	return scoreboard_tiles_obj
 end
