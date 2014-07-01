@@ -107,8 +107,8 @@ end
 
 
 function removeAll( sceneGroup )
-    util.removeObject( background , sceneGroup)  -- destroi imagem de fundo
-    util.removeObject( btnBack , sceneGroup)  -- destroi botao back
+    removeObject( background , sceneGroup)  -- destroi imagem de fundo
+    removeObject( btnBack , sceneGroup)  -- destroi botao back
 end
 
 -- "scene:destroy()"
