@@ -55,8 +55,8 @@ function newCanTile()
 	filename = {}
 	filename[1] = configuration.can_image_dir..configuration.player1_can; 
 	filename[2] = configuration.can_image_dir..configuration.player2_can; 
-	filename[3] = filename[2]
-	filename[4] = filename[1]
+	filename[3] = filename[2]	-- repete no cenario 2
+	filename[4] = filename[1]	-- reprete no cenario 2
 	filename[5] = configuration.can_image_dir..configuration.neutral_can; 
 
 	-- configuração das latas - com cores e neutras

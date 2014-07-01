@@ -281,11 +281,14 @@ function state:change(e)
 		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
 
 				-- terminou o jogo
-				if configuration.game_total_rounds <= configuration.game_current_round then					
+				if configuration.game_total_rounds < configuration.game_current_round then					
 
 			    	assetsTile.removeGameplayScenario()
 
+			    	-- Destroi eventos criados
 					state:removeEventListener("change", state);	
+					Runtime:removeEventListener( "enterFrame", assetsTile.moveCamera )
+					projectiles_container:removeEventListener("touch", projectileTouchListener);
 
 				    composer.removeScene('src.gameplay.game')
 				    composer.gotoScene( "src.gameplay.results", "fade", 400)
@@ -415,7 +418,16 @@ function next_round()
 		-- cria novas latas
 		assetsTile.reload_can_tiles( )
 
-		state:dispatchEvent({name="change", state="fire"});		
+		Runtime:addEventListener( "enterFrame", assetsTile.moveCamera )
+
+		timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+
+			spawnProjectile(); -- Spawn the first projectile.
+
+			Runtime:removeEventListener( "enterFrame", assetsTile.moveCamera )
+
+			end)		
+
 end
 
 function start_game()
