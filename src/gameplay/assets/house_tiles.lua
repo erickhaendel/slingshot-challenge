@@ -42,8 +42,11 @@ local configuration = require( "src.gameplay.configuration" )
 
 function newHouseTile()
 
-	local house = display.newImage( configuration.house_image_filename, true )
-	house.x = configuration.house_position_x; house.y = configuration.house_position_y
+	local house = {}
+	
+	house[1] = display.newImage( configuration.house_image_filename, true )
+	house[1].x = configuration.house_position_x; 
+	house[1].y = configuration.house_position_y
 	return house
 end
 

@@ -55,9 +55,6 @@ local update = nil
 
 local slingshot_container = display.newGroup();
 
--- flag de colisao
-local hit = 0
-
 ----------------------------------------------
 -- PROTOTYPE METHODS
 ----------------------------------------------
@@ -70,7 +67,6 @@ local next_turn
 -- METHODS
 ---------------------------------------------
 
-
 -- gera uma nova pedra
 function spawnProjectile()
 	
@@ -81,8 +77,6 @@ function spawnProjectile()
 	
 	-- Reset the indexing for the visual attributes of the catapult.
 	slingshot_container:insert(projectiles_container);
-	--slingshot_container:insert(assetsTile.slingshot_tiles_obj[1]);
-	--slingshot_container:insert(assetsTile.slingshot_tiles_obj[2]);
 
 	-- Add an event listener to the projectile.
 	projectiles_container:addEventListener("touch", projectileTouchListener);		
@@ -95,7 +89,7 @@ function can_collision_proccess(t)
 
 	local side = nil	
 
-	if hit == 0 then
+	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 		for i = 1, N do
 			for j = 1, M do
 
@@ -107,7 +101,7 @@ function can_collision_proccess(t)
 					t.isSensor = false
 
 					assetsTile.wall_tile_animation( 1 )	
-					hit = 1
+					configuration.game_is_hit = 1
 					side = 1
 
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 -- own can
@@ -122,7 +116,7 @@ function can_collision_proccess(t)
 					t.isSensor = false
 
 					assetsTile.wall_tile_animation( 2 )				
-					hit = 1
+					configuration.game_is_hit = 1
 					side = 2
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 -- friend can
 					score_proccess()
@@ -136,7 +130,7 @@ function can_collision_proccess(t)
 					t.isSensor = false
 
 					assetsTile.wall_tile_animation( 3 )	
-					hit = 1
+					configuration.game_is_hit = 1
 					side = 2
 
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 -- own can
@@ -151,7 +145,7 @@ function can_collision_proccess(t)
 					t.isSensor = false
 
 					assetsTile.wall_tile_animation( 4 )					
-					hit = 1
+					configuration.game_is_hit = 1
 					side = 1
 
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 -- friend can
@@ -200,10 +194,10 @@ function projectileTouchListener(e)
 				myLineBack, myLine = band_line_tiles_lib.newBandLine( t )
 				
 				-- Insert the components of the catapult into a group.
-				--assetsGroup:insert(slingshot_tiles_obj);
-				--assetsGroup:insert(myLineBack);
-				--assetsGroup:insert(t);
-				--assetsGroup:insert(myLine);
+				--slingshot_container:insert(slingshot_tiles_obj);
+				slingshot_container:insert(myLineBack);
+				slingshot_container:insert(t);
+				slingshot_container:insert(myLine);
 
 				-- Boundary for the projectile when grabbed	
 				-- evita que estique o elastico infinitamente	
@@ -211,6 +205,8 @@ function projectileTouchListener(e)
 
 			-- If the projectile touch event ends (player lets go)...
 			elseif(e.phase == "ended" or e.phase == "cancelled") then
+
+				configuration.game_is_shooted = 1
 
 				-- Remove projectile touch so player can't grab it back and re-use after firing.
 				projectiles_container:removeEventListener("touch", projectileTouchListener);
@@ -285,11 +281,9 @@ function state:change(e)
 		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
 
 				-- terminou o jogo
-				if configuration.game_total_rounds <= configuration.game_current_round then
+				if configuration.game_total_rounds <= configuration.game_current_round then					
 
-					gamelib.debug_gameplay()
-
-			    	removeGameplayScenario()
+			    	assetsTile.removeGameplayScenario()
 
 					state:removeEventListener("change", state);	
 
@@ -368,7 +362,8 @@ function next_turn()
 	end
 
 	-- collision detection mode on
-	hit = 0 
+	configuration.game_is_shooted = 0
+	configuration.game_is_hit = 0
 
 	gamelib.debug_gameplay()
 
@@ -396,7 +391,8 @@ function next_round()
 		configuration.game_current_round = configuration.game_current_round + 1
 
 		-- collision detection mode on
-		hit = 0 
+		configuration.game_is_shooted = 0
+		configuration.game_is_hit = 0
 
 		-- deal with scores
 		configuration.game_final_score_player[1] = configuration.game_score_player[1]
@@ -418,14 +414,13 @@ function next_round()
 
 		-- cria novas latas
 		assetsTile.reload_can_tiles( )
+
+		state:dispatchEvent({name="change", state="fire"});		
 end
 
 function start_game()
 	-- fisica ligado
 	physics.start();	
-
-	--configuration.game_total_rounds = math.random( 1, configuration.game_max_allowed_rounds )
-	configuration.game_total_rounds = 5
 
 	-- sempre inicia pelo primeiro turno, independente do jogador
 	configuration.game_current_turn = 1

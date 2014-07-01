@@ -97,12 +97,16 @@ local projectiles_container = nil;
 
 local function create_sky_tiles_obj()
 	sky_tiles_obj = sky_tiles_lib.startSky();
-	assetsGroup:insert( sky_tiles_obj )
+	for i=1, #sky_tiles_obj do
+		assetsGroup:insert( sky_tiles_obj[i] )	
+	end		
 end
 
 local function create_house_tiles_obj(  )
 	house_tiles_obj = house_tiles_lib.newHouseTile()
-	assetsGroup:insert( house_tiles_obj )	
+	for i=1, #house_tiles_obj do
+		assetsGroup:insert( house_tiles_obj[i] )	
+	end	
 end
 
 local function create_wall_tiles_obj(  )
@@ -177,17 +181,19 @@ end
 
 local function remove_sky_tiles_obj()
 	if sky_tiles_obj then
-		assetsGroup:remove( sky_tiles_obj )
+		for i=1, #sky_tiles_obj do
+			assetsGroup:remove( sky_tiles_obj[i] )	
+		end			
 		sky_tiles_lib.removeSky( sky_tiles_obj )
 	end
 end
 
-local function remove_house_tile_obj(  )
+local function remove_house_tiles_obj(  )
 	if house_tile_obj then
 		for i=1, #house_tile_obj do
 			assetsGroup:remove( house_tile_obj[i] )	
+			house_tile_lib[i].removeHouseTile( house_tile_obj[i] )			
 		end	
-		house_tile_lib.removeHouseTile( house_tile_obj )
 	end
 end
 
@@ -231,8 +237,8 @@ local function remove_slingshot_tiles_obj(  )
 	if slingshot_tiles_obj then
 		for i=1, #slingshot_tiles_obj do
 			assetsGroup:remove( slingshot_tiles_obj[i] )	
+			slingshot_tiles_lib.removeSlingshotTile( slingshot_tiles_obj[i] )			
 		end	
-		slingshot_tiles_lib.removeSlingshotTile( slingshot_tiles_obj )
 	end
 end
 
@@ -261,7 +267,7 @@ local function remove_scoreboard_tiles_obj(  )
 		for k = 1, 4 do	
 			for j = 1, M do
 				for i = 1, N do
-					assetsGroup:remove( scoreboard_tiles_obj[i] )	
+					assetsGroup:remove( scoreboard_tiles_obj[k][M * (i-1) + j] )	
 				end	
 			end
 		end
@@ -290,7 +296,7 @@ function removeGameplayScenario()
 	remove_ground_tiles_obj()
 	remove_slingshot_tiles_obj()
 	remove_title_player_tiles_obj()
-	remove_score_round_tiles_obj()
+	remove_title_round_tiles_obj()
 	remove_scoreboard_tiles_obj()
 	remove_score_player_tiles_obj()
 end

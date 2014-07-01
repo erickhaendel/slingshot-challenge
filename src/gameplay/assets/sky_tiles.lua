@@ -70,14 +70,13 @@ function startSky()
 
 	Runtime:addEventListener( "enterFrame", moveSky )	
 
-	return skyGroup
+	return skys
 end
 
 function removeSky( sky )
 
-	assetsGroup:remove( skyGroup )
-
 	for i=1,4 do
+		skyGroup:remove( sky[i] )		
 		sky[i]:removeSelf( ); sky[i] = nil
 	end
 

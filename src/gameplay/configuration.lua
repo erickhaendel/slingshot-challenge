@@ -46,16 +46,20 @@ game_final_score_player = {} 	-- NAO_MODIFICAR_VALOR
 game_final_score_player[1] = 0 	-- NAO_MODIFICAR_VALOR
 game_final_score_player[2] = 0 	-- NAO_MODIFICAR_VALOR
 
-game_current_turn = 1 			-- 1 rodada possui dois turnos, um para cada player  - NAO_MODIFICAR_VALOR
-game_max_allowed_turns = 2 		-- numero maximo de turnos por rodada - PODE_MODIFICAR_VALOR
-game_current_player = 1 		-- identifica o jogador que esta jogando no momento  - NAO_MODIFICAR_VALOR
-game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
-game_total_rounds = 5 		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
-game_max_allowed_rounds = 5 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
 
 game_hit_choose = {} 			-- intencao de acerto de cada player
 game_hit_choose[1] = {}			-- player 1
 game_hit_choose[2] = {} 		-- player 2
+
+-- GAME STATE MACHINE
+game_is_shooted = 0 			-- se a pedra foi disparada
+game_is_hit = 0 				-- se a lata foi atingida
+game_current_turn = 1 			-- 1 rodada possui dois turnos, um para cada player  - NAO_MODIFICAR_VALOR
+game_max_allowed_turns = 2 		-- numero maximo de turnos por rodada - PODE_MODIFICAR_VALOR
+game_current_player = 1 		-- identifica o jogador que esta jogando no momento  - NAO_MODIFICAR_VALOR
+game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
+game_total_rounds = 1 		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
+game_max_allowed_rounds = 1 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
 
 -- NETWORK
 port = 80
