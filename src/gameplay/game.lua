@@ -132,7 +132,12 @@ function can_collision_proccess(t, update)
 
 					print( "parede 1" )					
 
-					assetsTile.wall_tile_animation( 1 )	
+					t.isVisible = false
+					assetsTile.wall_tiles_obj[1]:toFront()	
+					assetsTile.wall_tiles_obj[2]:toFront()	
+					assetsTile.ground_tiles_obj[1]:toFront()
+					assetsTile.slingshot_tiles_obj[1]:toFront()
+
 					configuration.game_is_hit = 1
 					side = 1
 
@@ -158,7 +163,13 @@ function can_collision_proccess(t, update)
 
 					t.isSensor = false			
 
-					print( "parede 2" )					
+					print( "parede 2" )	
+
+					t.isVisible = false
+					assetsTile.wall_tiles_obj[1]:toFront()	
+					assetsTile.wall_tiles_obj[2]:toFront()	
+					assetsTile.ground_tiles_obj[1]:toFront()
+					assetsTile.slingshot_tiles_obj[1]:toFront()
 
 					assetsTile.wall_tile_animation( 2 )				
 					configuration.game_is_hit = 1
@@ -186,7 +197,13 @@ function can_collision_proccess(t, update)
 
 					t:toBack( )					
 
-					print( "parede 3" )					
+					print( "parede 3" )		
+
+					t.isVisible = false
+					assetsTile.wall_tiles_obj[3]:toFront()	
+					assetsTile.wall_tiles_obj[4]:toFront()						
+					assetsTile.ground_tiles_obj[2]:toFront()
+					assetsTile.slingshot_tiles_obj[2]:toFront()
 
 					assetsTile.wall_tile_animation( 3 )	
 					configuration.game_is_hit = 1
@@ -214,6 +231,12 @@ function can_collision_proccess(t, update)
 					t.isSensor = false
 
 					print( "parede 4" )
+
+					t.isVisible = false
+					assetsTile.wall_tiles_obj[3]:toFront()
+					assetsTile.wall_tiles_obj[4]:toFront()	
+					assetsTile.ground_tiles_obj[2]:toFront()					
+					assetsTile.slingshot_tiles_obj[2]:toFront()
 
 					assetsTile.wall_tile_animation( 4 )					
 					configuration.game_is_hit = 1
