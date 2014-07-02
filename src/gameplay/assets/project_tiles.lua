@@ -13,9 +13,17 @@ function newProjectile()
 	-- Import easing plugin
 	local easingx  = require("easing");
 	
+	local stone_name = nil
+
+	if configuration.game_current_player == 1 then
+		stone_name = "yellow-stone"
+	elseif configuration.game_current_player == 2 then
+		stone_name = "green-stone"
+	end
+
 	-- Bullet properties
 	local bun_bullet = {
-		name = "stone",
+		name = stone_name,
 		type = "bullet",
 		density=0.15,
 		friction=0.2,
