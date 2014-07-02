@@ -207,13 +207,15 @@ local function remove_wall_tiles_obj(  )
 end
 
 local function remove_can_tiles_obj(  )
+
 	if can_tiles_obj then
+
 		local M = 2 ; local N = 2
 
 		-- removendo as ltas do grupo
-		for i = 1, N do
-			for j = 1, M do
-				for k=1,4 do
+		for k=1,4 do
+			for i = 1, N do
+				for j = 1, M do
 					assetsGroup:remove( can_tiles_obj[k][M * (i-1) + j] )	
 				end
 			end
@@ -225,10 +227,13 @@ local function remove_can_tiles_obj(  )
 end
 
 local function remove_ground_tiles_obj(  )
+
 	if ground_tiles_obj then
+
 		for i=1, #ground_tiles_obj do
 			assetsGroup:remove( ground_tiles_obj[i] )	
 		end	
+
 		ground_tiles_lib.removeGrassTile( ground_tiles_obj )
 	end
 end
@@ -373,7 +378,7 @@ function score_animation( intend_to_hit )
 				
 				-- cenario 2
 				score_player_tiles_obj[4].text = "Player 1 >> "..i-- could be index 4 or 3							
-			else
+			elseif intend_to_hit == 2 then
 				-- cenario 1
 				scoreboard_tiles_obj[2][i].isVisible = true -- could index 1 or 2 - i did this to not write an if/else statemment
 				
@@ -396,11 +401,11 @@ end
 
 function wall_tile_animation( id )
 	wall_tiles_obj[id]:toFront()								
-	physics.removeBody( wall_tiles_obj[ id ] )	
+	--physics.removeBody( wall_tiles_obj[ id ] )	
 end
 
 function reconfigure_wall_tile( id )
-	physics.addBody( wall_tiles_obj[ id ], "static", configuration.wallBody )
+	--physics.addBody( wall_tiles_obj[ id ], "static", configuration.wallBody )
 end
 
 function reload_round_tiles( )
@@ -421,7 +426,9 @@ function reload_can_tiles( )
 	remove_can_tiles_obj(  )
 
 	-- carrega as latas em cima da parede
-	create_can_tiles_obj(  )
+	timer.performWithDelay(1000, function ( event )	
+		create_can_tiles_obj(  )
+		end)
 end
 
 function reload_scoreboard_tiles()
@@ -447,4 +454,23 @@ function hidePointsScoreboards()
 	end
 
 	return scoreboard_tiles_obj
+end
+
+-- processa a emulacao gráfica do eixo Z para dar impressão de profundidade
+function projectile_animation(t)
+	-- Scale Balls
+	if configuration.projecttile_scale > 0 then
+		configuration.projecttile_scale = configuration.projecttile_scale - configuration.projecttile_variation	
+		t.xScale = configuration.projecttile_scale; t.yScale = configuration.projecttile_scale
+		local vx, vy = t:getLinearVelocity()
+		t:setLinearVelocity(vx*0.94,vy*0.94)
+
+		local nw, nh 
+		local myScaleX, myScaleY = configuration.projecttile_scale, configuration.projecttile_scale
+
+		nw = t.width*myScaleX*0.5;
+		nh = t.height*myScaleY*0.5;
+
+		physics.addBody( t, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )						
+	end	
 end

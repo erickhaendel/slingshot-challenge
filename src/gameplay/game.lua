@@ -70,24 +70,45 @@ local next_turn
 -- gera uma nova pedra
 function spawnProjectile()
 	
-	projectiles_container = project_tiles_lib.newProjectile();
-	-- Flag projectiles for removal
-	projectiles_container.ready = true;
-	projectiles_container.remove = true;
-	
-	-- Reset the indexing for the visual attributes of the catapult.
-	slingshot_container:insert(projectiles_container);
+	-- If there is a projectile available then...
+	if(project_tiles_lib.ready)then
 
-	-- Add an event listener to the projectile.
-	projectiles_container:addEventListener("touch", projectileTouchListener);		
+		projectiles_container = project_tiles_lib.newProjectile();
+		-- Flag projectiles for removal
+		projectiles_container.ready = true;
+		projectiles_container.remove = true;
+		
+		-- Reset the indexing for the visual attributes of the catapult.
+		slingshot_container:insert(projectiles_container);
+
+		-- Add an event listener to the projectile.
+		projectiles_container:addEventListener("touch", projectileTouchListener);	
+
+	end	
+end
+
+
+local function onCollision( e )
+
+    if ( e.phase == "began" ) then
+
+        print( "bateu" )
+
+    elseif ( e.phase == "ended" ) then
+
+        --print( e.id )
+
+    end
 end
 
 -- detecta colisao da pedra com com as latas e atualiza a gui
-function can_collision_proccess(t)
+function can_collision_proccess(t, update)
 
 	local M = 2; local N = 2;	
 
-	local side = nil	
+	local side = nil
+
+	Runtime:addEventListener( "collision", onCollision )	
 
 	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 		for i = 1, N do
@@ -95,39 +116,77 @@ function can_collision_proccess(t)
 
 				-- PAREDE 01
 				if (gamelib.hitTestObjects( t, assetsTile.can_tiles_obj[1][M * (i-1) + j]) ) then
+
+					-- adiciona uma fisica proporcional a essa nova dimensao
+					for x=1,4 do
+						physics.addBody( assetsTile.can_tiles_obj[1][x],  { density=0.03, friction=0.1, bounce=0.5} )
+						assetsTile.can_tiles_obj[1][x]:applyForce( 0.5, -0.5, assetsTile.can_tiles_obj[1][M * (i-1) + j].x, assetsTile.can_tiles_obj[1][M * (i-1) + j].y);							
+					end
+
 					-- Play the hit can
 					assets_audio.playHitCan()
 
 					t.isSensor = false
+
+					t:toBack( )
+
+					print( "parede 1" )					
 
 					assetsTile.wall_tile_animation( 1 )	
 					configuration.game_is_hit = 1
 					side = 1
 
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 -- own can
+					
 					score_proccess()
+
+					t:toBack( )										
+				
 					break; -- stop checking hit cans						
 
 				-- PAREDE 2
 				elseif (gamelib.hitTestObjects( t, assetsTile.can_tiles_obj[2][M * (i-1) + j]) ) then
+
+					-- adiciona uma fisica proporcional a essa nova dimensao
+					for x=1,4 do
+						physics.addBody( assetsTile.can_tiles_obj[2][x],  { density=0.03, friction=0.1, bounce=0.5} )
+						assetsTile.can_tiles_obj[2][x]:applyForce( 0.5, -0.5, assetsTile.can_tiles_obj[1][M * (i-1) + j].x, assetsTile.can_tiles_obj[1][M * (i-1) + j].y);							
+					end
+
 					-- Play the hit can
 					assets_audio.playHitCan()
 
-					t.isSensor = false
+					t.isSensor = false			
+
+					print( "parede 2" )					
 
 					assetsTile.wall_tile_animation( 2 )				
 					configuration.game_is_hit = 1
 					side = 2
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 -- friend can
 					score_proccess()
+
+					t:toBack( )										
+				
 					break; -- stop checking hit cans	
 
 				-- PAREDE 3								
 				elseif (gamelib.hitTestObjects( t, assetsTile.can_tiles_obj[3][M * (i-1) + j]) ) then
+
+					-- adiciona uma fisica proporcional a essa nova dimensao
+					for x=1,4 do
+						physics.addBody( assetsTile.can_tiles_obj[3][x],  { density=0.03, friction=0.1, bounce=0.5} )
+						assetsTile.can_tiles_obj[3][x]:applyForce( 0.5, -0.5, assetsTile.can_tiles_obj[1][M * (i-1) + j].x, assetsTile.can_tiles_obj[1][M * (i-1) + j].y);							
+					end
+
 					-- Play the hit can
 					assets_audio.playHitCan()
 
 					t.isSensor = false
+
+					t:toBack( )					
+
+					print( "parede 3" )					
 
 					assetsTile.wall_tile_animation( 3 )	
 					configuration.game_is_hit = 1
@@ -135,14 +194,26 @@ function can_collision_proccess(t)
 
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 -- own can
 					score_proccess()
+
+					t:toBack( )										
+									
 					break; -- stop checking hit cans						
 
 				-- PAREDE 4
 				elseif (gamelib.hitTestObjects( t, assetsTile.can_tiles_obj[4][M * (i-1) + j]) ) then
+
+					-- adiciona uma fisica proporcional a essa nova dimensao
+					for x=1,4 do
+						physics.addBody( assetsTile.can_tiles_obj[4][x],  { density=0.03, friction=0.1, bounce=0.5} )
+						assetsTile.can_tiles_obj[4][x]:applyForce( 0.5, -0.5, assetsTile.can_tiles_obj[1][M * (i-1) + j].x, assetsTile.can_tiles_obj[1][M * (i-1) + j].y);							
+					end
+
 					-- Play the hit can
 					assets_audio.playHitCan()
 
 					t.isSensor = false
+
+					print( "parede 4" )
 
 					assetsTile.wall_tile_animation( 4 )					
 					configuration.game_is_hit = 1
@@ -150,6 +221,9 @@ function can_collision_proccess(t)
 
 					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 -- friend can
 					score_proccess()
+
+					t:toBack( )					
+
 					break; -- stop checking hit cans									
 				end	
 				
@@ -210,6 +284,7 @@ function projectileTouchListener(e)
 
 				-- Remove projectile touch so player can't grab it back and re-use after firing.
 				projectiles_container:removeEventListener("touch", projectileTouchListener);
+
 				-- Reset the stage focus
 				display.getCurrentStage():setFocus(nil);
 				t.isFocus = false;
@@ -234,22 +309,23 @@ function projectileTouchListener(e)
 				t.isFixedRotation = false;
 				
 				Runtime:removeEventListener('enterFrame', update)	
-				
-				-- remove a animacao da trajetoria da pedra anterior
-				--remove_projectile_animation()
 
 				configuration.projecttile_scale = 1.1
 
-				update = function(e)
+				t.timer1 = timer.performWithDelay(1, function(e)
 					-- diminui a escala da pedra e traça sua trajetoria
-
-					project_tiles_lib.new_projectile_animation(t)
+					assetsTile.projectile_animation(t)
 
 					-- monitora colisao com as latas
-					can_collision_proccess(t)					
-				end				
+					if configuration.game_is_hit == 0 then					
+						can_collision_proccess(t)	
+					end
 
-				Runtime:addEventListener('enterFrame', update)
+					if configuration.game_is_hit == 1 then
+						timer.cancel(t.timer1);
+						t.timer1 = nil;
+					end			
+				end,0)	
 
 				-- Wait a second before the catapult is reloaded (Avoids conflicts).
 				t.timer = timer.performWithDelay(1000, 
@@ -262,7 +338,7 @@ function projectileTouchListener(e)
 						end
 					
 					end
-				, 1)							
+				, 1)						
 			end
 		
 		end
@@ -364,15 +440,15 @@ function next_turn()
 		gamelib.changeCurrentPlayer()
 	end
 
-	-- collision detection mode on
-	configuration.game_is_shooted = 0
-	configuration.game_is_hit = 0
-
 	gamelib.debug_gameplay()
 
 	Runtime:addEventListener( "enterFrame", assetsTile.moveCamera )
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+
+		-- collision detection mode on
+		configuration.game_is_shooted = 0
+		configuration.game_is_hit = 0
 
 		spawnProjectile(); -- Spawn the first projectile.
 
@@ -436,10 +512,12 @@ function start_game()
 
 	-- sempre inicia pelo primeiro turno, independente do jogador
 	configuration.game_current_turn = 1
+	configuration.game_current_round = 1
 
 	-- escolhe entre o jogador 1 ou 2 quem vai iniciar primeiro o jogo
-	configuration.game_current_player = math.random( 1, 2 )
-
+	--configuration.game_current_player = math.random( 1, 2 )
+	configuration.game_current_player = 2
+	
 	assetsTile.createGameplayScenario() -- carrega objetos do cenario
 
 	Runtime:addEventListener( "enterFrame", assetsTile.moveCamera)
@@ -447,6 +525,9 @@ function start_game()
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
 		state:addEventListener("change", state); -- Create listnener for state changes in the game
+
+		-- Tell the projectile it's good to go!
+		project_tiles_lib.ready = true;
 
 		spawnProjectile(); -- Spawn the first projectile.
 

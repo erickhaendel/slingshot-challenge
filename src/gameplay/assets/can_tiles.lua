@@ -62,21 +62,18 @@ function newCanTile()
 	-- configuração das latas - com cores e neutras
 	local cans_disposal = candisposal.prepare_cans_disposition(  )
 
-	local current_can = {} -- alias para a lata atual
-
-	for k=1,4 do -- p1 cenario, p2 cenario 1, p2 cenario 2, p1 cenario 2
 
 		for i = 1, N do
 			for j = 1, M do
+				for k=1,4 do -- p1 cenario, p2 cenario 1, p2 cenario 2, p1 cenario 2
 
 				local nw, nh -- 
 
-				current_can[k] = cans[k][M * (i-1) + j]
-
 				-- se o array de configuracao de latas (can disposal) disser que é lata com cor
 				if cans_disposal[k][configuration.game_current_round][M * (i-1) + j] == 1 then
-					-- 
-					current_can[k] = display.newImage( 
+					
+					-- desenha a lata
+					cans[k][M * (i-1) + j] = display.newImage( 
 						filename[k], 
 						configuration.cans_x[k] + (i*configuration.can_width), 
 						configuration.cans_y[k] - (j*configuration.can_height) )
@@ -84,24 +81,23 @@ function newCanTile()
 				-- senao é lata neutra
 				elseif cans_disposal[k][configuration.game_current_round][M * (i-1) + j] == 0 then
 
-					current_can[k] = display.newImage( 
+					cans[k][M * (i-1) + j] = display.newImage( 
 						filename[5], 
 						configuration.cans_x[k] + (i*configuration.can_width), 
 						configuration.cans_y[k] - (j*configuration.can_height) )					
 				end
 
 				-- redimensiona as latas para dar uma impressão de menor do que são realmente
-				current_can[k].xScale = configuration.can_xScale
-				current_can[k].yScale = configuration.can_yScale
+				cans[k][M * (i-1) + j].xScale = configuration.can_xScale
+				cans[k][M * (i-1) + j].yScale = configuration.can_yScale
 
-				nw = current_can[k].width * myScaleX * configuration.can_xScale
-				nh = current_can[k].height * myScaleY * configuration.can_xScale
+				nw = cans[k][M * (i-1) + j].width * myScaleX * configuration.can_xScale
+				nh = cans[k][M * (i-1) + j].height * myScaleY * configuration.can_xScale
 
 				-- adiciona uma fisica proporcional a essa nova dimensao
-				local cansBody = { density=0.10, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}}
-				physics.addBody( current_can[k], cansBody )
+				--local newCansBody = { density=0.03, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}}
+				--physics.addBody( cans[k][M * (i-1) + j], newCansBody )
 
-				cans[k][M * (i-1) + j] = current_can[k]
 			end
 
 		end
@@ -110,14 +106,14 @@ function newCanTile()
 	return cans
 end
 
+-- remove todas as latas
 function removeCanTiles(cans)
 
 	local M = 2 ; local N = 2
 
-	for i = 1, N do
-		for j = 1, M do
-			for k=1,4 do
-				
+	for k=1,4 do
+		for i = 1, N do
+			for j = 1, M do
  				cans[k][M * (i-1) + j]:removeSelf( ); cans[k][M * (i-1) + j] = nil;
 			end
 		end

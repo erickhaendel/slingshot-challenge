@@ -46,7 +46,7 @@ function newWallTile(  )
 
 	for i=1,4 do
 		walls[i] = display.newImage(configuration.wall_image_filename, configuration.wall_x[i] , configuration.wall_y[i] )	
-		physics.addBody( walls[i], "static", configuration.wallBody )	
+		--physics.addBody( walls[i], "static", configuration.wallBody )	
 	end
 	
 	return walls

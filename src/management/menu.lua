@@ -138,7 +138,6 @@ function onBtnPlayEvent( event )
     removeAll()
     composer.removeScene('src.management.menu')
     composer.gotoScene( "src.gameplay.game", "fade", 400)
-    print( "lets play" )
 end
 
 -- Events for Button Credits

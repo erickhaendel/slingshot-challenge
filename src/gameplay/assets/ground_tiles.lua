@@ -47,7 +47,7 @@ function newGrassTile()
 	for i=1,2 do
 		grassTable[i] = display.newImage(configuration.grass_image_filename)
 		grassTable[i].x = configuration.grass_position_x[i]; grassTable[i].y = configuration.grass_position_y[i]
-		physics.addBody( grassTable[i], "static", grassBody )
+		--physics.addBody( grassTable[i], "static", grassBody )
 	end
 
 	return grassTable
