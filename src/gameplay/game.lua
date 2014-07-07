@@ -87,28 +87,12 @@ function spawnProjectile()
 	end	
 end
 
-
-local function onCollision( e )
-
-    if ( e.phase == "began" ) then
-
-        print( "bateu" )
-
-    elseif ( e.phase == "ended" ) then
-
-        --print( e.id )
-
-    end
-end
-
 -- detecta colisao da pedra com com as latas e atualiza a gui
 function can_collision_proccess(t, update)
 
 	local M = 2; local N = 2;	
 
 	local side = nil
-
-	Runtime:addEventListener( "collision", onCollision )	
 
 	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 		for i = 1, N do
@@ -137,6 +121,11 @@ function can_collision_proccess(t, update)
 					assetsTile.wall_tiles_obj[2]:toFront()	
 					assetsTile.ground_tiles_obj[1]:toFront()
 					assetsTile.slingshot_tiles_obj[1]:toFront()
+
+					assetsTile.score_player_tiles_obj[1]:toFront( )
+					assetsTile.score_player_tiles_obj[2]:toFront( )
+					assetsTile.score_player_tiles_obj[3]:toFront( )
+					assetsTile.score_player_tiles_obj[4]:toFront( )						
 
 					configuration.game_is_hit = 1
 					side = 1
@@ -169,7 +158,13 @@ function can_collision_proccess(t, update)
 					assetsTile.wall_tiles_obj[1]:toFront()	
 					assetsTile.wall_tiles_obj[2]:toFront()	
 					assetsTile.ground_tiles_obj[1]:toFront()
+
 					assetsTile.slingshot_tiles_obj[1]:toFront()
+
+					assetsTile.score_player_tiles_obj[1]:toFront( )
+					assetsTile.score_player_tiles_obj[2]:toFront( )
+					assetsTile.score_player_tiles_obj[3]:toFront( )
+					assetsTile.score_player_tiles_obj[4]:toFront( )						
 
 					assetsTile.wall_tile_animation( 2 )				
 					configuration.game_is_hit = 1
@@ -205,6 +200,11 @@ function can_collision_proccess(t, update)
 					assetsTile.ground_tiles_obj[2]:toFront()
 					assetsTile.slingshot_tiles_obj[2]:toFront()
 
+					assetsTile.score_player_tiles_obj[1]:toFront( )
+					assetsTile.score_player_tiles_obj[2]:toFront( )
+					assetsTile.score_player_tiles_obj[3]:toFront( )
+					assetsTile.score_player_tiles_obj[4]:toFront( )						
+
 					assetsTile.wall_tile_animation( 3 )	
 					configuration.game_is_hit = 1
 					side = 2
@@ -237,6 +237,11 @@ function can_collision_proccess(t, update)
 					assetsTile.wall_tiles_obj[4]:toFront()	
 					assetsTile.ground_tiles_obj[2]:toFront()					
 					assetsTile.slingshot_tiles_obj[2]:toFront()
+
+					assetsTile.score_player_tiles_obj[1]:toFront( )
+					assetsTile.score_player_tiles_obj[2]:toFront( )
+					assetsTile.score_player_tiles_obj[3]:toFront( )
+					assetsTile.score_player_tiles_obj[4]:toFront( )						
 
 					assetsTile.wall_tile_animation( 4 )					
 					configuration.game_is_hit = 1
