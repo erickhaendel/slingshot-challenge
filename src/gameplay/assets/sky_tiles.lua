@@ -44,9 +44,10 @@ local configuration = require( "src.gameplay.configuration" )
 -- SKY ANIMATION										--
 ----------------------------------------------------------
 -- Camera follows bolder automatically
-local skyGroup
+skyGroup = nil
 
 local function moveSky()
+
 	if (skyGroup.x > -960) then
 		skyGroup.x = skyGroup.x -0.2
 	else

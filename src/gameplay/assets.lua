@@ -96,10 +96,7 @@ local projectiles_container = nil;
 ---------------------------------------------------------------------------------------------------------------
 
 local function create_sky_tiles_obj()
-	sky_tiles_obj = sky_tiles_lib.startSky();
-	for i=1, #sky_tiles_obj do
-		assetsGroup:insert( sky_tiles_obj[i] )	
-	end		
+	sky_tiles_obj = sky_tiles_lib.startSky();	
 end
 
 local function create_house_tiles_obj(  )
@@ -180,10 +177,7 @@ end
 ---------------------------------------------------------------------------------------------------------------
 
 local function remove_sky_tiles_obj()
-	if sky_tiles_obj then
-		for i=1, #sky_tiles_obj do
-			assetsGroup:remove( sky_tiles_obj[i] )	
-		end			
+	if sky_tiles_obj then		
 		sky_tiles_lib.removeSky( sky_tiles_obj )
 	end
 end
@@ -343,19 +337,23 @@ end
 ---------------------------------------------------------------------------------------------------------------
 
 -- animation between of thw two players screen
-function moveCamera( )
+function moveCamera( )	
 
 	-- Vai do cenario 1 para o 2
 	if configuration.game_current_player == 2 then
 
 		if (assetsGroup.x > -1450) then	
-			assetsGroup.x = assetsGroup.x - configuration.camera_velocity		
+			sky_tiles_lib.skyGroup.x = sky_tiles_lib.skyGroup.x - configuration.camera_velocity 
+			sky_tiles_lib.skyGroup:toBack( )			
+			assetsGroup.x = assetsGroup.x - configuration.camera_velocity	
 		end
 
 	-- vai do cenario 2 para o 1
 	elseif configuration.game_current_player == 1 then	
 
 		if (assetsGroup.x < 0) then		
+			sky_tiles_lib.skyGroup.x = sky_tiles_lib.skyGroup.x + configuration.camera_velocity 
+			sky_tiles_lib.skyGroup:toBack( )
 			assetsGroup.x = assetsGroup.x + configuration.camera_velocity
 		end
 	end
