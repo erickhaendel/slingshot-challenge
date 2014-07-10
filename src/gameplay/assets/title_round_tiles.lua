@@ -44,11 +44,13 @@ function newRoundLabel()
 
 	local labels = {}
 
-	for i=1,2 do
-		labels[i] = display.newText( "Round "..configuration.game_current_round, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
-		labels[i]:setFillColor( .82, .35 , .35 )
+	labels[1] = display.newImage( configuration.title_round_image[configuration.game_current_round], true )
+	labels[1].x = configuration.title_player_label_x[1]
+	labels[1].y = configuration.title_player_label_y[1]		
 
-	end
+	labels[2] = display.newImage( configuration.title_round_image[configuration.game_current_round], true )
+	labels[2].x = configuration.title_player_label_x[2]
+	labels[2].y = configuration.title_player_label_y[2]	
 
 	return labels
 end

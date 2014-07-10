@@ -58,8 +58,8 @@ game_current_turn = 1 			-- 1 rodada possui dois turnos, um para cada player  - 
 game_max_allowed_turns = 2 		-- numero maximo de turnos por rodada - PODE_MODIFICAR_VALOR
 game_current_player = 1 		-- identifica o jogador que esta jogando no momento  - NAO_MODIFICAR_VALOR
 game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
-game_total_rounds = 2 		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
-game_max_allowed_rounds = 2 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
+game_total_rounds = 5		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
+game_max_allowed_rounds = 5 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
 
 -- NETWORK
 port = 80
@@ -194,6 +194,9 @@ title_player_label_x[1] = display.contentCenterX
 title_player_label_y[1] = display.contentCenterY-280
 title_player_label_x[2] = display.contentCenterX + 1400
 title_player_label_y[2] = display.contentCenterY-280
+title_player_image = {}
+title_player_image[1] = "resources/images/buttons/player1.png"
+title_player_image[2] = "resources/images/buttons/player2.png"
 
 -- SCORE PLAYER LABEL
 score_player_label_x = {}; score_player_label_y = {}
@@ -205,3 +208,16 @@ score_player_label_x[3] = display.contentCenterX + 885
 score_player_label_y[3] = display.contentCenterY + 375
 score_player_label_x[4] = display.contentCenterX + 1890
 score_player_label_y[4] = display.contentCenterY + 375
+
+-- TITLE ROUND LABEL
+title_round_image = {}
+title_round_image[1] = "resources/images/buttons/round1.png"
+title_round_image[2] = "resources/images/buttons/round2.png"
+title_round_image[3] = "resources/images/buttons/round3.png"
+title_round_image[4] = "resources/images/buttons/round4.png"
+title_round_image[5] = "resources/images/buttons/round5.png"
+
+-- TITLE TURN LABEL
+title_turn_image = {}
+title_turn_image[1] = "resources/images/buttons/turn1.png"
+title_turn_image[2] = "resources/images/buttons/turn2.png"

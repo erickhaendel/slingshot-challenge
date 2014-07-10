@@ -42,7 +42,7 @@ local assets_audio					= require( "src.gameplay.assets_audio" )
 local can_tiles_lib 				= require( "src.gameplay.assets.can_tiles" )
 local ground_tiles_lib 				= require( "src.gameplay.assets.ground_tiles" )
 local house_tiles_lib 				= require( "src.gameplay.assets.house_tiles" )
-local score_can_tiles_lib 			= require( "src.gameplay.assets.score_can_tiles" )
+--local score_can_tiles_lib 			= require( "src.gameplay.assets.score_can_tiles" )
 local score_player_tiles_lib 		= require( "src.gameplay.assets.score_player_tiles" )
 local scoreboard_tiles_lib 			= require( "src.gameplay.assets.scoreboard_tiles" )
 local sky_tiles_lib 				= require( "src.gameplay.assets.sky_tiles" )
@@ -61,7 +61,7 @@ band_line_tiles_obj 		= nil;
 can_tiles_obj 				= nil; 
 ground_tiles_obj 			= nil; 
 house_tiles_obj 			= nil; 
-score_can_tiles_obj 		= nil; 
+--score_can_tiles_obj 		= nil; 
 score_player_tiles_obj 		= nil;
 scoreboard_tiles_obj 		= nil; 
 sky_tiles_obj 				= nil; 
@@ -360,6 +360,8 @@ function moveCamera( )
 end
 
 function score_animation( intend_to_hit )
+
+	print( "oi" )
 	
 	for i=1,configuration.game_score_player[intend_to_hit] do
 		timer.performWithDelay(1+i*110, function(e)

@@ -43,20 +43,16 @@ local configuration = require( "src.gameplay.configuration" )
 function newScorePlayerLabel()
 
 	local scoreLabels = {}
-	local j = 1
+
+	scoreLabels[1] = display.newText( "Player 1 >> 0", configuration.score_player_label_x[1], configuration.score_player_label_y[1], native.systemFont, 30 )
+	scoreLabels[2] = display.newText( "Player 2 >> 0", configuration.score_player_label_x[2], configuration.score_player_label_y[2], native.systemFont, 30 )
+	scoreLabels[3] = display.newText( "Player 2 >> 0", configuration.score_player_label_x[3], configuration.score_player_label_y[3], native.systemFont, 30 )
+	scoreLabels[4] = display.newText( "Player 1 >> 0", configuration.score_player_label_x[4], configuration.score_player_label_y[4], native.systemFont, 30 )					
+
 	for i=1,4 do
-		scoreLabels[i] = display.newText( "Player "..j.." >> 0", configuration.score_player_label_x[i], configuration.score_player_label_y[i], native.systemFont, 30 )
-		
 		scoreLabels[i]:setFillColor( 1, 1 , 1 ) -- branco
 
 		scoreLabels[i]:toFront( ) -- para ficar por cima do grass image
-
-		-- Para mostrar o numero do player correto sendo 1 ou 2 apenas em display.newText
-		if j == 2 then 
-			j = 1; 
-		else 
-			j = j + 1; 
-		end
 	end
 
 	return scoreLabels

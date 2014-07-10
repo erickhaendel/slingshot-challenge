@@ -345,11 +345,9 @@ function projectileTouchListener(e)
 					assetsTile.projectile_animation(t)
 
 					-- monitora colisao com as latas
-					if configuration.game_is_hit == 0 then					
+					if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then					
 						can_collision_proccess(t)	
-					end
-
-					if configuration.game_is_hit == 1 then
+					else
 						timer.cancel(t.timer1);
 						t.timer1 = nil;
 					end			
@@ -414,6 +412,8 @@ end
 function score_proccess()
 
 	local player = configuration.game_current_player -- alias
+
+	print( "Player "..player )
 	
 	local intend_to_hit = configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] -- alias
 

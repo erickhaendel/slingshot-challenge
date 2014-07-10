@@ -45,9 +45,9 @@ function newTitlePlayerLabel()
 	local labels = {}
 
 	for i=1,2 do
-		labels[i] = display.newText( "Player "..i, configuration.title_player_label_x[i], configuration.title_player_label_y[i], native.systemFont, 72 )
-		labels[i]:setFillColor( .82, .35 , .35 )
-
+		labels[i] = display.newImage( configuration.title_player_image[i], true )
+		labels[i].x = configuration.title_player_label_x[i]
+		labels[i].y = configuration.title_player_label_y[i]
 	end
 
 	return labels
