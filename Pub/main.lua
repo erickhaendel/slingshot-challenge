@@ -12,7 +12,9 @@ local multiplayer = pubnub.new({
 local action  = nil
 local status  = "avaliable"
 local channel = "world"
-local id  = 1
+local id  = "erick1"
+local username = 'erick'
+local array_player_channel = {}
 
 local timerAccepetRequest, timerPrePlaying, timerPlaying
 
@@ -43,24 +45,25 @@ local function accepetRequest(message)
 end
 
 local function prePlaying(message)
-    multiplayer:publish({
-        channel  = channel,
-        message  = {
-            action      = "playing",
-            idSender    = id,
-            idReceiver  = message.idSender
-        },
+        multiplayer:publish({
+            channel  = channel,
+            message  = {
+                action      = "playing",
+                idSender    = id,
+                idReceiver  = message.idSender
+            },
 
-        callback = function(info)
-            -- WAS MESSAGE DELIVERED?
-            if info[1] then
-                status = "playing"
-                timerPrePlaying = timer.performWithDelay( 10000, initStatus)
-            else
-                print("MESSAGE FAILED BECAUSE -> " .. info[2])
+            callback = function(info)
+                -- WAS MESSAGE DELIVERED?
+                if info[1] then
+                    status = "playing"
+                    thread = false
+                    timerPrePlaying = timer.performWithDelay( 10000, initStatus)
+                else
+                    print("MESSAGE FAILED BECAUSE -> " .. info[2])
+                end
             end
-        end
-    })
+        })
 end
 
 local function playing(message)
@@ -89,24 +92,20 @@ end
 local function handleButtonEvent( event )
 
     if ( "ended" == event.phase ) then
-        --
--- PUBNUB PUBLISH MESSAGE (SEND A MESSAGE)
---
         multiplayer:publish({
             channel  = channel,
             message  = {
                 action      = "request_game",
                 idSender    = id,
+              --  idReceiver  = array_player_channel[channel][1]
             },
             callback = function(info)
-         
                 -- WAS MESSAGE DELIVERED?
                 if info[1] then
                     print("MESSAGE DELIVERED SUCCESSFULLY!")
                 else
                     print("MESSAGE FAILED BECAUSE -> " .. info[2])
                 end
-         
             end
         })
     end
@@ -119,26 +118,17 @@ multiplayer:subscribe({
     channel  = channel,
     callback = function(message)
         if message.idSender ~= id then
+        print("status "..status .." | resposta "..message.action.." |  veio ".. message.idSender)
             if status == "avaliable" then
-                if message.action == "request_game" then
-                    print(message.action)
-                    print(message.idSender)
-                    print("-------------------------------------")
+                if message.action == "request_game"  then
                     accepetRequest(message)
                 elseif message.action == "accepetRequest" then
-                     print(message.action)
-                    print(message.idSender)
-                    print(message.idReceiver)
-                    print("-------------------------------------")
                     if message.idReceiver == id then
                         prePlaying(message)
                     end
                 end
             elseif status == "preplaying" then
                  if message.action == "playing" then
-                     print(message.action)
-                    print(message.idSender)
-                    print("-------------------------------------")
                     if message.idReceiver == id then
                         prePlaying(message)
                     end
@@ -146,24 +136,16 @@ multiplayer:subscribe({
             elseif status == "playing" then
                  if message.action == "preplaying" then
                     if message.idReceiver == id then
-                         print(message.action)
-                    print(message.idSender)
-                    print("-------------------------------------")
-                         if timerAccepetRequest ~= nil then timer.cancel( timerAccepetRequest ) end
+                        if timerAccepetRequest ~= nil then timer.cancel( timerAccepetRequest ) end
                         if timerPrePlaying ~= nil then timer.cancel( timerPrePlaying ) end
                         if timerPlaying ~= nil then timer.cancel( timerPlaying ) end
                         playing(message)
                     end
                 elseif message.action == "playing" then
-
                      if message.idReceiver == id then
-                         print(message.action)
-                    print(message.idSender)
-                    print("-------------------------------------")
                         if timerAccepetRequest ~= nil then timer.cancel( timerAccepetRequest ) end
                         if timerPrePlaying ~= nil then timer.cancel( timerPrePlaying ) end
                         if timerPlaying ~= nil then timer.cancel( timerPlaying ) end
-                        
                         playing(message)
                     end
                 end
