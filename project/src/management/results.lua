@@ -109,7 +109,11 @@ function loadBackgroundAnimation()
 	animation.x = configuration.results_sprite_x
 	animation.y = configuration.results_sprite_y
 	resultsGroup:insert(animation)
-	animation:play()
+
+  timer.performWithDelay( 1000, function()
+    animation:play()
+  end )
+
 end
 
 function loadMenuButton()
