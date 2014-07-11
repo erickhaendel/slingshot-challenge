@@ -49,37 +49,6 @@ if ( isAndroid ) then
     tHeight = tHeight + 10
 end
 
--------------------------------------------
--- General event handler for fields
--------------------------------------------
-
-function textListener( event )
-
-    if ( event.phase == "began" ) then
-
-        -- user begins editing text field
-        print( event.text )
-
-    elseif ( event.phase == "ended" ) then
-
-        -- text field loses focus
-
-    elseif ( event.phase == "ended" or event.phase == "submitted" ) then
-
-        -- do something with defaultField's text
-      -- Hide keyboard
-      native.setKeyboardFocus( nil )        
-
-    elseif ( event.phase == "editing" ) then
-
-        print( event.newCharacters )
-        print( event.oldText )
-        print( event.startPosition )
-        print( event.text )
-
-    end
-end
-
 -- OBJECTs PROTOTYPE
 local loginBackground
 local loginEmailField, loginPasswordField
@@ -92,6 +61,47 @@ local loginListener, loginButtonPress, sendButtonPress, createAll
 
 -- GROUPS
 local loginButtons = display.newGroup()
+
+-------------------------------------------
+-- General event handler for fields
+-------------------------------------------
+
+local function loginEmailFieldHandler( event )
+    fieldHandler( function() return loginEmailField end ) -- passes the text field object
+end
+
+local function loginPasswordFieldHandler( event )
+    fieldHandler( function() return loginPasswordField end ) -- passes the text field object
+end
+
+-- TextField Listener
+local function fieldHandler( getObj )
+
+-- Use Lua closure in order to access the TextField object
+
+    return function( event )
+
+        print( "TextField Object is: " .. tostring( getObj() ) )
+
+        if ( "began" == event.phase ) then
+            -- This is the "keyboard has appeared" event
+
+        elseif ( "ended" == event.phase ) then
+            -- This event is called when the user stops editing a field:
+            -- for example, when they touch a different field or keyboard focus goes away
+
+            print( "Text entered = " .. tostring( getObj().text ) )         -- display the text entered
+
+        elseif ( "submitted" == event.phase ) then
+            -- This event occurs when the user presses the "return" key
+            -- (if available) on the onscreen keyboard
+
+            -- Hide keyboard
+            native.setKeyboardFocus( nil )
+        end
+    end     -- "return function()"
+
+end
 
 -- METHODS
 loadBackground = function()
@@ -115,7 +125,7 @@ loadEmailField = function()
 
   loginEmailField.font = native.newFont( native.systemFontBold, inputFontSize )
   loginEmailField.isEditable = true  
-  loginEmailField:addEventListener( "userInput", textListener  ) 
+  loginEmailField:addEventListener( "userInput", loginEmailFieldHandler  ) 
 
 end
 
@@ -129,7 +139,7 @@ loadPasswordField = function()
   loginPasswordField.font = native.newFont( native.systemFontBold, inputFontSize )
   loginPasswordField.isSecure = true
   loginPasswordField.isEditable = true   
-  loginPasswordField:addEventListener( "userInput", textListener  ) 
+  loginPasswordField:addEventListener( "userInput", loginPasswordFieldHandler  ) 
 end
 
 loadCancelButton = function()
@@ -162,10 +172,10 @@ end
 
 function removeAll()
 
-  if(loginBackground) then loginBackground = nil; end
+  if(loginBackground) then loginBackground:removeSelf( ); loginBackground = nil; end
 
   if(loginEmailField) then 
-    loginEmailField:removeEventListener("userInput", textListener); 
+    loginEmailField:removeEventListener("userInput", loginEmailFieldHandler); 
     loginEmailField.isVisible = false
     loginEmailField:removeSelf(); 
     loginEmailField = nil; 
@@ -173,7 +183,7 @@ function removeAll()
   end
   
   if(loginPasswordField) then 
-    loginPasswordField:removeEventListener("userInput", textListener); 
+    loginPasswordField:removeEventListener("userInput", loginPasswordFieldHandler); 
     loginPasswordField.isVisible = false
     loginPasswordField:removeSelf(); 
     loginPasswordField = nil; 
