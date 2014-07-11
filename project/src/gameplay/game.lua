@@ -164,7 +164,7 @@ function state:change(e)
 					projectiles_container:removeEventListener("touch", projectileTouchListener);
 
 				    composer.removeScene('src.gameplay.game')
-				    composer.gotoScene( "src.gameplay.results", "fade", 400)
+				    composer.gotoScene( "src.management.results", "fade", 400)
 				
 				elseif configuration.game_current_turn == 1 then
 					print( "Prox turno" )
@@ -255,10 +255,13 @@ function start_game()
 	-- sempre inicia pelo primeiro turno, independente do jogador
 	configuration.game_current_turn = 1
 	configuration.game_current_round = 1
-
+    configuration.game_score_player[1] = 0  
+    configuration.game_score_player[2] = 0  
+    configuration.game_final_score_player[1] = 0    
+    configuration.game_final_score_player[2] = 0                  
+  
 	-- escolhe entre o jogador 1 ou 2 quem vai iniciar primeiro o jogo
-	--configuration.game_current_player = math.random( 1, 2 )
-	configuration.game_current_player = 2
+	configuration.game_current_player = math.random( 1, 2 )
 	
 	assets_image.createGameplayScenario() -- carrega objetos do cenario
 

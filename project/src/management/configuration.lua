@@ -47,6 +47,7 @@ signup_button_image 	= "resources/images/buttons/signup.png"
 login_button_image 		= "resources/images/buttons/login.png"
 cancel_button_image 	= "resources/images/buttons/cancel.png"
 back_button_image 		= "resources/images/buttons/back.png"
+menu_button_image 		= "resources/images/buttons/menu.png"
 confirm_button_image 	= "resources/images/buttons/confirm.png"
 ok_button_image 		= "resources/images/buttons/ok.png"
 play_button_image 		= "resources/images/buttons/play.png"
@@ -62,6 +63,10 @@ welcome_background_image 	= "resources/images/backgrounds/welcome.png"
 settings_background_image 	= "resources/images/backgrounds/settings.png"
 credits_background_image 	= "resources/images/backgrounds/credits.png"
 about_background_image 		= "resources/images/backgrounds/about.png"
+results_background_image	= "resources/images/backgrounds/results.png"
+
+-- SPRITES
+results_sprite_image	= "resources/images/backgrounds/results-sprite.jpg"
 
 ------------------------------------------------
 -- AUDIOS 									  --
@@ -120,3 +125,30 @@ signup_cancel_button_y			= display.contentCenterY + 200
 signup_send_button_x			= display.contentCenterX + 200
 signup_send_button_y			= display.contentCenterY + 200
 
+-- RESULTS SCENE
+results_menu_button_x			= display.contentCenterX
+results_menu_button_y			= display.contentCenterY + 300
+
+results_sprite_x				= display.contentWidth/2
+results_sprite_y				= display.contentHeight/2
+
+results_font_name				= native.systemFontBold
+
+results_player1_title_label_x	= display.contentCenterX - 400
+results_player1_title_label_y	= display.contentCenterY - 100
+results_player1_title_font_size = 96
+
+results_player1_score_label_x	= display.contentCenterX - 500
+results_player1_score_label_y	= display.contentCenterY + 100
+results_player1_score_font_size = 64
+
+results_player2_title_label_x	= display.contentCenterX + 450
+results_player2_title_label_y	= display.contentCenterY - 100
+results_player2_title_font_size = 96
+
+results_player2_score_label_x	= display.contentCenterX + 400
+results_player2_score_label_y	= display.contentCenterY + 100
+results_player2_score_font_size = 64
+
+results_imagesheet_options 		= { width=1280, height=800, numFrames=10, sheetContentWidth=1280, sheetContentHeight=8000 }
+results_sprite_options			= { name = "normalRun", start=1, count=10, time=900, loopCount = 1 }
