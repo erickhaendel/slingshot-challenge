@@ -77,63 +77,49 @@ local function onComplete( event )
 end
 
 -- OBJECTs PROTOTYPE
-local loginTituloLabel, loginEmailLabel, loginPasswordLabel
+local loginBackground
 local loginEmailField, loginPasswordField
 local loginCancelButton, loginSendButton
 
 -- METHODS PROTOTYPE
-local loadTituloLabel,loadEmailLabel,loadEmailField,loadPasswordLabel
+local loadEmailField, loadBackgound
 local loadPasswordField,loadCancelButton,loadLoginSendButton,removeAll
 local loginListener, loginButtonPress, sendButtonPress, createAll
 
 -- GROUPS
-local loginLabels = display.newGroup()
 local loginFields = display.newGroup()
 local loginButtons = display.newGroup()
 
 -- METHODS
-loadTituloLabel = function()
-  loginTituloLabel = display.newText( "Insert your data:", 
-    configuration.login_title_label_x, 
-    configuration.login_title_label_y, 
-    native.systemFontBold, 
-    configuration.login_title_font_size_label )
+loadBackground = function()
 
-  loginTituloLabel:setFillColor( 1, 1, 1, 255 )
-  loginLabels:insert(loginTituloLabel)
-end
+  loginBackground = display.newImage( 
+    configuration.login_background_image, 
+    display.contentCenterX, 
+    display.contentCenterY, 
+    true )
+  loginBackground:toBack( )
 
-loadEmailLabel = function()
-  loginEmailLabel = display.newText( "Email:", 
-    configuration.login_email_label_x, 
-    configuration.login_email_label_y, 
-    native.systemFontBold, 
-    configuration.login_email_font_size_label )
-
-  loginEmailLabel:setFillColor( 1, 1, 1, 255 )
-  loginLabels:insert(loginEmailLabel)
 end
 
 loadEmailField = function()
-  loginEmailField = native.newTextField( configuration.login_email_field_x, configuration.login_email_field_y, 245, tHeight )
+  loginEmailField = native.newTextField( 
+    configuration.login_email_field_x, 
+    configuration.login_email_field_y, 
+    configuration.login_email_size_field, 
+    tHeight )
+
   loginEmailField.font = native.newFont( native.systemFontBold, inputFontSize )
   loginEmailField:addEventListener( "userInput", fieldHandler( function() return loginEmailField end ) ) 
   loginFields:insert(loginEmailField)
 end
 
-loadPasswordLabel = function()
-  loginPasswordLabel = display.newText( "Password:", 
-    configuration.login_password_label_x, 
-    configuration.login_password_label_y, 
-    native.systemFontBold, 
-    configuration.login_password_font_size_label )
-
-  loginPasswordLabel:setFillColor( 1, 1, 1, 255 )
-  loginLabels:insert(loginPasswordLabel)
-end
-
 loadPasswordField = function()
-  loginPasswordField = native.newTextField( configuration.login_password_field_x, configuration.login_password_field_y, 245, tHeight )
+  loginPasswordField = native.newTextField( 
+    configuration.login_password_field_x, 
+    configuration.login_password_field_y, 
+    configuration.login_password_size_field, 
+    tHeight )
   loginPasswordField.font = native.newFont( native.systemFontBold, inputFontSize )
   loginPasswordField.isSecure = true
   loginPasswordField:addEventListener( "userInput", fieldHandler( function() return loginPasswordField end ) ) 
@@ -147,7 +133,7 @@ loadCancelButton = function()
     defaultFile = configuration.cancel_button_image,
     overFile = configuration.cancel_button_image,
     emboss = true,
-    onPress = loginButtonPress,
+    onPress = cancelButtonPress,
   }
 
   loginCancelButton.x = configuration.login_cancel_button_x
@@ -161,7 +147,7 @@ loadLoginSendButton = function()
   defaultFile = configuration.login_button_image,
   overFile = configuration.login_button_image,
   emboss = true,
-  onPress = loginButtonPress,}
+  onPress = sendButtonPress,}
 
   loginSendButton.x = configuration.login_send_button_x
   loginSendButton.y = configuration.login_send_button_y
@@ -169,14 +155,11 @@ loadLoginSendButton = function()
 end
 
 function removeAll()
-  if(loginTituloLabel) then display.remove( loginTituloLabel ); loginLabels:remove( loginTituloLabel ); loginTituloLabel = nil; end
 
-  if(loginEmailLabel) then display.remove( loginEmailLabel ); loginLabels:remove( loginEmailLabel ); loginEmailLabel = nil; end
-  
+  if(loginBackground) then loginBackground = nil; end
+
   if(loginEmailField) then loginEmailField:removeSelf(); loginFields:remove( loginEmailField ); loginEmailField = nil; end
   
-  if(loginPasswordLabel) then display.remove( loginPasswordLabel ); loginLabels:remove( loginPasswordLabel ); loginPasswordLabel = nil; end
- 
   if(loginPasswordField) then loginPasswordField:removeSelf(); loginFields:remove( loginPasswordField ); loginPasswordField = nil; end
 
   if(loginCancelButton) then loginButtons:remove( loginCancelButton ); loginCancelButton = nil; end  
@@ -184,12 +167,12 @@ function removeAll()
   if(loginSendButton) then loginButtons:remove( loginSendButton ); loginSendButton = nil; end       
 end
 
-function loginListener(event)
+function Listener(event)
 --     if(getLogin() == 1) then
 --        local alert = native.showAlert( "Login", "conectado.", { "OK" }, onComplete )                 
-        removeTudo()        
+        removeAll()        
 
-        composer.gotoScene( "src.management.menu", "slideLeft", 400 )
+        composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
 
 --     end  
 
@@ -198,7 +181,7 @@ function loginListener(event)
 --   end
 end
 
-loginButtonPress = function( event )
+sendButtonPress = function( event )
 
   local id = my_player_id
   local email = loginEmailField.text
@@ -231,11 +214,11 @@ loginButtonPress = function( event )
 
 end
 
-sendButtonPress = function( event )
+cancelButtonPress = function( event )
   
-  removeTudo()  	
+  removeAll()  	
   
-  composer.gotoScene( "src.management.menu", "slideLeft", 400 )
+  composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
 
 end
 
@@ -243,14 +226,10 @@ end
 
 createAll = function()
   
-  if not loginTituloLabel then  loadTituloLabel();  end  
+  if not loginBackground then  loadBackground();  end  
 
-  if not loginEmailLabel then loadEmailLabel();  end  
-    
   if not loginEmailField then loadEmailField();  end
     
-  if not loginPasswordLabel then loadPasswordLabel();  end  
-  
   if not loginPasswordField then loadPasswordField();  end 
 
   if not loginCancelButton then loadCancelButton();  end 

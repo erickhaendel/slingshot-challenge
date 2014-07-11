@@ -78,31 +78,20 @@ press_button_sound					= ""
 ------------------------------------------------
 
 -- LOGIN SCENE OBJECT POSITIONS
-login_title_label_x				= display.contentCenterX
-login_title_label_y				= display.contentCenterY - 300
-login_title_font_size_label		= 36
-
-login_email_label_x				= display.contentCenterX - 150
-login_email_label_y				= display.contentCenterY - 200
-login_email_font_size_label		= 36
 
 login_email_field_x				= display.contentCenterX + 150
-login_email_field_y				= display.contentCenterY - 200
-login_email_size_field			= 245
-
-login_password_label_x			= display.contentCenterX - 150
-login_password_label_y			= display.contentCenterY - 100
-login_password_font_size_label	= 36
+login_email_field_y				= display.contentCenterY - 50
+login_email_size_field			= 320
 
 login_password_field_x 			= display.contentCenterX + 150
-login_password_field_y			= display.contentCenterY - 100
-login_password_size_field		= 245
+login_password_field_y			= display.contentCenterY + 30
+login_password_size_field		= 320
 
 login_cancel_button_x			= display.contentCenterX - 200
-login_cancel_button_y			= display.contentCenterY + 50
+login_cancel_button_y			= display.contentCenterY + 200
 
 login_send_button_x				= display.contentCenterX + 200
-login_send_button_y				= display.contentCenterY + 50
+login_send_button_y				= display.contentCenterY + 200
 
 
 
