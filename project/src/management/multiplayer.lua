@@ -1,4 +1,6 @@
+-- my libs
 require( "src.infra.includeall" )
+local configuration = require( "src.management.configuration" )
 
 
 -- Require the widget library

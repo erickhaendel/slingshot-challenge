@@ -2,9 +2,9 @@
 -- welcome.lua
 -- Dewcription: welcome screen
 -- @author Erick <erickhaendel@gmail.com>
--- @modified 
 -- @version 1.00
--- @date 06/29/2014
+-- @created_date 06/29/2014
+-- @modified_date 07/10/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -32,7 +32,12 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
+-- corona libs
 local composer = require( "composer" )
+
+-- my libs
+local configuration = require( "src.management.configuration" )
+
 
 local scene = composer.newScene()
 
@@ -44,7 +49,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
-local btnVisitor -- type newImage
+local btnLogin -- type newImage
 local btnSignup  -- type newImage
 
 -- "scene:create()"
@@ -52,16 +57,17 @@ function scene:create( event )
 
     local sceneGroup = self.view
 
-    local menu_song = audio.loadStream( "resources/audio/songs/menu.wav" )
-
-    gameMusicChannel = audio.play( menu_song, { channel=1, loops=-1, fadein=5000 } )
-
-    audio.setVolume( 0.5 )    
+    -- audio
+    local menu_song = audio.loadStream( configuration.background_sound_theme )
+    gameMusicChannel = audio.play( menu_song, configuration.background_config_sound_theme )
+    audio.setVolume( configuration.background_sound_theme_volume_level )    
 
     -- Create elements
    	-- Background & box  welcome
-    --local boxWelcome = display.newImage( "resources/images/backgrounds/welcome.png", display.contentCenterX , display.contentCenterY , true )
-     local boxWelcome = display.newImageRect( "resources/images/backgrounds/welcome.png",  display.contentWidth  ,  display.contentHeight  )
+    local boxWelcome = display.newImageRect( 
+        configuration.welcome_background_image,  
+        display.contentWidth  ,  
+        display.contentHeight  )
 
      boxWelcome.x , boxWelcome.y =  display.contentCenterX , display.contentCenterY 
     
@@ -69,14 +75,14 @@ function scene:create( event )
     btnX = display.contentCenterX / 2 
     btnY = ( display.contentCenterY  + display.contentCenterY / 2 ) 
     
-    btnVisitor = display.newImage( "resources/images/buttons/login.png", btnX , btnY , true  )
-    btnSignup = display.newImage( "resources/images/buttons/signup.png", btnX + display.contentCenterX , btnY , true  )
+    btnLogin = display.newImage( configuration.login_button_image, btnX , btnY , true  )
+    btnSignup = display.newImage( configuration.signup_button_image, btnX + display.contentCenterX , btnY , true  )
 
 
 
     --Insert elements to scene
     sceneGroup:insert( boxWelcome ) -- inserindo o box welcome
-    sceneGroup:insert( btnVisitor ) -- inserindo o button visitor
+    sceneGroup:insert( btnLogin ) -- inserindo o button visitor
     sceneGroup:insert( btnSignup ) -- inserindo o button signup
 
 end
@@ -93,7 +99,7 @@ function scene:show( event )
     elseif ( phase == "did" ) then
 
     	-- Eventos
-        btnVisitor:addEventListener( "touch" , btnVisitorEvent )
+        btnLogin:addEventListener( "touch" , btnLoginEvent )
         btnSignup:addEventListener( "touch" ,  btnSignupEvent )
 
     end
@@ -128,13 +134,13 @@ end
 
 
 -- Events for Button Visitor
-function btnVisitorEvent( event )
-	composer.gotoScene( "src.management.menu", "slideLeft", 400 )
+function btnLoginEvent( event )
+	composer.gotoScene( "src.management.login", "slideLeft", 400 )
 end
 
 -- Events for Button Signup
 function btnSignupEvent( event )
-	composer.gotoScene( "src.management.menu", "fade", 400 )
+	composer.gotoScene( "src.management.signup", "fade", 400 )
 end
 
 

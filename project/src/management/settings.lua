@@ -32,8 +32,10 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
--- Imports
-local composer = require( "composer" )
+-- my libs
+require( "src.infra.includeall" )
+local configuration = require( "src.management.configuration" )
+
 local widget = require( "widget" )
 
 -- local util =  require( "src.infra.util" )

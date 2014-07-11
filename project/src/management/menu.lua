@@ -32,7 +32,9 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
+-- my libs
 require( "src.infra.includeall" )
+local configuration = require( "src.management.configuration" )
 
 --local util =  require( "src.infra.util" )
 

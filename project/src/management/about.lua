@@ -32,8 +32,9 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
-local composer = require( "composer" )
--- local util =  require( "src.infra.util" )
+-- my libs
+require( "src.infra.includeall" )
+local configuration = require( "src.management.configuration" )
 
 local scene = composer.newScene()
 
