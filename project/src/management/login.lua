@@ -40,39 +40,43 @@ local scene = composer.newScene()
 
 local tHeight		-- forward reference
 
+local isAndroid = "Android" == system.getInfo( "platformName" )
+local inputFontSize = 18
+local tHeight = 30
+
+if ( isAndroid ) then
+    inputFontSize = inputFontSize - 4
+    tHeight = tHeight + 10
+end
+
 -------------------------------------------
 -- General event handler for fields
 -------------------------------------------
 
-local function fieldHandler( textField )
+function textListener( event )
 
-	return function( event )
-		if ( "began" == event.phase ) then
-			-- This is the "keyboard has appeared" event
-			-- In some cases you may want to adjust the interface when the keyboard appears.
-		
-		elseif ( "ended" == event.phase ) then
-			-- This event is called when the user stops editing a field: for example, when they touch a different field
-			
-		elseif ( "editing" == event.phase ) then
-		
-		elseif ( "submitted" == event.phase ) then
-			-- This event occurs when the user presses the "return" key (if available) on the onscreen keyboard
-			print( textField().text )
-			
-			-- Hide keyboard
-			native.setKeyboardFocus( nil )
-		end
-	end
-end
+    if ( event.phase == "began" ) then
 
--- Handler that gets notified when the alert closes
-local function onComplete( event )
-    if "clicked" == event.action then
-        local i = event.index
-        if 1 == i then
-                -- Do nothing; dialog will simply dismiss
-        end
+        -- user begins editing text field
+        print( event.text )
+
+    elseif ( event.phase == "ended" ) then
+
+        -- text field loses focus
+
+    elseif ( event.phase == "ended" or event.phase == "submitted" ) then
+
+        -- do something with defaultField's text
+      -- Hide keyboard
+      native.setKeyboardFocus( nil )        
+
+    elseif ( event.phase == "editing" ) then
+
+        print( event.newCharacters )
+        print( event.oldText )
+        print( event.startPosition )
+        print( event.text )
+
     end
 end
 
@@ -87,7 +91,6 @@ local loadPasswordField,loadCancelButton,loadLoginSendButton,removeAll
 local loginListener, loginButtonPress, sendButtonPress, createAll
 
 -- GROUPS
-local loginFields = display.newGroup()
 local loginButtons = display.newGroup()
 
 -- METHODS
@@ -102,6 +105,7 @@ loadBackground = function()
 
 end
 
+-- Remenber: Native objects CANNOT be inserted into displayGroups.
 loadEmailField = function()
   loginEmailField = native.newTextField( 
     configuration.login_email_field_x, 
@@ -110,10 +114,12 @@ loadEmailField = function()
     tHeight )
 
   loginEmailField.font = native.newFont( native.systemFontBold, inputFontSize )
-  loginEmailField:addEventListener( "userInput", fieldHandler( function() return loginEmailField end ) ) 
-  loginFields:insert(loginEmailField)
+  loginEmailField.isEditable = true  
+  loginEmailField:addEventListener( "userInput", textListener  ) 
+
 end
 
+-- Remender: Native objects CANNOT be inserted into displayGroups.
 loadPasswordField = function()
   loginPasswordField = native.newTextField( 
     configuration.login_password_field_x, 
@@ -122,8 +128,8 @@ loadPasswordField = function()
     tHeight )
   loginPasswordField.font = native.newFont( native.systemFontBold, inputFontSize )
   loginPasswordField.isSecure = true
-  loginPasswordField:addEventListener( "userInput", fieldHandler( function() return loginPasswordField end ) ) 
-  loginFields:insert(loginPasswordField)
+  loginPasswordField.isEditable = true   
+  loginPasswordField:addEventListener( "userInput", textListener  ) 
 end
 
 loadCancelButton = function()
@@ -158,20 +164,44 @@ function removeAll()
 
   if(loginBackground) then loginBackground = nil; end
 
-  if(loginEmailField) then loginEmailField:removeSelf(); loginFields:remove( loginEmailField ); loginEmailField = nil; end
+  if(loginEmailField) then 
+    loginEmailField:removeEventListener("userInput", textListener); 
+    loginEmailField.isVisible = false
+    loginEmailField:removeSelf(); 
+    loginEmailField = nil; 
+    print( "oi" )
+  end
   
-  if(loginPasswordField) then loginPasswordField:removeSelf(); loginFields:remove( loginPasswordField ); loginPasswordField = nil; end
+  if(loginPasswordField) then 
+    loginPasswordField:removeEventListener("userInput", textListener); 
+    loginPasswordField.isVisible = false
+    loginPasswordField:removeSelf(); 
+    loginPasswordField = nil; 
+  end
 
-  if(loginCancelButton) then loginButtons:remove( loginCancelButton ); loginCancelButton = nil; end  
+  if(loginCancelButton) then 
+    loginButtons:remove( loginCancelButton ); 
+    loginCancelButton:removeSelf( ); 
+    loginCancelButton = nil; 
+  end  
   
-  if(loginSendButton) then loginButtons:remove( loginSendButton ); loginSendButton = nil; end       
+  if(loginSendButton) then 
+    loginButtons:remove( loginSendButton ); 
+    loginSendButton:removeSelf( ); 
+    loginSendButton = nil; 
+  end  
+
+
+  --best to remove keyboard focus, in case keyboard is still on screen
+  native.setKeyboardFocus(nil)   
+
 end
 
 function Listener(event)
 --     if(getLogin() == 1) then
 --        local alert = native.showAlert( "Login", "conectado.", { "OK" }, onComplete )                 
         removeAll()        
-
+        composer.removeScene('src.management.login')
         composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
 
 --     end  
@@ -193,6 +223,7 @@ sendButtonPress = function( event )
 
   removeAll()    
   
+  composer.removeScene('src.management.login')  
   composer.gotoScene( "src.management.menu", "slideLeft", 400 )
   
   -- Validacao inicial do formulario
@@ -218,6 +249,7 @@ cancelButtonPress = function( event )
   
   removeAll()  	
   
+  composer.removeScene('src.management.login')  
   composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
 
 end
@@ -236,24 +268,6 @@ createAll = function()
 
   if not loginSendButton then loadLoginSendButton();  end   
 
-end
-
--------------------------------------------
--- *** Create native input textfields ***
--------------------------------------------
-
--- Note: currently this feature works in device builds or Xcode simulator builds only (also works on Corona Mac Simulator)
-local isAndroid = "Android" == system.getInfo("platformName")
-local inputFontSize = 18
-local inputFontHeight = 30
-tHeight = 30
-
-if isAndroid then
-	-- Android text fields have more chrome. It's either make them bigger, or make the font smaller.
-	-- We'll do both
-	inputFontSize = 14
-	inputFontHeight = 42
-	tHeight = 40
 end
 
 -------------------------------------------
@@ -281,7 +295,6 @@ end
 function scene:create( event )
     local sceneGroup = self.view
 
-    
     createAll()
 
 end
@@ -326,6 +339,7 @@ function scene:destroy( event )
     local sceneGroup = self.view
 
     removeAll()
+      
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.

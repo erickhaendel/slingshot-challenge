@@ -93,5 +93,30 @@ login_cancel_button_y			= display.contentCenterY + 200
 login_send_button_x				= display.contentCenterX + 200
 login_send_button_y				= display.contentCenterY + 200
 
+-- SIGNUP SCENE OBJECT POSITIONS
+signup_username_field_x			= display.contentCenterX + 150
+signup_username_field_y			= display.contentCenterY - 50
+signup_username_size_field		= 320
 
+signup_password_field_x 		= display.contentCenterX + 150
+signup_password_field_y			= display.contentCenterY + 30
+signup_password_size_field		= 320
+
+signup_email_field_x			= display.contentCenterX + 150
+signup_email_field_y			= display.contentCenterY - 50
+signup_email_size_field			= 320
+
+signup_age_field_x 				= display.contentCenterX + 150
+signup_age_field_y				= display.contentCenterY + 30
+signup_age_size_field			= 320
+
+signup_gender_field_x 			= display.contentCenterX + 150
+signup_gender_field_y			= display.contentCenterY + 30
+signup_gender_size_field		= 320
+
+signup_cancel_button_x			= display.contentCenterX - 200
+signup_cancel_button_y			= display.contentCenterY + 200
+
+signup_send_button_x			= display.contentCenterX + 200
+signup_send_button_y			= display.contentCenterY + 200
 

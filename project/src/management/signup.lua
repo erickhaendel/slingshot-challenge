@@ -1,10 +1,9 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- welcome.lua
--- Dewcription: welcome screen
--- @author Erick <erickhaendel@gmail.com>
--- @modified 
+-- signup.lua
+-- Description: signup screen
+-- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @version 1.00
--- @date 06/29/2014
+-- @date 07/10/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -38,31 +37,32 @@ local configuration = require( "src.management.configuration" )
 
 local scene = composer.newScene()
 
-local tHeight		-- forward reference
+local tHeight   -- forward reference
 
 -------------------------------------------
 -- General event handler for fields
 -------------------------------------------
 
 local function fieldHandler( textField )
-	return function( event )
-		if ( "began" == event.phase ) then
-			-- This is the "keyboard has appeared" event
-			-- In some cases you may want to adjust the interface when the keyboard appears.
-		
-		elseif ( "ended" == event.phase ) then
-			-- This event is called when the user stops editing a field: for example, when they touch a different field
-			
-		elseif ( "editing" == event.phase ) then
-		
-		elseif ( "submitted" == event.phase ) then
-			-- This event occurs when the user presses the "return" key (if available) on the onscreen keyboard
-			print( textField().text )
-			
-			-- Hide keyboard
-			native.setKeyboardFocus( nil )
-		end
-	end
+
+  return function( event )
+    if ( "began" == event.phase ) then
+      -- This is the "keyboard has appeared" event
+      -- In some cases you may want to adjust the interface when the keyboard appears.
+    
+    elseif ( "ended" == event.phase ) then
+      -- This event is called when the user stops editing a field: for example, when they touch a different field
+      
+    elseif ( "editing" == event.phase ) then
+    
+    elseif ( "submitted" == event.phase ) then
+      -- This event occurs when the user presses the "return" key (if available) on the onscreen keyboard
+      print( textField().text )
+      
+      -- Hide keyboard
+      native.setKeyboardFocus( nil )
+    end
+  end
 end
 
 -- Handler that gets notified when the alert closes
@@ -75,207 +75,216 @@ local function onComplete( event )
     end
 end
 
-local cadastrarNameField, cadastrarEmailField, cadastrarPasswordField, cadastrarConfirmPasswordField
-local cadastrarEmailLabel, cadastrarNameLabel, cadastrarPasswordLabel, cadastrarConfirmPasswordLabel
-local cadastrarDefaultButton, cadastrarVoltarButton
+-- OBJECTs PROTOTYPE
+local signupBackground
+local signupEmailField, signupPasswordField, signupAgeField, signupGenderField, signupUsernameField
+local signupCancelButton, signupSendButton
 
-local cadastrarFields = display.newGroup()
-local cadastrarLabels = display.newGroup()
-local cadastrarButtons = display.newGroup()
+-- METHODS PROTOTYPE
+local loadEmailField, loadBackgound, loadUsernameField, loadGenderField, loadAgeField, loadEmailField, loadPasswordField
+local loadCancelButton,loadLoginSendButton,removeAll
+local signupListener, signupButtonPress, sendButtonPress, createAll
 
--------------------------------------------
--- *** Add field labels ***
--------------------------------------------
+-- GROUPS
+local signupFields = display.newGroup()
+local signupButtons = display.newGroup()
 
-local function carregaCadastrarNameLabel()
-  cadastrarNameLabel = display.newText( "Nome:", 60, 100, native.systemFontBold, 18 )
-  cadastrarNameLabel:setTextColor( 0, 0, 0, 255 )
-  cadastrarLabels:insert(cadastrarNameLabel)
+-- METHODS
+loadBackground = function()
+
+  signupBackground = display.newImage( 
+    configuration.signup_background_image, 
+    display.contentCenterX, 
+    display.contentCenterY, 
+    true )
+  signupBackground:toBack( )
+
 end
 
-local function carregaCadastrarNameField()
-  cadastrarNameField = native.newTextField( 60, 120, 240, tHeight )
-  cadastrarNameField.font = native.newFont( native.systemFontBold, inputFontSize )
-  cadastrarNameField:addEventListener( "userInput", fieldHandler( function() return cadastrarNameField end ) ) 
-  cadastrarFields:insert(cadastrarNameField)
+loadEmailField = function()
+  signupEmailField = native.newTextField( 
+    configuration.signup_email_field_x, 
+    configuration.signup_email_field_y, 
+    configuration.signup_email_size_field, 
+    tHeight )
+
+  signupEmailField.font = native.newFont( native.systemFontBold, inputFontSize )
+  signupEmailField:addEventListener( "userInput", fieldHandler( function() return signupEmailField end ) ) 
+  signupFields:insert(signupEmailField)
 end
 
-local function carregaCadastrarEmailLabel()
-  cadastrarEmailLabel = display.newText( "Email:", 60, 160, native.systemFontBold, 18 )
-  cadastrarEmailLabel:setTextColor( 0, 0, 0, 255 )
-  cadastrarLabels:insert(cadastrarEmailLabel)
+loadPasswordField = function()
+  signupPasswordField = native.newTextField( 
+    configuration.signup_password_field_x, 
+    configuration.signup_password_field_y, 
+    configuration.signup_password_size_field, 
+    tHeight )
+  signupPasswordField.font = native.newFont( native.systemFontBold, inputFontSize )
+  signupPasswordField.isSecure = true
+  signupPasswordField:addEventListener( "userInput", fieldHandler( function() return signupPasswordField end ) ) 
+  signupFields:insert(signupPasswordField)
 end
 
-local carregaCadastrarEmailField = function()
-  cadastrarEmailField = native.newTextField( 60, 180, 240, tHeight )
-  cadastrarEmailField.font = native.newFont( native.systemFontBold, inputFontSize )
-  cadastrarEmailField:addEventListener( "userInput", fieldHandler( function() return cadastrarEmailField end ) ) 
-  cadastrarFields:insert(cadastrarEmailField)
+loadUsernameField = function()
+  signupUsernameField = native.newTextField( 
+    configuration.signup_username_field_x, 
+    configuration.signup_username_field_y, 
+    configuration.signup_username_size_field, 
+    tHeight )
+  signupUsernameField.font = native.newFont( native.systemFontBold, inputFontSize )
+  signupUsernameField:addEventListener( "userInput", fieldHandler( function() return signupUsernameField end ) ) 
+  signupFields:insert(signupUsernameField)
 end
 
-local carregaCadastrarPasswordLabel = function()
-  cadastrarPasswordLabel = display.newText( "Senha:", 60, 220, native.systemFontBold, 18 )
-  cadastrarPasswordLabel:setTextColor( 0, 0, 0, 255 )
-  cadastrarLabels:insert(cadastrarPasswordLabel)
+loadGenderField = function()
+  signupGenderField = native.newTextField( 
+    configuration.signup_gender_field_x, 
+    configuration.signup_gender_field_y, 
+    configuration.signup_gender_size_field, 
+    tHeight )
+  signupGenderField.font = native.newFont( native.systemFontBold, inputFontSize )
+  signupGenderField:addEventListener( "userInput", fieldHandler( function() return signupGenderField end ) ) 
+  signupFields:insert(signupGenderField)
 end
 
-local carregaCadastrarPasswordField = function()
-  cadastrarPasswordField = native.newTextField( 60, 240, 240, tHeight )
-  cadastrarPasswordField.font = native.newFont( native.systemFontBold, inputFontSize )
-  cadastrarPasswordField.isSecure = true
-  cadastrarPasswordField:addEventListener( "userInput", fieldHandler( function() return cadastrarPasswordField end ) ) 
-  cadastrarFields:insert(cadastrarPasswordField)
+loadAgeField = function()
+  signupAgeField = native.newTextField( 
+    configuration.signup_age_field_x, 
+    configuration.signup_age_field_y, 
+    configuration.signup_age_size_field, 
+    tHeight )
+  signupAgeField.font = native.newFont( native.systemFontBold, inputFontSize )
+  signupAgeField:addEventListener( "userInput", fieldHandler( function() return signupAgeField end ) ) 
+  signupFields:insert(signupAgeField)
 end
 
-local carregaCadastrarConfirmPasswordLabel = function()
-  cadastrarConfirmPasswordLabel = display.newText( "Confirme Senha:", 60, 280, native.systemFontBold, 18 )
-  cadastrarConfirmPasswordLabel:setTextColor( 0, 0, 0, 255 )
-  cadastrarLabels:insert(cadastrarConfirmPasswordLabel)
-end
+loadCancelButton = function()
 
-local carregaCadastrarConfirmPasswordField = function()
-  cadastrarConfirmPasswordField = native.newTextField( 60, 300, 240, tHeight )
-  cadastrarConfirmPasswordField.font = native.newFont( native.systemFontBold, inputFontSize )
-  cadastrarConfirmPasswordField.isSecure = true
-  cadastrarConfirmPasswordField:addEventListener( "userInput", fieldHandler( function() return cadastrarConfirmPasswordField end ) ) 
-  cadastrarFields:insert(cadastrarConfirmPasswordField)
-end
-
-local function cadastrarRemoveTudo()
-
-  if cadastrarNameLabel then display.remove( cadastrarNameLabel ); cadastrarLabels:remove( cadastrarNameLabel ); cadastrarNameLabel = nil; end
-      
-  if cadastrarNameField then cadastrarNameField:removeSelf(); cadastrarFields:remove( cadastrarNameField ); cadastrarNameField = nil; end
-  
-  if cadastrarEmailLabel then display.remove( cadastrarEmailLabel ); cadastrarLabels:remove( cadastrarEmailLabel ); cadastrarEmailLabel = nil; end
-
-  if cadastrarEmailField then cadastrarEmailField:removeSelf(); cadastrarFields:remove( cadastrarEmailField ); cadastrarEmailField = nil; end  
-  
-  if cadastrarPasswordLabel then display.remove( cadastrarPasswordLabel ); cadastrarLabels:remove( cadastrarPasswordLabel ); cadastrarPasswordLabel = nil; end
- 
-  if cadastrarPasswordField then cadastrarPasswordField:removeSelf(); cadastrarFields:remove( cadastrarPasswordField ); cadastrarPasswordField = nil; end
-  
-  if cadastrarConfirmPasswordLabel then display.remove( cadastrarConfirmPasswordLabel ); cadastrarLabels:remove( cadastrarConfirmPasswordLabel ); cadastrarConfirmPasswordLabel = nil; end
- 
-  if cadastrarConfirmPasswordField then cadastrarConfirmPasswordField:removeSelf(); cadastrarFields:remove( cadastrarConfirmPasswordField ); cadastrarConfirmPasswordField = nil; end
-    
-  if cadastrarDefaultButton then cadastrarButtons:remove( cadastrarDefaultButton ); cadastrarDefaultButton = nil; end  
-  
-  if cadastrarVoltarButton then cadastrarButtons:remove( cadastrarVoltarButton ); cadastrarVoltarButton = nil; end   
-end   
-
-local function cadastrarListener(event)
-     if(getCadastro() == 1) then
-        local alert = native.showAlert( "Cadastro", "Cadastrado.", { "OK" }, onComplete )                 
-      
-      setCadastro(1)
-      
-      cadastrarRemoveTudo()
-      
-      storyboard.gotoScene( "login" )  
-            
-     end  
-
-   if(getCadastro() == 0) then
-   
-    setCadsatro(0)
-
-    local alert = native.showAlert( "Cadastro", "Erro ao realizar cadastro", { "OK" }, onComplete ) 
-    
-  end
-end
-
-
-local cadastrarButtonPress = function( event )
-
-  local nome = cadastrarNameField.text
-  local email = cadastrarEmailField.text
-  local senha = cadastrarPasswordField.text
-  local confirmacao_senha = cadastrarPasswordField.text
-  local dados = {"cadastrar",nome,email,senha}
-  
-  if nome == "" or nome == nil or email == "" or email == nil or senha == "" or senha == nil or confirmacao_senha == "" or confirmacao_senha == nil then
-
-    local cadastro_erro = native.showAlert( "Cadastro", "Erro. Preencha todos os campos corretamente", { "OK" }, onComplete ) 
-
-  elseif( senha == confirmacao_senha ) then
-
-      send_pubnub(dados)  
-      
-      timer.performWithDelay( 10000,cadastrarListener,1)       
-  end
-end
-
-local cadastrarVoltarButtonPress = function( event )
-
-  storyboard.gotoScene( "login" ) 
-end
-
-local function carregaCadastrarDefaultButton()
-  cadastrarDefaultButton = widget.newButton
+  signupCancelButton = widget.newButton
   {
-    defaultFile = "buttonBlue.png",
-    overFile = "buttonBlueOver.png",
-    label = "Cadastrar",
-    labelColor = 
-    { 
-      default = { 255, 255, 255 }, 
-    },
-    fontSize = 26,
+    defaultFile = configuration.cancel_button_image,
+    overFile = configuration.cancel_button_image,
     emboss = true,
-    onPress = cadastrarButtonPress,
-  }
-  local s = display.getCurrentStage()
-  cadastrarDefaultButton.x = s.contentWidth/2; cadastrarDefaultButton.y = 370
-  cadastrarButtons:insert(cadastrarDefaultButton)
-end
-
-local function carregaCadastrarVoltarButton()
-  cadastrarVoltarButton = widget.newButton
-  {
-    defaultFile = "buttonBlue.png",
-    overFile = "buttonBlueOver.png",
-    label = "Voltar",
-    labelColor = 
-    { 
-      default = { 255, 255, 255 }, 
-    },
-    fontSize = 26,
-    emboss = true,
-    onPress = cadastrarVoltarButtonPress,
+    onPress = cancelButtonPress,
   }
 
-  local s = display.getCurrentStage()
-  
-  cadastrarVoltarButton.x = s.contentWidth/2; cadastrarVoltarButton.y = 430
-  cadastrarButtons:insert(cadastrarVoltarButton)
-end  
+  signupCancelButton.x = configuration.signup_cancel_button_x
+  signupCancelButton.y = configuration.signup_cancel_button_y
+  signupButtons:insert(signupCancelButton)
+end
 
-local function criaTudo()
+loadLoginSendButton = function()
 
-  setCadastro(0)
-  
-  if not cadastrarNameLabel then carregaCadastrarNameLabel();  end  
-    
-  if not cadastrarNameField then carregaCadastrarNameField();  end
-  
-  if not cadastrarEmailLabel then carregaCadastrarEmailLabel();  end  
-    
-  if not cadastrarEmailField then carregaCadastrarEmailField();  end
-    
-  if not cadastrarPasswordLabel then carregaCadastrarPasswordLabel();  end  
-  
-  if not cadastrarPasswordField then carregaCadastrarPasswordField();  end 
+  signupSendButton = widget.newButton{ 
+  defaultFile = configuration.signup_button_image,
+  overFile = configuration.signup_button_image,
+  emboss = true,
+  onPress = sendButtonPress,}
 
-  if not cadastrarConfirmPasswordLabel then carregaCadastrarConfirmPasswordLabel();  end  
-  
-  if not cadastrarConfirmPasswordField then carregaCadastrarConfirmPasswordField();  end 
-  
-  if not cadastrarDefaultButton then carregaCadastrarDefaultButton();  end 
+  signupSendButton.x = configuration.signup_send_button_x
+  signupSendButton.y = configuration.signup_send_button_y
+  signupButtons:insert(signupSendButton)
+end
 
-  if not cadastrarVoltarButton then carregaCadastrarVoltarButton();  end   
+function removeAll()
+
+  if(signupBackground) then signupBackground = nil; end
+
+  if(signupEmailField) then signupEmailField:removeSelf(); signupFields:remove( signupEmailField ); signupEmailField = nil; end
+  
+  if(signupPasswordField) then signupPasswordField:removeSelf(); signupFields:remove( signupPasswordField ); signupPasswordField = nil; end
+
+  if(signupUsernameField) then signupUsernameField:removeSelf(); signupFields:remove( signupUsernameField ); signupUsernameField = nil; end
+  
+  if(signupGenderField) then signupGenderField:removeSelf(); signupFields:remove( signupGenderField ); signupGenderField = nil; end
+
+  if(signupAgeField) then signupAgeField:removeSelf(); signupFields:remove( signupAgeField ); signupAgeField = nil; end
+  
+  if(signupCancelButton) then signupButtons:remove( signupCancelButton ); signupCancelButton = nil; end  
+  
+  if(signupSendButton) then signupButtons:remove( signupSendButton ); signupSendButton = nil; end       
+end
+
+function Listener(event)
+--     if(getLogin() == 1) then
+--        local alert = native.showAlert( "Login", "conectado.", { "OK" }, onComplete )                 
+        removeAll()        
+
+        composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
+
+--     end  
+
+--   if(getLogin() == 0) then
+  --      local alert = native.showAlert( "Login", "Erro ao se conectar.XO", { "OK" }, onComplete )           
+--   end
+end
+
+sendButtonPress = function( event )
+
+  local id = my_player_id
+  local email = signupEmailField.text
+  local senha = signupPasswordField.text
+  local dados = {"signup",id,email,senha}
+--  email = "teste"
+--  senha = "123"
+--  local dados = {"signup",id,email,senha}
+
+  removeAll()    
+  
+  composer.gotoScene( "src.management.menu", "slideLeft", 400 )
+  
+  -- Validacao inicial do formulario
+  --if (email == "" or email == nil or senha == "" or senha == nil ) then
+  
+  -- local alert = native.showAlert( "Login", "Erro. Email e/ou senha inválida"..email..senha, { "OK" }, onComplete )
+
+  -- Envia as informacoes ao servidor pubnub
+  --else  
+    --setEmail(email)
+
+    --send_pubnub(dados) 
+
+--    signupListener(event)    
+
+ --   timer.performWithDelay( 10000,signupListener,1) 
+  
+--  end
 
 end
+
+cancelButtonPress = function( event )
+  
+  removeAll()   
+  
+  composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
+
+end
+
+
+
+createAll = function()
+  
+  if not signupBackground then  loadBackground();  end  
+
+  if not signupEmailField then loadEmailField();  end
+    
+  if not signupPasswordField then loadPasswordField();  end 
+
+  if not signupUsernameField then loadUsernameField();  end
+    
+  if not signupGenderField then loadGenderField();  end 
+
+  if not signupAgeField then loadAgeField();  end
+
+  if not signupCancelButton then loadCancelButton();  end 
+
+  if not signupSendButton then loadLoginSendButton();  end   
+
+end
+
+-------------------------------------------
+-- *** Create native input textfields ***
+-------------------------------------------
 
 -- Note: currently this feature works in device builds or Xcode simulator builds only (also works on Corona Mac Simulator)
 local isAndroid = "Android" == system.getInfo("platformName")
@@ -284,16 +293,17 @@ local inputFontHeight = 30
 tHeight = 30
 
 if isAndroid then
-	-- Android text fields have more chrome. It's either make them bigger, or make the font smaller.
-	-- We'll do both
-	inputFontSize = 14
-	inputFontHeight = 42
-	tHeight = 40
+  -- Android text fields have more chrome. It's either make them bigger, or make the font smaller.
+  -- We'll do both
+  inputFontSize = 14
+  inputFontHeight = 42
+  tHeight = 40
 end
 
 -------------------------------------------
 -- Create a Background touch event
 -------------------------------------------
+
 
 -- Tapping screen dismisses the keyboard
 --
@@ -301,62 +311,78 @@ end
 -- no return key to clear focus.
 
 local listener = function( event )
-	-- Hide keyboard
-	print("tap pressed")
-	native.setKeyboardFocus( nil )
-	
-	return true
+  -- Hide keyboard
+  print("tap pressed")
+  native.setKeyboardFocus( nil )
+  
+  return true
 end
 
--- Called when the scene's view does not exist:
-function scene:createScene( event )
-	local group = self.view
-	
-  -- Load the background image
-  local bg = display.newImage( "title.png" )
-  group:insert( bg )
+----------------------------------------------------------------------------------
 
-  criaTudo()
+
+-- "scene:create()"
+function scene:create( event )
+    local sceneGroup = self.view
+
+    
+    createAll()
+
 end
 
--- Called immediately after scene has moved onscreen:
-function scene:enterScene( event )
-	local group = self.view
-	
-	criaTudo()
-		
+-- "scene:show()"
+function scene:show( event )
+
+    local sceneGroup = self.view
+    local phase = event.phase
+
+    createAll()
+
+    if ( phase == "will" ) then
+        -- Called when the scene is still off screen (but is about to come on screen).
+    elseif ( phase == "did" ) then
+
+    end
 end
 
--- Called when scene is about to move offscreen:
-function scene:exitScene( event )
-	local group = self.view
-	 cadastrarRemoveTudo()
+
+-- "scene:hide()"
+function scene:hide( event )
+
+    local sceneGroup = self.view
+    local phase = event.phase
+
+    removeAll()
+
+    if ( phase == "will" ) then
+        -- Called when the scene is on screen (but is about to go off screen).
+        -- Insert code here to "pause" the scene.
+        -- Example: stop timers, stop animation, stop audio, etc.
+    elseif ( phase == "did" ) then
+        -- Called immediately after scene goes off screen.
+    end
 end
 
 
--- Called prior to the removal of scene's "view" (display group)
-function scene:destroyScene( event )
-	local group = self.view
-  cadastrarRemoveTudo()
+-- "scene:destroy()"
+function scene:destroy( event )
+
+    local sceneGroup = self.view
+
+    removeAll()
+    -- Called prior to the removal of scene's view ("sceneGroup").
+    -- Insert code here to clean up the scene.
+    -- Example: remove display objects, save state, etc.
 end
 
----------------------------------------------------------------------------------
--- END OF YOUR IMPLEMENTATION
----------------------------------------------------------------------------------
 
--- "createScene" event is dispatched if scene's view does not exist
-scene:addEventListener( "createScene", scene )
+-- -------------------------------------------------------------------------------
 
--- "enterScene" event is dispatched whenever scene transition has finished
-scene:addEventListener( "enterScene", scene )
-
--- "exitScene" event is dispatched before next scene's transition begins
-scene:addEventListener( "exitScene", scene )
-
--- "destroyScene" event is dispatched before view is unloaded, which can be
--- automatically unloaded in low memory situations, or explicitly via a call to
--- storyboard.purgeScene() or storyboard.removeScene().
-scene:addEventListener( "destroyScene", scene )
+-- Listener setup
+scene:addEventListener( "create", scene )
+scene:addEventListener( "show", scene )
+scene:addEventListener( "hide", scene )
+scene:addEventListener( "destroy", scene )
 
 ---------------------------------------------------------------------------------
 
