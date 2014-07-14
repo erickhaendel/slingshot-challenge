@@ -153,7 +153,7 @@ function state:change(e)
 		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
 
 				-- terminou o jogo
-				if configuration.game_total_rounds <= configuration.game_current_round then					
+				if configuration.game_total_rounds <= configuration.game_current_round and configuration.game_current_turn == 2 then					
 
 			    	assets_image.removeGameplayScenario()
 
