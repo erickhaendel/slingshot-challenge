@@ -144,7 +144,6 @@ function projectileTouchListener(e)
 
 end
 
-
 -- GAME STATE CHANGE FUNCTION
 function state:change(e)
 

@@ -38,7 +38,7 @@ function animationProcess(stone)
 		nw = stone.width*myScaleX*0.5;
 		nh = stone.height*myScaleY*0.5;
 
-		physics.addBody( stone, { density=0.15, friction=0.2, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )						
+		physics.addBody( stone, { density=0.15, friction=0.2, bounce=0.6 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )						
 	end	
 end
 

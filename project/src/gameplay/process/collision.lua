@@ -61,10 +61,16 @@ function animationProcess(assets_image, number, stone)
 
 	-- adiciona uma fisica proporcional a essa nova dimensao
 	local cans = assets_image.can_tiles_obj[number]
+
 	for i=1,4 do
-		physics.addBody( cans[i],  { density=0.03, friction=0.1, bounce=0.5} )
-		cans[i]:applyForce( 0.5, -0.5, cans[i].x, cans[i].y);							
+		physics.addBody( cans[i],  { density=0.02, friction=0.10, bounce=3.0} )						
 	end
+
+	cans[1]:applyForce( -1, -4.0, cans[1].x, cans[1].y);	
+	cans[2]:applyForce( 1, -4.0, cans[2].x, cans[2].y);	
+	cans[3]:applyForce( 1, -4.0, cans[3].x, cans[3].y);	
+	cans[4]:applyForce( -1, -4.0, cans[4].x, cans[4].y);	
+
 	assets_image.can_tiles_obj[number] = cans
 
 	-- Play the hit can
@@ -111,15 +117,14 @@ end
 -- detecta colisao da pedra com com as latas e atualiza a gui
 function collision_process(stone, assets_image)
 
-	local M = 2; local N = 2;	
-
 	local side = nil
 
 	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 
+		local M = 2; local N = 2;	
+
 		for i = 1, N do
 			for j = 1, M do
-
 				-- k is the position of the wall 1,2,3,4
 				for k=1,4 do
 
@@ -127,7 +132,7 @@ function collision_process(stone, assets_image)
 
 					if test then
 
-						animationProcess(assets_image, k, stone)	
+						animationProcess(assets_image, k, stone)
 
 						if k == 1 or k==4 then
 							side = 1	
@@ -139,7 +144,7 @@ function collision_process(stone, assets_image)
 
 						score_process_lib.score_process(assets_image)					
 					
-						break; -- stop checking hit cans	
+						return
 					end -- end of if test statement
 
 				end -- end of for k <- walls

@@ -143,16 +143,16 @@ wallBody = { density=882.0, friction=880.3, bounce=0.4 }
 
 cans_x = {}; cans_y = {}					-- para 04 grupos de 4 latas, posicao delas no muro no cenario 1 e 2
 cans_x[1] = display.contentCenterX - 280
-cans_y[1] = display.contentCenterY - 50
+cans_y[1] = display.contentCenterY - 40
 cans_x[2] = display.contentCenterX + 280
-cans_y[2] = display.contentCenterY - 50
+cans_y[2] = cans_y[1]
 cans_x[3] = display.contentCenterX + 1080
-cans_y[3] = display.contentCenterY - 50
+cans_y[3] = cans_y[1]
 cans_x[4] = display.contentCenterX + 1680
-cans_y[4] = display.contentCenterY - 50
+cans_y[4] = cans_y[1]
 
 can_image_dir = "resources/images/objects/"		-- diretorio onde estao as imagens das latas
-can_xScale = 0.75; 
+can_xScale = 1.00; 
 can_yScale = can_xScale		-- escala da lata na parede
 can_width = 40 * can_xScale
 can_height = 85 * can_yScale

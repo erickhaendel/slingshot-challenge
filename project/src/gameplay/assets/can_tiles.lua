@@ -48,9 +48,6 @@ function newCanTile()
 	cans[1] = {}; cans[2] = {}
 	cans[3] = {}; cans[4] = {}
 
-	local myScaleX, myScaleY = 0.5, 0.5
-	local M = 2 ; local N = 2 -- blocos de 4 latas, 2 a 2
-
 	-- nome de arquivo das imagens das latas
 	filename = {}
 	filename[1] = configuration.can_image_dir..configuration.player1_can; 
@@ -62,12 +59,11 @@ function newCanTile()
 	-- configuração das latas - com cores e neutras
 	local can_organization = can_process_lib.prepare_can_organization(  )
 
+	local M = 2 ; local N = 2 -- blocos de 4 latas, 2 a 2
 
-		for i = 1, N do
-			for j = 1, M do
-				for k=1,4 do -- p1 cenario, p2 cenario 1, p2 cenario 2, p1 cenario 2
-
-				local nw, nh -- 
+	for i = 1, N do
+		for j = 1, M do
+			for k=1,4 do -- p1 cenario, p2 cenario 1, p2 cenario 2, p1 cenario 2
 
 				-- se o array de configuracao de latas (can disposal) disser que é lata com cor
 				if can_organization[k][configuration.game_current_round][M * (i-1) + j] == 1 then
@@ -86,20 +82,7 @@ function newCanTile()
 						configuration.cans_x[k] + (i*configuration.can_width), 
 						configuration.cans_y[k] - (j*configuration.can_height) )					
 				end
-
-				-- redimensiona as latas para dar uma impressão de menor do que são realmente
-				cans[k][M * (i-1) + j].xScale = configuration.can_xScale
-				cans[k][M * (i-1) + j].yScale = configuration.can_yScale
-
-				nw = cans[k][M * (i-1) + j].width * myScaleX * configuration.can_xScale
-				nh = cans[k][M * (i-1) + j].height * myScaleY * configuration.can_xScale
-
-				-- adiciona uma fisica proporcional a essa nova dimensao
-				--local newCansBody = { density=0.03, friction=0.1, bounce=0.5 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}}
-				--physics.addBody( cans[k][M * (i-1) + j], newCansBody )
-
 			end
-
 		end
 	end
 
