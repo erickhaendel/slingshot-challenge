@@ -2,18 +2,32 @@ require "pubnub"
 widget = require "widget" 
 
 local multiplayer = pubnub.new({
-    publish_key   = "pub-c-d23a1f82-3792-4632-8226-b1883069c916",
-    subscribe_key = "sub-c-afd2e9e0-f898-11e3-aa40-02ee2ddab7fe",
-    secret_key    = "sec-c-NDBlYmZkOGEtZjlkNi00ZjBiLWE5OGYtYmM4NjUxZjkyNWY0",
-    ssl           = nil,
-    origin        = "pubsub.pubnub.com"
+    -- ERICK
+    --publish_key   = "pub-c-d23a1f82-3792-4632-8226-b1883069c916", -- erick
+    --subscribe_key = "sub-c-afd2e9e0-f898-11e3-aa40-02ee2ddab7fe", -- Erick
+    --secret_key    = "sec-c-NDBlYmZkOGEtZjlkNi00ZjBiLWE5OGYtYmM4NjUxZjkyNWY0", -- Erick
+
+    -- SAMUEL
+    publish_key     = "pub-c-a0a926e6-bcd6-4a70-9db1-fdd4cd614e94", -- Samuel
+    subscribe_key   = "sub-c-a6b57a24-0b82-11e4-9ae5-02ee2ddab7fe", -- Samuel
+    secret_key      = "sec-c-NzdmNzQ4NmMtZTg5NS00ZjQ0LTgxYWMtYjU5ZWJhMzg2YmJm", -- Samuel
+    ssl             = nil,
+    origin          = "pubsub.pubnub.com"
 })
 
+-- ERICK
+-- local action  = nil
+-- local status  = "avaliable"
+-- local channel = "world"
+-- local id  = "erick1"
+-- local username = 'erick'
+
+-- SAMUEL
 local action  = nil
 local status  = "avaliable"
 local channel = "world"
-local id  = "erick1"
-local username = 'erick'
+local id  = system.getInfo( "deviceID" ) 
+local username = 'slunart'
 local array_player_channel = {}
 
 local timerAccepetRequest, timerPrePlaying, timerPlaying

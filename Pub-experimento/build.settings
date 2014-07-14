@@ -7,7 +7,15 @@ settings = {
 		default = "portrait",
 		supported = { "portrait", }
 	},
-	
+    android =
+    {
+        versionCode = "10",
+        usesPermissions =
+        {
+            "android.permission.INTERNET",
+            "android.permission.READ_PHONE_STATE",
+        },
+    },	
 	iphone = {
 		plist = {
 			UIStatusBarHidden = false,
