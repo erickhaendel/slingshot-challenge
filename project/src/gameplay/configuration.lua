@@ -178,13 +178,13 @@ player2_score_can = "green-can-score.png"
 
 -- SKY
 sky_x = {}; sky_y = {}
-sky_x[1] = display.contentCenterX - 1440
+sky_x[1] = display.contentCenterX - 1510
 sky_y[1] = display.contentCenterY - 280
-sky_x[2] = display.contentCenterX - 160
+sky_x[2] = display.contentCenterX - 230
 sky_y[2] = display.contentCenterY - 280
-sky_x[3] = display.contentCenterX + 1120
+sky_x[3] = display.contentCenterX + 1050
 sky_y[3] = display.contentCenterY - 280
-sky_x[4] = display.contentCenterX + 2400
+sky_x[4] = display.contentCenterX + 2330
 sky_y[4] = display.contentCenterY - 280
 sky_image_filename = "resources/images/objects/sky.png"
 
