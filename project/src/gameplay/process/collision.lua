@@ -138,7 +138,7 @@ function collision_process(stone, assets_image)
 							side = 1	
 							configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = side -- own can
 						else
-							side = 1	
+							side = 2	
 							configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = side -- own can
 						end
 

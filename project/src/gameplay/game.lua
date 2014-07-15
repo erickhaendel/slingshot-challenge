@@ -162,8 +162,12 @@ function state:change(e)
 					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 					projectiles_container:removeEventListener("touch", projectileTouchListener);
 
+					configuration.game_final_score_player[1] = configuration.game_score_player[1]
+					configuration.game_final_score_player[2] = configuration.game_score_player[2]
+
 				    composer.removeScene('src.gameplay.game')
 				    composer.gotoScene( "src.management.results", "fade", 400)
+
 				
 				elseif configuration.game_current_turn == 1 then
 					print( "Prox turno" )
