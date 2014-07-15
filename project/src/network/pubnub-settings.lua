@@ -35,17 +35,17 @@
 -- LIBs
 -------------------------------------------
 -- corona libs
-require "pubnub"
+require("src.network.pubnub")
 
 -- my libs
 require( "src.infra.includeall" )
 
 module(..., package.seeall)
 
-publish_key   = "pub-c-a0a926e6-bcd6-4a70-9db1-fdd4cd614e94",
-subscribe_key = "sub-c-a6b57a24-0b82-11e4-9ae5-02ee2ddab7fe",
-secret_key    = "sec-c-NzdmNzQ4NmMtZTg5NS00ZjQ0LTgxYWMtYjU5ZWJhMzg2YmJm",
-ssl           = nil,
+publish_key   = "pub-c-a0a926e6-bcd6-4a70-9db1-fdd4cd614e94"
+subscribe_key = "sub-c-a6b57a24-0b82-11e4-9ae5-02ee2ddab7fe"
+secret_key    = "sec-c-NzdmNzQ4NmMtZTg5NS00ZjQ0LTgxYWMtYjU5ZWJhMzg2YmJm"
+ssl           = nil
 origin        = "pubsub.pubnub.com"
 channel       = "world"
 my_device_id  = system.getInfo( "deviceID" )

@@ -31,11 +31,14 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
+-- this file is a lib!
+module(..., package.seeall)
+
 -------------------------------------------
 -- LIBs
 -------------------------------------------
 -- corona libs
-require "pubnub"
+require("src.network.pubnub")
 
 -- my libs
 local settings = require( "src.network.pubnub-settings" )
@@ -61,113 +64,30 @@ multiplayer = pubnub.new({
     origin        = settings.origin
 })
 
--- Escuta uma das seguintes mensagens e a trata
-multiplayer:subscribe({
-    channel  = settings.channel,
-    callback = function(message)
-
+function receive_pubnub(statement)
     -----------------------------------------
     -- DATABASE SERVER CONNECTION MESSAGES --
     -----------------------------------------
-        if(message[settings.my_device_id] == "connexion-successfully-login") then
-            -- TODO
-        end
-        
-        if(message[settings.my_device_id] == "connexion-error-login") then
-            -- TODO
-        end
-                
-        if(message[settings.my_device_id] == "connexion-successfully-logoff") then
-            -- TODO
-        end
+    if(statement == "find_available_player") then
 
-        if(message[settings.my_device_id] == "connexion-error-logoff") then
-            -- TODO
-        end
-        
-        if(message[settings.my_device_id] == "connexion-successfully-signup") then
-            -- TODO         
-        end    
-        
-        if(message[settings.my_device_id] == "connexion-error-signup") then
-            -- TODO
-        end 
+        -- Escuta uma das seguintes mensagens e a trata
+        multiplayer:subscribe({
+            channel  = settings.channel,
+            callback = function(message)
 
-    -----------------------------------------
-    -- PREGAMEPLAY MESSAGES --
-    -----------------------------------------
-        if(message[settings.my_device_id] == "letsplay-successfully-request") then
-            -- TODO
-        end 
+                if(message["msgtext"]) then
+                    print( message["msgtext"]["service"] )
+                    return 1
+                end
 
-        if(message[settings.my_device_id] == "letsplay-error-request") then
-            -- TODO
-        end     
+            end,
 
-        if(message[settings.my_device_id] == "letsplay-successfully-acceptedresponse") then
-            -- TODO
-        end    
-
-        if(message[settings.my_device_id] == "letsplay-error-acceptedresponse") then
-            -- TODO
-        end   
-
-        if(message[settings.my_device_id] == "letsplay-successfully-rejectedresponse") then
-            -- TODO
-        end 
-
-        if(message[settings.my_device_id] == "letsplay-error-rejectedresponse") then
-            -- TODO
-        end 
-
-        if(message[settings.my_device_id] == "letsplay-successfully-agreedproposal") then
-            -- TODO
-        end  
-
-        if(message[settings.my_device_id] == "letsplay-error-agreedproposal") then
-            -- TODO
-        end          
-
-    -----------------------------------------
-    -- GAMEPLAY MESSAGES --
-    -----------------------------------------
-        if(message[settings.my_device_id] == "myprojectile-successfully-sent") then
-            -- TODO
-        end  
-        
-        if(message[settings.my_device_id] == "myprojectile-error-sent") then
-            -- TODO
-        end  
-
-        if(message[settings.my_device_id] == "yourprojectile-successfully-received") then
-            -- TODO
-        end  
-        
-        if(message[settings.my_device_id] == "yourprojectile-error-received") then
-            -- TODO
-        end  
-
-        if(message[settings.my_device_id] == "score-successfully-sent") then
-            -- TODO
-        end  
-        
-        if(message[settings.my_device_id] == "score-error-sent") then
-            -- TODO
-        end  
-
-        if(message[settings.my_device_id] == "score-successfully-received") then
-            -- TODO
-        end  
-        
-        if(message[settings.my_device_id] == "score-error-received") then
-            -- TODO
-        end         
-    end,
-    errorback = function()
---        print("Oh nao!!! A conexao 3G caiu!")
-        local alert = native.showAlert( "Conexão", "Oh nao!!! A conexao 3G caiu!", { "OK" }, onComplete )         
+            errorback = function()
+                local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
+            end
+        })
     end
-})
+end
 
 function send_pubnub(text)
     multiplayer:publish({
@@ -177,11 +97,13 @@ function send_pubnub(text)
      
             -- WAS MESSAGE DELIVERED? 
             if info[1] then 
---                local alert = native.showAlert( "Conexão", "MESSAGE DELIVERED SUCCESSFULLY!", { "OK" }, onComplete )             
---                print("MESSAGE DELIVERED SUCCESSFULLY!") 
+                --local alert = native.showAlert( "Conexão", "MESSAGE DELIVERED SUCCESSFULLY!", { "OK" }, onComplete )             
+                print("MESSAGE DELIVERED SUCCESSFULLY!")
+                return 1
             else 
---                print("MESSAGE FAILED BECAUSE -> " .. info[2]) 
-                local alert = native.showAlert( "Conexão", "MESSAGE FAILED BECAUSE -> " .. info[2], { "OK" }, onComplete )                         
+                print("MESSAGE FAILED BECAUSE -> " .. info[2]) 
+                --local alert = native.showAlert( "Conexão", "MESSAGE FAILED BECAUSE -> " .. info[2], { "OK" }, onComplete )  
+                return 0                       
             end 
      
         end         
