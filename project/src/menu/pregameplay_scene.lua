@@ -34,8 +34,11 @@
 
 -- my libs
 require( "src.infra.includeall" )
-local configuration = require( "src.menu.menu_settings" )
+
+local configuration       = require( "src.menu.menu_settings" )
 local network_pregameplay = require( "src.network.pregameplaysync" )
+local player1_obj         = require( "src.player.player1" )
+local player2_obj         = require( "src.player.player2" )
 
 local scene = composer.newScene()
 
@@ -102,10 +105,16 @@ function menuButtonPress( event )
     composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
 end
 
+-- Processo de conexao com o pubnub para achar um player e criar um jogo
+-- Para testar no pubnub, digite no console o json:
+-- {"msgtext":{"service":"availableplayer","id":"12345","username":"playerdebug","status":"available"}}
+-- Esse json serve para dizer que o player esta disponivel. Ja o json abaixo:
+-- {"msgtext":{"service":"invitetoplay","id":"<id do player 2>"}}
+-- 
 function connecting_process()
 
   -- notifica o servidor que o player esta disponivel   
-  timer.performWithDelay( 2000, function( ) 
+  timer.performWithDelay( 1000, function( ) 
       shadow_label.text = "Connecting to a server..."
       status_label.text = "Connecting to a server..."      
     if response_user_status ~= "available" then    
@@ -114,35 +123,47 @@ function connecting_process()
   end )
 
     -- procura por um player disponivel para jogar
-  timer.performWithDelay( 4000, function()
-    shadow_label.text = "Find a available player..."    
-    status_label.text = "Find a available player..."
-    player2_id = network_pregameplay.findAvailablePlayer()
+  timer.performWithDelay( 2000, function()
+    shadow_label.text = "Finding a available player..."    
+    status_label.text = "Finding a available player..."
+    network_pregameplay.findAvailablePlayer()
   end )
 
-  timer.performWithDelay( 6000, function()
-    if player2_id ~= nil then
-    shadow_label.text = "Player found. Inviting him to play..."                  
-    status_label.text = "Player found. Inviting him to play..."         
-      response_invite_to_play = network_pregameplay.inviteToPlayey(player2_id)
+  timer.performWithDelay( 4000, function()
 
-      if response_invite_to_play == "confirmed" then
-        shadow_label.text = "Player accepted. Loading..."    
-        status_label.text = "Player accepted. Loading..."            
-        response_user_status = network_pregameplay.sendUserStatus("busy")
+    tick = timer.performWithDelay( 1000, function()
 
-          -- lets play
-          timer.cancel( tick )
+      if player2_obj.id ~= nil and player2_obj.id ~= "" then
+      shadow_label.text = "Player found. Inviting him to play..."                  
+      status_label.text = "Player found. Inviting him to play..."         
+      response_invite_to_play = network_pregameplay.inviteToPlay(player2_obj.id)
 
-          removeAll()
+        if response_invite_to_play == "confirmed" then
+          shadow_label.text = "Player accepted. Loading..."    
+          status_label.text = "Player accepted. Loading..."            
+          response_user_status = network_pregameplay.sendUserStatus("busy")
 
-          composer.removeScene('src.menu.pregameplay_scene')  
-          composer.gotoScene( "src.gameplay.game", "slideLeft", 400 )
-        --return "play"
-      end
-    else
+            -- lets play
+            timer.cancel( tick )
 
-    end      
+            removeAll()
+
+            composer.removeScene('src.menu.pregameplay_scene')  
+            composer.gotoScene( "src.gameplay.game", "slideLeft", 400 )
+          --return "play"
+
+          -- se nao respondeu ao convite, coloque-se na posicao de convidado
+        else
+          shadow_label.text = "Refused. Trying be a guest of someone else..."                  
+          status_label.text = "Refused. Trying be a guest of someone else..."         
+          response_invite_to_play = network_pregameplay.beGuestToPlay()
+          
+        end
+      else
+            network_pregameplay.findAvailablePlayer()
+      end  
+    end,0)
+
   end)
 end
 

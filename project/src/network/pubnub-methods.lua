@@ -40,8 +40,11 @@ module(..., package.seeall)
 -- corona libs
 require("src.network.pubnub")
 
+
 -- my libs
-local settings = require( "src.network.pubnub-settings" )
+local settings      = require( "src.network.pubnub-settings" )
+local player1_obj   = require( "src.player.player1" )
+local player2_obj   = require( "src.player.player2" )
 
 require( "src.infra.includeall" )
 
@@ -76,8 +79,9 @@ function receive_pubnub(statement)
             callback = function(message)
 
                 if(message["msgtext"]) then
-                    print( message["msgtext"]["service"] )
-                    return 1
+                    if(message["msgtext"]["service"] == "availableplayer") then                      
+                        player2_obj.id = message["msgtext"]["id"]
+                    end
                 end
 
             end,
@@ -87,6 +91,27 @@ function receive_pubnub(statement)
             end
         })
     end
+
+ if(statement == "be_guest_to_play") then
+
+        -- Escuta uma das seguintes mensagens e a trata
+        multiplayer:subscribe({
+            channel  = settings.channel,
+            callback = function(message)
+
+                if(message["msgtext"]) then
+                    if(message["msgtext"]["service"] == "invitetoplay" and message["msgtext"]["guest"] == player1_obj.id) then                      
+                        player2_obj.id = message["msgtext"]["id"]
+                    end
+                end
+
+            end,
+
+            errorback = function()
+                local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
+            end
+        })
+    end    
 end
 
 function send_pubnub(text)
@@ -97,8 +122,6 @@ function send_pubnub(text)
      
             -- WAS MESSAGE DELIVERED? 
             if info[1] then 
-                --local alert = native.showAlert( "Conexão", "MESSAGE DELIVERED SUCCESSFULLY!", { "OK" }, onComplete )             
-                print("MESSAGE DELIVERED SUCCESSFULLY!")
                 return 1
             else 
                 print("MESSAGE FAILED BECAUSE -> " .. info[2]) 
