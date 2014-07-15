@@ -33,7 +33,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.management.configuration" )
+local configuration = require( "src.management.menu_settings" )
 
 
 -- musica de fundo gameplay

@@ -34,7 +34,7 @@
 
 -- my libs
 require( "src.infra.includeall" )
-local configuration = require( "src.management.configuration" )
+local configuration = require( "src.menu.menu_settings" )
 
 local scene = composer.newScene()
 
@@ -45,6 +45,7 @@ local scene = composer.newScene()
 -- local forward references should go here
 
 -- -------------------------------------------------------------------------------
+
 local function removeObject(object, group)
 	if group then group:remove( object ); end
   	if object then object = nil; end 
@@ -63,7 +64,7 @@ function scene:create( event )
 
     -- Create elements
     -- Background & box  welcome
-    background = display.newImage( "resources/images/backgrounds/about.png", display.contentCenterX , display.contentCenterY , true )
+    background = display.newImage( "resources/images/backgrounds/credits.png", display.contentCenterX , display.contentCenterY , true )
     -- Buttons
     btnBack     = display.newImage( "resources/images/buttons/back.png",  200, ( display.contentHeight - 100) , true  )
 
@@ -120,8 +121,8 @@ end
 
 -- Events for Button back
 function onBtnBackPress( event )
-    composer.removeScene('src.management.credits')
-    composer.gotoScene( "src.management.menu", "fade", 400)
+    composer.removeScene('src.menu.credits_scene')
+    composer.gotoScene( "src.menu.menu_scene", "fade", 400)
 end
 
 -- -------------------------------------------------------------------------------

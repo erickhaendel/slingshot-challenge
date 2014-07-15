@@ -33,7 +33,7 @@
 
 -- libs
 require( "src.infra.includeall" )
-local configuration = require( "src.management.configuration" )
+local configuration = require( "src.menu.menu_settings" )
 
 ----------------------------------------------------------------------------------------------
 
@@ -135,8 +135,8 @@ function menuButtonPress( event )
 	
 	removeAll()
 
-	composer.removeScene('src.management.results')	
-	composer.gotoScene( "src.management.menu", "slideLeft", 400 )
+	composer.removeScene('src.menu.results_scene')	
+	composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
 end
 
 

@@ -36,7 +36,7 @@
 local composer = require( "composer" )
 
 -- my libs
-local configuration = require( "src.management.configuration" )
+local configuration = require( "src.menu.menu_settings" )
 
 
 local scene = composer.newScene()
@@ -135,12 +135,12 @@ end
 
 -- Events for Button Visitor
 function btnLoginEvent( event )
-	composer.gotoScene( "src.management.login", "slideLeft", 400 )
+	composer.gotoScene( "src.menu.login_scene", "slideLeft", 400 )
 end
 
 -- Events for Button Signup
 function btnSignupEvent( event )
-	composer.gotoScene( "src.management.signup", "fade", 400 )
+	composer.gotoScene( "src.menu.signup_scene", "fade", 400 )
 end
 
 

@@ -125,6 +125,18 @@ signup_cancel_button_y			= display.contentCenterY + 200
 signup_send_button_x			= display.contentCenterX + 200
 signup_send_button_y			= display.contentCenterY + 200
 
+--PRE GAMEPLAY SCENE
+pregameplay_menu_button_x		= display.contentCenterX - 500
+pregameplay_menu_button_y		= display.contentCenterY + 280
+
+pregameplay_play_button_x		= display.contentCenterX
+pregameplay_play_button_y		= display.contentCenterY + 280
+
+pregameplay_status_label_x		= display.contentCenterX
+pregameplay_status_label_y		= display.contentCenterY - 100
+pregameplay_status_font_size 	= 72
+pregameplay_status_font_name	= native.systemFontBold
+
 -- RESULTS SCENE
 results_menu_button_x			= display.contentCenterX
 results_menu_button_y			= display.contentCenterY + 300

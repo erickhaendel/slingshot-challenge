@@ -34,11 +34,9 @@
 
 -- my libs
 require( "src.infra.includeall" )
-local configuration = require( "src.management.configuration" )
+local configuration = require( "src.menu.menu_settings" )
 
-local widget = require( "widget" )
-
--- local util =  require( "src.infra.util" )
+--local util =  require( "src.infra.util" )
 
 local scene = composer.newScene()
 
@@ -50,41 +48,40 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
+local  btnSettings , btnPlay, btnCredits, btnAbout
+-- Metodos
+local onBtnAboutEvent, onBtnCreditsEvent, onBtnPlayEvent, onBtnPlayEvent
+
 local function removeObject(object, group)
 	if group then group:remove( object ); end
   	if object then object = nil; end 
 end
 
-local sceneGroup , background
-local btnBack
--- Metodos
-local removeAll, onBtnBackPress, onSwitchPress
-
 -- "scene:create()"
 function scene:create( event )
-     sceneGroup = self.view
+    local sceneGroup = self.view
 
     -- Create elements
     -- Background & box  welcome
-    background = display.newImage( "resources/images/backgrounds/settings.png", display.contentCenterX , display.contentCenterY , true )
+    local background = display.newImage( "resources/images/backgrounds/menu.png", display.contentCenterX , display.contentCenterY , true )
     -- Buttons
-    btnBack     = display.newImage( "resources/images/buttons/back.png",  200, ( display.contentHeight - 100) , true  )
-    -- Create the widget
-    local onOffSwitch = widget.newSwitch
-    {
-        left = 250,
-        top = 200,
-        style = "onOff",
-        id = "onOffSwitch",
-        onPress = onSwitchPress
-    }
+    btnX = display.contentCenterX / 2  
+    btnY = ( display.contentCenterY  ) 
+    btnPlay     = display.newImage( "resources/images/buttons/play.png", display.contentCenterX , display.contentCenterY - 100, true  )
+
+    btnAbout    = display.newImage( "resources/images/buttons/about.png", btnX - 100, btnY + 30, true  )
+    btnCredits  = display.newImage( "resources/images/buttons/credits.png", btnX + 20, btnY + 140, true  )
+    btnSettings = display.newImage( "resources/images/buttons/settings.png", btnX + 170, btnY + 280, true  )
 
     --Insert elements to scene
     sceneGroup:insert( background ) -- insert background to group
-    sceneGroup:insert( btnBack )
-    sceneGroup:insert( onOffSwitch )
+    sceneGroup:insert( btnPlay ) 
+    sceneGroup:insert( btnAbout ) 
+    sceneGroup:insert( btnCredits ) 
+    sceneGroup:insert( btnSettings )
 
 end
+
 
 -- "scene:show()"
 function scene:show( event )
@@ -95,46 +92,77 @@ function scene:show( event )
     if ( phase == "will" ) then
         -- Called when the scene is still off screen (but is about to come on screen).
     elseif ( phase == "did" ) then
+
         -- Eventos
-        btnBack:addEventListener( "touch" , onBtnBackPress )
+        btnPlay:addEventListener( "touch" , onBtnPlayEvent )
+        btnSettings:addEventListener( "touch" , onBtnSettingsEvent )
+        btnCredits:addEventListener( "touch" , onBtnCreditsEvent )
+        btnAbout:addEventListener( "touch" , onBtnAboutEvent )
+
     end
 end
 
 
 -- "scene:hide()"
 function scene:hide( event )
-
+    removeAll()
     local sceneGroup = self.view
     local phase = event.phase
 
     if ( phase == "will" ) then
+        -- Called when the scene is on screen (but is about to go off screen).
+        -- Insert code here to "pause" the scene.
+        -- Example: stop timers, stop animation, stop audio, etc.
     elseif ( phase == "did" ) then
+        -- Called immediately after scene goes off screen.
     end
 end
 
-function removeAll( sceneGroup )
-    removeObject( background , sceneGroup)  -- destroi imagem de fundo
-    removeObject( btnBack , sceneGroup)  -- destroi botao back
-    removeObject( onOffSwitch , sceneGroup)  -- destroi botao
-    removeObject( onOffSwitch , sceneGroup)  -- destroi botao
-end
 
 -- "scene:destroy()"
 function scene:destroy( event )
     local sceneGroup = self.view
-    removeAll( sceneGroup )
-end
- 
--- Events for Button back
-function onBtnBackPress( event )
-    composer.removeScene('src.management.settings')
-    composer.gotoScene( "src.management.menu", "fade", 400)
+    removeAll()
 end
 
 
--- Handle press events for the checkbox
-local function onSwitchPress( event )
-    local switch = event.target
+function removeAll( sceneGroup )
+    removeObject( background , sceneGroup)  -- destroi imagem de fundo
+    removeObject( btnPlay , sceneGroup)  -- destroi botao back
+    removeObject( btnCredits , sceneGroup)  -- destroi botao
+    removeObject( btnAbout , sceneGroup)  -- destroi botao
+    removeObject( btnSettings , sceneGroup)  -- destroi botao
+    removeObject( onOffSwitch , sceneGroup)  -- destroi botao
+end
+
+-- Events for Button Play
+function onBtnPlayEvent( event )
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.menu.pregameplay_scene", "fade", 400)
+end
+
+-- Events for Button Credits
+function onBtnCreditsEvent( event )
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.menu.credits_scene", "fade", 400)
+end
+
+-- Events for Button About
+function onBtnAboutEvent( event )
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.menu.about_scene", "fade", 400)
+end
+
+-- Events for Button Settings
+function onBtnSettingsEvent( event )
+    removeAll()
+    if( event.phase == "began") then
+        composer.removeScene('src.menu.menu_scene')
+        composer.gotoScene( "src.menu.settings_scene", "fade", 400)
+    end
 end
 
 -- -------------------------------------------------------------------------------
@@ -146,5 +174,12 @@ scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 
 -- -------------------------------------------------------------------------------
+
+local function checkMemory()
+   collectgarbage( "collect" )
+   local memUsage_str = string.format( "MEMORY = %.3f KB", collectgarbage( "count" ) )
+   print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
+end
+-- timer.performWithDelay( 1000, checkMemory, 0 )
 
 return scene

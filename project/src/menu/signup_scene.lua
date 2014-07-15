@@ -33,7 +33,7 @@
 
 -- my libs
 require( "src.infra.includeall" )
-local configuration = require( "src.management.configuration" )
+local configuration = require( "src.menu.menu_settings" )
 
 local scene = composer.newScene()
 
@@ -210,7 +210,7 @@ function Listener(event)
 --        local alert = native.showAlert( "Login", "conectado.", { "OK" }, onComplete )                 
         removeAll()        
 
-        composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
+        composer.gotoScene( "src.menu.welcome_scene", "slideLeft", 400 )
 
 --     end  
 
@@ -231,7 +231,7 @@ sendButtonPress = function( event )
 
   removeAll()    
   
-  composer.gotoScene( "src.management.menu", "slideLeft", 400 )
+  composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
   
   -- Validacao inicial do formulario
   --if (email == "" or email == nil or senha == "" or senha == nil ) then
@@ -256,7 +256,7 @@ cancelButtonPress = function( event )
   
   removeAll()   
   
-  composer.gotoScene( "src.management.welcome", "slideLeft", 400 )
+  composer.gotoScene( "src.menu.welcome_scene", "slideLeft", 400 )
 
 end
 
