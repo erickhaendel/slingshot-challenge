@@ -188,8 +188,8 @@ end
 
 function removeAll()
 
-  if(signupBackground) then signupBackground = nil; end
-
+  if(signupBackground) then signupBackground:removeSelf(); signupFields:remove( signupBackground ); signupBackground = nil; end
+  
   if(signupEmailField) then signupEmailField:removeSelf(); signupFields:remove( signupEmailField ); signupEmailField = nil; end
   
   if(signupPasswordField) then signupPasswordField:removeSelf(); signupFields:remove( signupPasswordField ); signupPasswordField = nil; end
