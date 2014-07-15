@@ -36,7 +36,7 @@
 -------------------------------------------
 require( "src.infra.includeall" )
 
-math.randomseed( os.time() )
+math.randomseed( 1598+os.time() )
 
 display.setStatusBar( display.HiddenStatusBar )
 
