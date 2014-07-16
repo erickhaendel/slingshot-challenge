@@ -39,6 +39,10 @@ module(..., package.seeall)
 local pubnub_settings 	= require( "src.network.pubnub-settings" )
 local pubnub_methods 	= require( "src.network.pubnub-methods" )
 
+function disconnect()
+	pubnub_methods.disconnect_pubnub()
+end
+
 function findAvailablePlayer()
 	local player2 = pubnub_methods.receive_pubnub("find_available_player")
 	return player2

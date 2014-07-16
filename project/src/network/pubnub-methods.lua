@@ -67,6 +67,11 @@ multiplayer = pubnub.new({
     origin        = settings.origin
 })
 
+
+function disconnect_pubnub()
+    multiplayer:unsubscribe({channel  = settings.channel})
+end
+
 function receive_pubnub(statement)
     -----------------------------------------
     -- DATABASE SERVER CONNECTION MESSAGES --
@@ -92,6 +97,7 @@ function receive_pubnub(statement)
         })
     end
 
+ -- {"msgtext":{"service":"availableplayer","id":"12345","username":"playerdebug","status":"available"}}
  if(statement == "be_guest_to_play") then
 
         -- Escuta uma das seguintes mensagens e a trata

@@ -166,7 +166,7 @@ function state:change(e)
 					configuration.game_final_score_player[2] = configuration.game_score_player[2]
 
 				    composer.removeScene('src.gameplay.game')
-				    composer.gotoScene( "src.management.results", "fade", 400)
+				    composer.gotoScene( "src.menu.results_scene", "fade", 400)
 
 				
 				elseif configuration.game_current_turn == 1 then

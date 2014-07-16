@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- pregameplay.lua
+-- pregameplay_scene.lua
 -- Dewcription: welcome screen
 -- @author Samuel <samuellunamartins@gmail.com>
 -- @modified 
@@ -35,17 +35,15 @@
 -- my libs
 require( "src.infra.includeall" )
 
-local configuration       = require( "src.menu.menu_settings" )
-local network_pregameplay = require( "src.network.pregameplaysync" )
-local player1_obj         = require( "src.player.player1" )
-local player2_obj         = require( "src.player.player2" )
+local configuration         = require( "src.menu.menu_settings" )
+local network_pregameplay   = require( "src.network.pregameplaysync" )
+local player1_obj           = require( "src.player.player1" )
+local player2_obj           = require( "src.player.player2" )
 
 local scene = composer.newScene()
 
 -- Prototype Objects
 local menuButton, background, status_label, shadow_label
-
-local tick
 
 -- prototype Methods
 local menuButtonPress, playButtonPress, loadMenuButton, loadBackground
@@ -57,7 +55,7 @@ pregameplayGroup = display.newGroup( )
 local response_invite_to_play, response_user_status = 0, 0
 
 function loadBackground()
-  background = display.newImage( "resources/images/backgrounds/menu.png", display.contentCenterX , display.contentCenterY , true )
+  background = display.newImage( configuration.menu_background_image, display.contentCenterX , display.contentCenterY , true )
   pregameplayGroup:insert( background ) 
 end
 
@@ -68,6 +66,7 @@ function loadStatusLabel()
     configuration.pregameplay_status_label_y+2, 
     configuration.pregameplay_status_font_name, 
     configuration.pregameplay_status_font_size )  
+
   status_label = display.newText( 
     "", 
     configuration.pregameplay_status_label_x, 
@@ -95,6 +94,7 @@ function loadMenuButton()
   menuButton.x = configuration.pregameplay_menu_button_x
   menuButton.y = configuration.pregameplay_menu_button_y
   pregameplayGroup:insert(menuButton)
+  --menuButton.isVisible = false
 end
 
 function menuButtonPress( event )
@@ -111,60 +111,93 @@ end
 -- Esse json serve para dizer que o player esta disponivel. Ja o json abaixo:
 -- {"msgtext":{"service":"invitetoplay","id":"<id do player 2>"}}
 -- 
-function connecting_process()
 
-  -- notifica o servidor que o player esta disponivel   
+function go_warn_available(response_user_status)
   timer.performWithDelay( 1000, function( ) 
-      shadow_label.text = "Connecting to a server..."
-      status_label.text = "Connecting to a server..."      
+      if shadow_label then shadow_label.text = "Connecting to a server..."; end
+      if status_label then status_label.text = "Connecting to a server..."; end
     if response_user_status ~= "available" then    
-      response_user_status = network_pregameplay.sendUserStatus("avaiable")
+      return network_pregameplay.sendUserStatus("avaiable")
     end
   end )
+end
 
-    -- procura por um player disponivel para jogar
+function go_find_available( )
   timer.performWithDelay( 2000, function()
-    shadow_label.text = "Finding a available player..."    
-    status_label.text = "Finding a available player..."
+    if shadow_label then shadow_label.text = "Finding a available player..."; end
+    if status_label then status_label.text = "Finding a available player..."; end
     network_pregameplay.findAvailablePlayer()
   end )
+end
 
+function go_invite()
+    if shadow_label then shadow_label.text = "Player found. Inviting him to play..."; end                
+    if status_label then status_label.text = "Player found. Inviting him to play..."; end         
+    return network_pregameplay.inviteToPlay(player2_obj.id)
+end
+
+function go_be_guest()
+    if shadow_label then shadow_label.text = "Waiting a invite..."; end                
+    if status_label then status_label.text = "Waiting a invite..."; end         
+    network_pregameplay.beGuestToPlay()
+end
+
+function go_play()
+  if shadow_label then shadow_label.text = "Player accepted. Loading..."; end
+  if status_label then status_label.text = "Player accepted. Loading..."; end
+
+  response_user_status = network_pregameplay.sendUserStatus("busy")
+  removeAll()
+
+  composer.removeScene('src.menu.pregameplay_scene')  
+  composer.gotoScene( "src.gameplay.game", "slideLeft", 400 )
+end
+
+function beguest_process()
+  -- notifica o servidor que o player esta disponivel   
+  response_user_status = go_warn_available(response_user_status)
+
+  -- esperar por um convite
+  go_be_guest()
+
+  -- verifica a cada segundo se foi convidado
+  timer.performWithDelay( 1000, function() 
+
+    -- caso tenha sido convidado, responda dizendo que quer jogar
+    if player2_obj.id ~= nil and player2_obj.id ~= "" then
+
+    end
+
+  end,30) 
+
+end
+
+function inviting_process()
+
+  -- notifica o servidor que o player esta disponivel   
+  response_user_status = go_warn_available(response_user_status)
+
+    -- procura por um player disponivel para jogar
+  go_find_available()
+
+  -- Da 4 segundos para procurar alguém
   timer.performWithDelay( 4000, function()
 
-    tick = timer.performWithDelay( 1000, function()
+    -- encontrou alguem disponivel, convide-o para jogar
+    if player2_obj.id ~= nil and player2_obj.id ~= "" then
+      response_invite_to_play = go_invite()
 
-      if player2_obj.id ~= nil and player2_obj.id ~= "" then
-      shadow_label.text = "Player found. Inviting him to play..."                  
-      status_label.text = "Player found. Inviting him to play..."         
-      response_invite_to_play = network_pregameplay.inviteToPlay(player2_obj.id)
-
+      -- da 4 segundos para responder o convite
+      timer.performWithDelay( 8000, function()
+        -- confirmou que quer jogar, entao va jogar
         if response_invite_to_play == "confirmed" then
-          shadow_label.text = "Player accepted. Loading..."    
-          status_label.text = "Player accepted. Loading..."            
-          response_user_status = network_pregameplay.sendUserStatus("busy")
-
-            -- lets play
-            timer.cancel( tick )
-
-            removeAll()
-
-            composer.removeScene('src.menu.pregameplay_scene')  
-            composer.gotoScene( "src.gameplay.game", "slideLeft", 400 )
-          --return "play"
-
-          -- se nao respondeu ao convite, coloque-se na posicao de convidado
-        else
-          shadow_label.text = "Refused. Trying be a guest of someone else..."                  
-          status_label.text = "Refused. Trying be a guest of someone else..."         
-          response_invite_to_play = network_pregameplay.beGuestToPlay()
-          
+          go_play()
         end
-      else
-            network_pregameplay.findAvailablePlayer()
-      end  
-    end,0)
 
-  end)
+      end)
+    end -- fim do encontrou alguem disponivel
+
+  end,10) 
 end
 
 function createAll()
@@ -175,22 +208,29 @@ function createAll()
 
   if not menuButton then loadMenuButton();  end 
 
-    -- LEMBRAR DO JANTAR DOS FILOSOFOS
-      local r = connecting_process()
+
+  inviting_process()
+
+  beguest_process()
 
 end
 
 function removeAll()
 
-    if(background) then pregameplayGroup:remove( background ); background:removeSelf(); background = nil; end
+    if tick then timer.cancel( tick );  end
 
-    if(status_label) then pregameplayGroup:remove( status_label ); status_label:removeSelf(); status_label = nil; end
+    network_pregameplay.disconnect()
+
+    if(background) then pregameplayGroup:remove( background ); background:removeSelf(); background = nil; end
 
     if(shadow_label) then pregameplayGroup:remove( shadow_label ); shadow_label:removeSelf(); shadow_label = nil; end
 
+    if(status_label) then pregameplayGroup:remove( status_label ); status_label:removeSelf(); status_label = nil; end
+
     if(menuButton) then pregameplayGroup:remove( menuButton ); menuButton:removeSelf(); menuButton = nil; end
 
-    if(playButton) then pregameplayGroup:remove( playButton ); playButton:removeSelf(); playButton = nil; end    
+    if(playButton) then pregameplayGroup:remove( playButton ); playButton:removeSelf(); playButton = nil; end       
+  
 end
 
 function scene:create( event )
