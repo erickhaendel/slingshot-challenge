@@ -39,7 +39,7 @@ module(..., package.seeall)
 -------------------------------------------
 -- corona libs
 require("src.network.pubnub")
-
+local configuration         = require( "src.gameplay.configuration" )
 
 -- my libs
 local settings      = require( "src.network.pubnub-settings" )
@@ -72,73 +72,30 @@ function disconnect_pubnub()
     multiplayer:unsubscribe({channel  = settings.channel})
 end
 
-function receive_pubnub(statement)
+function receive_pubnub()
     -----------------------------------------
     -- DATABASE SERVER CONNECTION MESSAGES --
     -----------------------------------------
-    if(statement == "find_available_player") then
 
-        -- Escuta uma das seguintes mensagens e a trata
-        multiplayer:subscribe({
-            channel  = settings.channel,
-            callback = function(message)
+    -- Escuta uma das seguintes mensagens e a trata
+    multiplayer:subscribe({
+        channel  = settings.channel,
+        callback = function(message)
 
-                if(message["msgtext"]) then
-                    if(message["msgtext"]["service"] == "availableplayer") then                      
-                        player2_obj.id = message["msgtext"]["id"]
-                    end
+            if(message["msgtext"]) then
+                if(message["msgtext"] == "invitetoplay" and configuration.game_i_am_player_number == nil) then  
+                    print( "recebeu ".. message["msgtext"] )
+                    configuration.game_i_am_player_number = 2
                 end
-
-            end,
-
-            errorback = function()
-                local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
             end
-        })
-    end
 
- -- {"msgtext":{"service":"availableplayer","id":"12345","username":"playerdebug","status":"available"}}
- if(statement == "be_guest_to_play") then
+        end,
 
-        -- Escuta uma das seguintes mensagens e a trata
-        multiplayer:subscribe({
-            channel  = settings.channel,
-            callback = function(message)
-
-                if(message["msgtext"]) then
-                    if(message["msgtext"]["service"] == "invitetoplay" and message["msgtext"]["guest"] == player1_obj.id) then                      
-                        player2_obj.id = message["msgtext"]["id"]
-                    end
-                end
-
-            end,
-
-            errorback = function()
-                local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
-            end
-        })
-    end 
-
- if(statement == "accept_invite") then
-
-        -- Escuta uma das seguintes mensagens e a trata
-        multiplayer:subscribe({
-            channel  = settings.channel,
-            callback = function(message)
-
-                if(message["msgtext"]) then
-                    if(message["msgtext"]["service"] == "inviteaccepted" and message["msgtext"]["host"] == player1_obj.id) then                      
-                        player2_obj.id = message["msgtext"]["id"]
-                    end
-                end
-
-            end,
-
-            errorback = function()
-                local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
-            end
-        })
-    end 
+        errorback = function()
+            local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
+        end
+    })
+    
 end
 
 function send_pubnub(text)
@@ -146,6 +103,8 @@ function send_pubnub(text)
         channel = settings.channel,
         message = { msgtext = text },
         callback = function(info) 
+
+            print( "enviou "..text )
      
             -- WAS MESSAGE DELIVERED? 
             if info[1] then 

@@ -56,6 +56,7 @@ game_is_shooted = 0 			-- se a pedra foi disparada
 game_is_hit = 0 				-- se a lata foi atingida
 game_current_turn = 1 			-- 1 rodada possui dois turnos, um para cada player  - NAO_MODIFICAR_VALOR
 game_max_allowed_turns = 2 		-- numero maximo de turnos por rodada - PODE_MODIFICAR_VALOR
+game_i_am_player_number = nil
 game_current_player = 1 		-- identifica o jogador que esta jogando no momento  - NAO_MODIFICAR_VALOR
 game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
 game_total_rounds = 1		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR

@@ -36,7 +36,7 @@
 module(..., package.seeall)
 
 -- personal data
-id			= ""
+id			= "54321"
 username	= "player2debug"
 email		= "localhost@localhost"
 age			= ""

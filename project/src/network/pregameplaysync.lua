@@ -39,34 +39,12 @@ module(..., package.seeall)
 local pubnub_settings 	= require( "src.network.pubnub-settings" )
 local pubnub_methods 	= require( "src.network.pubnub-methods" )
 
-function disconnect()
-	pubnub_methods.disconnect_pubnub()
-end
-
-function findAvailablePlayer()
-	local player2 = pubnub_methods.receive_pubnub("find_available_player")
-	return player2
-end
-
-function inviteToPlay( player_id )
-	local message = '{"service:invitetoplay","id":"'..pubnub_settings.my_device_id..'","guest":"'..player_id..'"}'
-
-	return pubnub_methods.send_pubnub(message)
-end
-
-function acceptInvite( player_id )
-	local message = '{"service:inviteaccepted","id":"'..pubnub_settings.my_device_id..'","host":"'..player_id..'"}'
-
-	return pubnub_methods.send_pubnub(message)
-end
-
 function beGuestToPlay()
-	local player2 = pubnub_methods.receive_pubnub("be_guest_to_play")
-	return player2
+	local check = pubnub_methods.receive_pubnub()
+	return check
 end
 
-function sendUserStatus(status)
-	local message = '{"service":"availableplayer","id":"'..pubnub_settings.my_device_id..'","username":"playerdebug","status":"'..status..'"}'
-
-	return pubnub_methods.send_pubnub(message)
+function letsPlay()
+	local check = pubnub_methods.send_pubnub("invitetoplay")
+	return check
 end

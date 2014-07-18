@@ -54,3 +54,4 @@ if system.getInfo( "platformName" ) == "Mac OS X" then isSimulator = false; end
 -------------------------------------------
 composer.gotoScene('src.menu.welcome_scene', "fade", 0 )
 
+

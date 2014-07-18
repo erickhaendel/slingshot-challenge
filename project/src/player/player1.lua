@@ -36,7 +36,7 @@
 module(..., package.seeall)
 
 -- personal data
-id			= system.getInfo( "deviceID" )
+id			= 12345
 username	= "player1debug"
 email		= "localhost@localhost"
 age			= "6"
