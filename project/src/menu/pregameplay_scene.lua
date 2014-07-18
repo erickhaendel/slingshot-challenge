@@ -54,6 +54,9 @@ pregameplayGroup = display.newGroup( )
 
 local response_invite_to_play, response_user_status = 0, 0
 
+---------------------------
+-- GUI METHODS       --
+---------------------------
 function loadBackground()
   background = display.newImage( configuration.menu_background_image, display.contentCenterX , display.contentCenterY , true )
   pregameplayGroup:insert( background ) 
@@ -105,29 +108,22 @@ function menuButtonPress( event )
     composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
 end
 
--- Processo de conexao com o pubnub para achar um player e criar um jogo
--- Para testar no pubnub, digite no console o json:
--- {"msgtext":{"service":"availableplayer","id":"12345","username":"playerdebug","status":"available"}}
--- Esse json serve para dizer que o player esta disponivel. Ja o json abaixo:
--- {"msgtext":{"service":"invitetoplay","id":"<id do player 2>"}}
--- 
+---------------------------
+-- NETWORK METHODS       --
+---------------------------
 
 function go_warn_available(response_user_status)
-  timer.performWithDelay( 1000, function( ) 
-      if shadow_label then shadow_label.text = "Connecting to a server..."; end
-      if status_label then status_label.text = "Connecting to a server..."; end
+    if shadow_label then shadow_label.text = "Connecting to a server..."; end
+    if status_label then status_label.text = "Connecting to a server..."; end
     if response_user_status ~= "available" then    
       return network_pregameplay.sendUserStatus("avaiable")
     end
-  end )
 end
 
 function go_find_available( )
-  timer.performWithDelay( 2000, function()
     if shadow_label then shadow_label.text = "Finding a available player..."; end
     if status_label then status_label.text = "Finding a available player..."; end
     network_pregameplay.findAvailablePlayer()
-  end )
 end
 
 function go_invite()
@@ -142,6 +138,12 @@ function go_be_guest()
     network_pregameplay.beGuestToPlay()
 end
 
+function go_warn_accepted()
+    if shadow_label then shadow_label.text = "Invite received. Accepting it..."; end                
+    if status_label then status_label.text = "Invite received. Accepting it..."; end         
+    network_pregameplay.acceptInvite(player2_obj.id)  
+end
+
 function go_play()
   if shadow_label then shadow_label.text = "Player accepted. Loading..."; end
   if status_label then status_label.text = "Player accepted. Loading..."; end
@@ -154,6 +156,7 @@ function go_play()
 end
 
 function beguest_process()
+
   -- notifica o servidor que o player esta disponivel   
   response_user_status = go_warn_available(response_user_status)
 
@@ -165,7 +168,7 @@ function beguest_process()
 
     -- caso tenha sido convidado, responda dizendo que quer jogar
     if player2_obj.id ~= nil and player2_obj.id ~= "" then
-
+      go_warn_accepted()
     end
 
   end,30) 
@@ -175,20 +178,23 @@ end
 function inviting_process()
 
   -- notifica o servidor que o player esta disponivel   
-  response_user_status = go_warn_available(response_user_status)
-
+  timer.performWithDelay( 1000, 
+    function()
+      response_user_status = go_warn_available(response_user_status)
+    end
+  )
     -- procura por um player disponivel para jogar
-  go_find_available()
+  timer.performWithDelay( 2000, go_find_available )
 
   -- Da 4 segundos para procurar alguém
-  timer.performWithDelay( 4000, function()
+  timer.performWithDelay( 6000, function()
 
     -- encontrou alguem disponivel, convide-o para jogar
     if player2_obj.id ~= nil and player2_obj.id ~= "" then
       response_invite_to_play = go_invite()
 
       -- da 4 segundos para responder o convite
-      timer.performWithDelay( 8000, function()
+      timer.performWithDelay( 10000, function()
         -- confirmou que quer jogar, entao va jogar
         if response_invite_to_play == "confirmed" then
           go_play()
@@ -209,9 +215,9 @@ function createAll()
   if not menuButton then loadMenuButton();  end 
 
 
-  inviting_process()
+  timer.performWithDelay( 1, inviting_process )
 
-  beguest_process()
+  timer.performWithDelay( 12000, beguest_process )
 
 end
 

@@ -117,7 +117,28 @@ function receive_pubnub(statement)
                 local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
             end
         })
-    end    
+    end 
+
+ if(statement == "accept_invite") then
+
+        -- Escuta uma das seguintes mensagens e a trata
+        multiplayer:subscribe({
+            channel  = settings.channel,
+            callback = function(message)
+
+                if(message["msgtext"]) then
+                    if(message["msgtext"]["service"] == "inviteaccepted" and message["msgtext"]["host"] == player1_obj.id) then                      
+                        player2_obj.id = message["msgtext"]["id"]
+                    end
+                end
+
+            end,
+
+            errorback = function()
+                local alert = native.showAlert( "Alert", "Error", { "OK" }, onComplete )         
+            end
+        })
+    end 
 end
 
 function send_pubnub(text)

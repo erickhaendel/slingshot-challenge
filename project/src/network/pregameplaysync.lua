@@ -54,6 +54,12 @@ function inviteToPlay( player_id )
 	return pubnub_methods.send_pubnub(message)
 end
 
+function acceptInvite( player_id )
+	local message = '{"service:inviteaccepted","id":"'..pubnub_settings.my_device_id..'","host":"'..player_id..'"}'
+
+	return pubnub_methods.send_pubnub(message)
+end
+
 function beGuestToPlay()
 	local player2 = pubnub_methods.receive_pubnub("be_guest_to_play")
 	return player2
