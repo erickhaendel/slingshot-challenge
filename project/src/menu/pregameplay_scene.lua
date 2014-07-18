@@ -161,7 +161,7 @@ function inviting_process()
 
 
 
-  timer.performWithDelay( 4000, function( )
+  timer.performWithDelay( 2000, function( )
 
     network_pregameplay.letsPlay() 
 

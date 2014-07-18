@@ -87,6 +87,9 @@ function receive_pubnub()
                     print( "recebeu ".. message["msgtext"] )
                     configuration.game_i_am_player_number = 2
                 end
+                if message["msgtext"] == "projectile" then  
+                    print( "recebi uma pedra " )
+                end
             end
 
         end,
@@ -99,12 +102,13 @@ function receive_pubnub()
 end
 
 function send_pubnub(text)
+
     multiplayer:publish({
         channel = settings.channel,
         message = { msgtext = text },
         callback = function(info) 
 
-            print( "enviou "..text )
+           -- print( "enviou "..text )
      
             -- WAS MESSAGE DELIVERED? 
             if info[1] then 

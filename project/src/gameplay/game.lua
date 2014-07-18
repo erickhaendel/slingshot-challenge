@@ -51,6 +51,11 @@ local collision_process_lib 	= require( "src.gameplay.process.collision" )
 local score_process_lib 		= require( "src.gameplay.process.score" )
 local projectile_process_lib 	= require( "src.gameplay.process.projectile" )
 
+-- Network
+local network_pregameplay   	= require( "src.network.gameplaysync" )
+local player1_obj           	= require( "src.player.player1" )
+local player2_obj           	= require( "src.player.player2" )
+
 -------------------------------------------
 -- GROUPS
 -------------------------------------------

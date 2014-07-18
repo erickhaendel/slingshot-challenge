@@ -5,6 +5,10 @@ local configuration 			= require( "src.gameplay.configuration" )
 local assets_audio				= require( "src.gameplay.assets_audio" )
 local collision_process_lib 	= require( "src.gameplay.process.collision" )
 
+local network_gameplay   	= require( "src.network.gameplaysync" )
+local player1_obj           = require( "src.player.player1" )
+local player2_obj           = require( "src.player.player2" )
+
 -- verifica o limite do eslatico do estilingue e devolve os valores corretos
 function getBoundaryProjectile( e, stone )
 	-- Boundary for the projectile when grabbed			
@@ -82,11 +86,18 @@ function launched_process(stone, e, assets_image, state)
 	stone.bodyType = "dynamic";
 
 	-- FORCA X, FORCA Y, X, Y
-	stone:applyForce(
-		(display.contentCenterX - e.x)*configuration.projecttile_force_multiplier, 
-		( assets_image.slingshot_tiles_obj[configuration.game_current_player].y - e.y)*configuration.projecttile_force_multiplier, 
-		stone.x, 
-		stone.y);				
+	local x_force = (display.contentCenterX - e.x)*configuration.projecttile_force_multiplier
+	local y_force = ( assets_image.slingshot_tiles_obj[configuration.game_current_player].y - e.y)*configuration.projecttile_force_multiplier
+	stone:applyForce(x_force, y_force, stone.x, stone.y);
+
+	-- SYNC NETWORK
+	local info = {}
+	info["projectile"] = {}
+	info["projectile"][1] = x_force
+	info["projectile"][2] = y_force
+	info["projectile"][3] = stone.x
+	info["projectile"][4] = stone.y	
+	network_gameplay.updateMyProjectile(info)			
 	
 	stone:applyTorque( configuration.projecttile_torque )
 	stone.isFixedRotation = false;	
