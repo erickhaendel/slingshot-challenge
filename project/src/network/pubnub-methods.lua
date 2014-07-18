@@ -87,8 +87,8 @@ function receive_pubnub()
                     print( "recebeu ".. message["msgtext"] )
                     configuration.game_i_am_player_number = 2
                 end
-                if message["msgtext"] == "projectile" then  
-                    print( "recebi uma pedra " )
+                if message["msgtext"]["projectile"]  then  
+                    print( "recebi uma pedra "..message["msgtext"]["projectile"] )
                 end
             end
 
