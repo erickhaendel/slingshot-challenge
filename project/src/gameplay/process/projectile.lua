@@ -71,6 +71,55 @@ function launching_process(stone, touch_event)
 	return stone
 end
 
+function remote_launched_process( stone, info )
+
+	print( "fui chamado" )
+
+	stone.isVisible = true
+
+	configuration.game_is_shooted = 1
+
+	-- Reset the stage focus
+	display.getCurrentStage():setFocus(nil);
+	stone.isFocus = false;	
+	-- Launch projectile
+	stone.bodyType = "dynamic";
+	stone:applyForce(info["projectile"]["x_force"], info["projectile"]["y_force"], info["projectile"]["stone.x"], info["projectile"]["stone.y"]);
+
+	stone:applyTorque( configuration.projecttile_torque )
+	stone.isFixedRotation = false;	
+
+	configuration.projecttile_scale = 1.1	
+
+
+	stone.timer1 = timer.performWithDelay(1, function(e)
+		-- diminui a escala da pedra e traça sua trajetoria
+		animationProcess(stone)
+
+		-- monitora colisao com as latas
+		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
+
+			collision_process_lib.collision_process(stone, assets_image)
+		else
+			timer.cancel(stone.timer1);
+			stone.timer1 = nil;
+		end			
+	end,0)	
+
+	-- Wait a second before the catapult is reloaded (Avoids conflicts).
+	stone.timer = timer.performWithDelay(1000, 
+		function(e)
+			state:dispatchEvent({name="change", state="fire"});
+
+			if(e.count == 1) then
+				timer.cancel(stone.timer);
+				stone.timer = nil;
+			end
+		
+		end
+	, 1)
+end
+
 function launched_process(stone, e, assets_image, state)
 
 	configuration.game_is_shooted = 1
@@ -93,10 +142,11 @@ function launched_process(stone, e, assets_image, state)
 	-- SYNC NETWORK
 	local info = {}
 	info["projectile"] = {}
-	info["projectile"][1] = x_force
-	info["projectile"][2] = y_force
-	info["projectile"][3] = stone.x
-	info["projectile"][4] = stone.y	
+	info["projectile"]["player"] = configuration.game_i_am_player_number
+	info["projectile"]["x_force"] = x_force
+	info["projectile"]["y_force"] = y_force
+	info["projectile"]["stone.x"] = stone.x
+	info["projectile"]["stone.y"] = stone.y	
 	network_gameplay.updateMyProjectile(info)			
 	
 	stone:applyTorque( configuration.projecttile_torque )

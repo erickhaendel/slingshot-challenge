@@ -81,6 +81,7 @@ function spawnProjectile()
 	if(projectile_tiles_lib.ready)then
 
 		projectiles_container = projectile_tiles_lib.newProjectile();
+
 		-- Flag projectiles for removal
 		projectiles_container.ready = true;
 		projectiles_container.remove = true;
@@ -89,7 +90,7 @@ function spawnProjectile()
 		slingshot_container:insert(projectiles_container);
 
 		-- Add an event listener to the projectile.
-		projectiles_container:addEventListener("touch", projectileTouchListener);	
+		projectiles_container:addEventListener("touch", projectileTouchListener);
 
 	end	
 end
@@ -100,51 +101,57 @@ function projectileTouchListener(e)
 	-- The current projectile on screen
 	local stone = e.target;
 
-	-- If the projectile is 'ready' to be used
-	if(stone.ready) then
+	configuration.projectile_object = stone
 
-		if(e.phase == "began") then -- if the touch event has started...
+	if configuration.game_current_player == configuration.game_i_am_player_number then
 
-			stone = projectile_process_lib.ready_to_launch_process(stone)
+		-- If the projectile is 'ready' to be used
+		if(stone.ready) then
 
-			-- Init the elastic band.
-			local myLine = nil;
-			local myLineBack = nil;
-		
-		elseif(stone.isFocus) then -- If the target of the touch event is the focus...
+			if(e.phase == "began") then -- if the touch event has started...
 
-			if(e.phase == "moved") then -- If the target of the touch event moves...
+				stone = projectile_process_lib.ready_to_launch_process(stone)
 
-				-- If the band exists... refresh the drawing of the line on the stage.
-				band_line_tiles_lib.removeBandLine( )
+				-- Init the elastic band.
+				local myLine = nil;
+				local myLineBack = nil;
+			
+			elseif(stone.isFocus) then -- If the target of the touch event is the focus...
 
-				myLineBack, myLine = band_line_tiles_lib.newBandLine( stone )
-				
-				-- Insert the components of the catapult into a group.
-				--slingshot_container:insert(slingshot_tiles_obj);
-				slingshot_container:insert(myLineBack);
-				slingshot_container:insert(stone);
-				slingshot_container:insert(myLine);
+				if(e.phase == "moved") then -- If the target of the touch event moves...
 
-				-- Boundary for the projectile when grabbed	
-				-- evita que estique o elastico infinitamente	
-				stone = projectile_process_lib.launching_process(stone, e)
+					-- If the band exists... refresh the drawing of the line on the stage.
+					band_line_tiles_lib.removeBandLine( )
 
-			-- If the projectile touch event ends (player lets go)...
-			elseif(e.phase == "ended" or e.phase == "cancelled") then
+					myLineBack, myLine = band_line_tiles_lib.newBandLine( stone )
+					
+					-- Insert the components of the catapult into a group.
+					--slingshot_container:insert(slingshot_tiles_obj);
+					slingshot_container:insert(myLineBack);
+					slingshot_container:insert(stone);
+					slingshot_container:insert(myLine);
 
-				-- Remove projectile touch so player can't grab it back and re-use after firing.
-				projectiles_container:removeEventListener("touch", projectileTouchListener);
+					-- Boundary for the projectile when grabbed	
+					-- evita que estique o elastico infinitamente	
+					stone = projectile_process_lib.launching_process(stone, e)
 
-				-- Remove the elastic band
-				band_line_tiles_lib.removeBandLine( )
+				-- If the projectile touch event ends (player lets go)...
+				elseif(e.phase == "ended" or e.phase == "cancelled") then
 
-				stone = projectile_process_lib.launched_process(stone, e,  assets_image, state)
-										
+					-- Remove projectile touch so player can't grab it back and re-use after firing.
+					projectiles_container:removeEventListener("touch", projectileTouchListener);
+
+					-- Remove the elastic band
+					band_line_tiles_lib.removeBandLine( )
+
+					stone = projectile_process_lib.launched_process(stone, e,  assets_image, state)
+											
+				end
+			
 			end
 		
 		end
-	
+
 	end
 
 end
@@ -268,9 +275,6 @@ function start_game()
     configuration.game_final_score_player[1] = 0    
     configuration.game_final_score_player[2] = 0                  
   
-	-- escolhe entre o jogador 1 ou 2 quem vai iniciar primeiro o jogo
-	configuration.game_current_player = math.random( 1, 2 )
-	
 	assets_image.createGameplayScenario() -- carrega objetos do cenario
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera)

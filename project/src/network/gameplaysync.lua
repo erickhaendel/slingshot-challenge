@@ -51,6 +51,5 @@ function updateMyProjectile(info)
 end
 
 function listenOtherPlayer()
-	local check = pubnub_methods.receive_pubnub()
-	return check
+	pubnub_methods.receive_pubnub()
 end

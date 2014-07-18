@@ -46,6 +46,8 @@ local settings      = require( "src.network.pubnub-settings" )
 local player1_obj   = require( "src.player.player1" )
 local player2_obj   = require( "src.player.player2" )
 
+local projectile_process_lib    = require( "src.gameplay.process.projectile" )
+
 require( "src.infra.includeall" )
 
 -- Handler that gets notified when the alert closes
@@ -88,7 +90,12 @@ function receive_pubnub()
                     configuration.game_i_am_player_number = 2
                 end
                 if message["msgtext"]["projectile"]  then  
-                    print( "recebi uma pedra "..message["msgtext"]["projectile"] )
+                    print( "recebi uma pedra "..message["msgtext"]["projectile"]["player"] )
+
+                    --> deixe visivel, lance com as config
+                    if message["msgtext"]["projectile"]["player"] ~= configuration.game_i_am_player_number then
+                        stone = projectile_process_lib.remote_launched_process(configuration.projectile_object, message["msgtext"] )
+                    end
                 end
             end
 

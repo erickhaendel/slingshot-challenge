@@ -62,11 +62,6 @@ game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
 game_total_rounds = 1		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
 game_max_allowed_rounds = 1 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
 
--- NETWORK
-port = 80
-player1_ip = "127.1.1.1"
-player2_ip = "127.1.1.1"
-
 -- ANIMATION CONFIG
 camera_velocity = 12 									-- velocidade da animcao de transicao de tela
 time_hide_title_player_label = 64000 / camera_velocity	-- tempo de duracao de exibicao do nome player
@@ -83,6 +78,7 @@ projecttile_torque = 100 								-- força de rotacao da pedra
 projecttile_scale = 1.1 								-- escala da pedra
 projecttile_variation = 0.03 							-- variacao da escala da pedra ao ser lancada
 projecttile_force_multiplier = 10 						-- valor que multiplica a forca em cada eixo
+projectile_object = nil
 
 -- PROJECT TILE TRAJECTORY
 local circle_id = 1 									-- contador de pontos da trajetoria
