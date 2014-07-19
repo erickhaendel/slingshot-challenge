@@ -94,7 +94,7 @@ function receive_pubnub()
 
                     --> deixe visivel, lance com as config
                     if message["msgtext"]["projectile"]["player"] ~= configuration.game_i_am_player_number then
-                        stone = projectile_process_lib.remote_launched_process(configuration.projectile_object, message["msgtext"] )
+                        stone = projectile_process_lib.remote_launched_process(message["msgtext"])
                     end
                 end
             end

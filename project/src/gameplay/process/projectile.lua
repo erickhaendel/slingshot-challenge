@@ -71,7 +71,11 @@ function launching_process(stone, touch_event)
 	return stone
 end
 
-function remote_launched_process( stone, info )
+-- Metodo de lancamneto de pedra multiplayer
+function remote_launched_process( info )
+
+	local stone = configuration.projectile_object
+	local assets_image = configuration.assets_image_object
 
 	print( "fui chamado" )
 
@@ -99,7 +103,7 @@ function remote_launched_process( stone, info )
 		-- monitora colisao com as latas
 		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
 
-			collision_process_lib.collision_process(stone, assets_image)
+			collision_process_lib.collision_process(stone, configuration.assets_image_object)
 		else
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;
@@ -109,7 +113,7 @@ function remote_launched_process( stone, info )
 	-- Wait a second before the catapult is reloaded (Avoids conflicts).
 	stone.timer = timer.performWithDelay(1000, 
 		function(e)
-			state:dispatchEvent({name="change", state="fire"});
+			configuration.state_object:dispatchEvent({name="change", state="fire"});
 
 			if(e.count == 1) then
 				timer.cancel(stone.timer);
@@ -147,6 +151,9 @@ function launched_process(stone, e, assets_image, state)
 	info["projectile"]["y_force"] = y_force
 	info["projectile"]["stone.x"] = stone.x
 	info["projectile"]["stone.y"] = stone.y	
+
+	-- copia da pedra, usado pelo pubnub
+	configuration.projectile_object = stone		
 	network_gameplay.updateMyProjectile(info)			
 	
 	stone:applyTorque( configuration.projecttile_torque )

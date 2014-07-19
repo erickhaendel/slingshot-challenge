@@ -59,9 +59,7 @@ local player2_obj           	= require( "src.player.player2" )
 -------------------------------------------
 -- GROUPS
 -------------------------------------------
-local state
-
-state = display.newGroup();
+configuration.state_object = display.newGroup();
 
 local slingshot_container = display.newGroup();
 
@@ -92,6 +90,7 @@ function spawnProjectile()
 		-- Add an event listener to the projectile.
 		projectiles_container:addEventListener("touch", projectileTouchListener);
 
+		configuration.projectile_object = projectiles_container
 	end	
 end
 
@@ -101,16 +100,14 @@ function projectileTouchListener(e)
 	-- The current projectile on screen
 	local stone = e.target;
 
-	configuration.projectile_object = stone
-
-	if configuration.game_current_player == configuration.game_i_am_player_number then
-
 		-- If the projectile is 'ready' to be used
 		if(stone.ready) then
 
 			if(e.phase == "began") then -- if the touch event has started...
 
 				stone = projectile_process_lib.ready_to_launch_process(stone)
+				-- copia da pedra, usado pelo pubnub
+				configuration.projectile_object = stone				
 
 				-- Init the elastic band.
 				local myLine = nil;
@@ -144,7 +141,7 @@ function projectileTouchListener(e)
 					-- Remove the elastic band
 					band_line_tiles_lib.removeBandLine( )
 
-					stone = projectile_process_lib.launched_process(stone, e,  assets_image, state)
+					stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
 											
 				end
 			
@@ -152,15 +149,14 @@ function projectileTouchListener(e)
 		
 		end
 
-	end
+	--end
 
 end
 
 -- GAME STATE CHANGE FUNCTION
-function state:change(e)
+function configuration.state_object:change(e)
 
 	if(e.state == "fire") then
-		
 		--
 		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
 
@@ -170,7 +166,8 @@ function state:change(e)
 			    	assets_image.removeGameplayScenario()
 
 			    	-- Destroi eventos criados
-					state:removeEventListener("change", state);	
+					configuration.state_object:removeEventListener("change", configuration.state_object);	
+					
 					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 					projectiles_container:removeEventListener("touch", projectileTouchListener);
 
@@ -183,10 +180,12 @@ function state:change(e)
 				
 				elseif configuration.game_current_turn == 1 then
 					print( "Prox turno" )
+					-- utilizado pelo pubnub					
 					next_turn()
 						-- avanca um round					
 				elseif configuration.game_current_turn == 2 then
 					print( "prox round" )
+					-- utilizado pelo pubnub				
 					next_round()
 				end
 			end)
@@ -273,15 +272,20 @@ function start_game()
     configuration.game_score_player[1] = 0  
     configuration.game_score_player[2] = 0  
     configuration.game_final_score_player[1] = 0    
-    configuration.game_final_score_player[2] = 0                  
-  
-	assets_image.createGameplayScenario() -- carrega objetos do cenario
+    configuration.game_final_score_player[2] = 0   
+
+  	 -- carrega objetos do cenario
+	assets_image.createGameplayScenario()
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera)
 
+	-- passando o cenario para uma variavel global - utilizado pelo pubnub
+	configuration.assets_image_object = assets_image
+
+
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		state:addEventListener("change", state); -- Create listnener for state changes in the game
+		configuration.state_object:addEventListener("change", configuration.state_object); -- Create listnener for state changes in the game
 
 		-- Tell the projectile it's good to go!
 		projectile_tiles_lib.ready = true;
@@ -289,11 +293,12 @@ function start_game()
 		spawnProjectile(); -- Spawn the first projectile.
 
 		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
-
 		end)
 
 	-- Inicia a musica do gameplay
 	assets_audio.startBackgroundMusic( )
+
+
 end
 
 ---------------------------------------------------------------------------------

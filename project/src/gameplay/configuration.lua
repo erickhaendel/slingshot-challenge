@@ -79,6 +79,8 @@ projecttile_scale = 1.1 								-- escala da pedra
 projecttile_variation = 0.03 							-- variacao da escala da pedra ao ser lancada
 projecttile_force_multiplier = 10 						-- valor que multiplica a forca em cada eixo
 projectile_object = nil
+assets_image_object = nil
+state_object = nil
 
 -- PROJECT TILE TRAJECTORY
 local circle_id = 1 									-- contador de pontos da trajetoria

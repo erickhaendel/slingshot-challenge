@@ -64,21 +64,36 @@ function loadBackground()
 end
 
 function loadStatusLabel()
-  shadow_label = display.newText(
-    "",
-    configuration.pregameplay_status_label_x-2, 
-    configuration.pregameplay_status_label_y+2, 
-    configuration.pregameplay_status_font_name, 
-    configuration.pregameplay_status_font_size )  
 
-  status_label = display.newText( 
-    "", 
-    configuration.pregameplay_status_label_x, 
-    configuration.pregameplay_status_label_y, 
-    configuration.pregameplay_status_font_name, 
-    configuration.pregameplay_status_font_size )
+  local options = 
+  {
+    --parent = textGroup,
+    text =  "",
+    x = configuration.pregameplay_status_label_x-2, 
+    y = configuration.pregameplay_status_label_y+2,
+    width = 775,    --required for multi-line and alignment
+    font = configuration.pregameplay_status_font_name, 
+    fontSize = configuration.pregameplay_status_font_size,
+    align = "center"  --new alignment parameter
+  }
 
-  status_label:setFillColor( 1, 1, 0, 255 )
+  shadow_label = display.newText(options)  
+
+  options = 
+  {
+    --parent = textGroup,
+    text =  "",
+    x = configuration.pregameplay_status_label_x, 
+    y = configuration.pregameplay_status_label_y,
+    width = 775,    --required for multi-line and alignment
+    font = configuration.pregameplay_status_font_name, 
+    fontSize = configuration.pregameplay_status_font_size,
+    align = "center"  --new alignment parameter
+  }
+
+  status_label = display.newText(options)
+
+  status_label:setFillColor( 1, 1, 1, 255 )
   shadow_label:setFillColor( 0, 0, 0, 255 )
 
   pregameplayGroup:insert(shadow_label)
@@ -113,8 +128,8 @@ function loadInviteButton()
 
   inviteButton = widget.newButton
   {
-    defaultFile = configuration.play_button_image,
-    overFile = configuration.play_button_image,
+    defaultFile = configuration.invite_button_image,
+    overFile = configuration.invite_button_image,
     emboss = true,
     onPress = inviteButtonPress,
   }
@@ -177,11 +192,14 @@ function createAll()
 
   if not background then  loadBackground();  end   
   
-  if not statusLabel then loadStatusLabel(); end
+  if not status_label then loadStatusLabel(); end
 
   if not menuButton then loadMenuButton();  end 
 
   if not inviteButton then loadInviteButton();  end 
+
+  shadow_label.text =  "Waiting for someone to\ninvite you to play ...\n\nor you can invite\nsomeone..."
+  status_label.text =  "Waiting for someone to\ninvite you to play ...\n\nor you can invite\nsomeone..."
 
   timer.performWithDelay( 100, beguest_process )
 
