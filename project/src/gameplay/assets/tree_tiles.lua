@@ -40,22 +40,22 @@ local configuration = require( "src.gameplay.configuration" )
 -- HOUSE TILES											--
 ----------------------------------------------------------
 
+-- Por enquanto vamos deixar apenas 1 arvore
+local num = 1
+
 function newTreeTile()
 
 	local tree = {}
 	
-	-- Por enquanto vamos deixar apenas 1 arvore
-	local num = 1
 	for i=1,num do	
-		tree[i] = display.newImage( configuration.tree_image_filename[i], true )
-		tree[i].x = configuration.tree_position_x[i]
-		tree[i].y = configuration.tree_position_y[i]
+		tree[i] = display.newImage( configuration.tree_image_filename[i], configuration.tree_position_x[i], configuration.tree_position_y[i] )
 	end
+
 	return tree
 end
 
 function removeTreeTile(tree)
-	for i=1,2 do
+	for i=1,num do
 		tree[i]:removeSelf( ); tree[i] = nil
 	end	
 end

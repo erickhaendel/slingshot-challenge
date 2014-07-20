@@ -59,8 +59,8 @@ game_max_allowed_turns = 2 		-- numero maximo de turnos por rodada - PODE_MODIFI
 game_i_am_player_number = nil
 game_current_player = 1 		-- identifica o jogador que esta jogando no momento  - NAO_MODIFICAR_VALOR
 game_current_round = 1 			-- rodada atual - NAO_MODIFICAR_VALOR
-game_total_rounds = 1		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
-game_max_allowed_rounds = 1 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
+game_total_rounds = 5		 	-- guarda o numero sorteado de rounds - NAO_MODIFICAR_VALOR
+game_max_allowed_rounds = 5 	-- numero maximo de rounds em um sorteio - PODE_MODIFICAR_VALOR
 
 -- ANIMATION CONFIG
 camera_velocity = 12 									-- velocidade da animcao de transicao de tela
@@ -93,7 +93,7 @@ local trajetory = {} 									-- contador de pontos da trajetoria
 -- HOUSE
 house_position_x = {}
 house_position_y = {}
-house_position_x[1] = display.contentCenterX - 540 				-- posicao do tile casa
+house_position_x[1] = display.contentCenterX - 740 				-- posicao do tile casa
 house_position_y[1] = display.contentCenterY - 280 	
 house_position_x[2] = display.contentCenterX + 2750 			-- posicao do tile casa
 house_position_y[2] = display.contentCenterY - 280 				-- poiscao do tile casa
@@ -203,6 +203,7 @@ sky_y[3] = display.contentCenterY - 280
 sky_x[4] = display.contentCenterX + 2330
 sky_y[4] = display.contentCenterY - 280
 sky_image_filename = "resources/images/objects/sky.png"
+sky_transition_event = nil
 
 -- TITLE PLAYER LABEL
 title_player_label_x = {}; title_player_label_y = {}

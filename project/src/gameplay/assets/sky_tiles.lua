@@ -55,12 +55,61 @@ local function moveSky()
 	end
 end
 
+function transitionNightDay(sky, background_sky)
+
+	-- 0.23,0.35,0.42,1
+	local original_red, original_green, original_blue, original_alpha = 0.73,0.85,0.92,1
+	local red, green, blue, alpha = original_red, original_green, original_blue, original_alpha
+	local offset, offset_alpha = 0.0007, 0.0007
+
+	function animation( event )
+
+		configuration.sky_transition_event = event.source
+
+		for i=1,4 do	
+			sky[i]:setFillColor( 1, 1, 1, alpha ) 
+		end	
+
+		background_sky:setFillColor( red, green, blue, original_alpha )
+
+		red = red + offset
+
+		if red > 1.0 or red < 0 then
+			offset = offset*(-1)
+		end	
+
+		green = green + offset
+
+		if green > 1.0 or green < 0 then
+			offset = offset*(-1)
+		end			
+
+		blue = blue + offset
+
+		if blue > 1.0 or blue < 0 then
+			offset = offset*(-1)
+		end
+
+		alpha = alpha + offset_alpha
+
+		if alpha < 0.3 or alpha > original_alpha then
+			offset_alpha = offset_alpha*(-1)
+		end		
+	end	
+
+	timer.performWithDelay( 1, animation ,0 )
+end
+
 -- load the sky animation
 function startSky()
 
 	local skys = {}
 
 	skyGroup = display.newGroup();
+
+	local background_sky = display.newRect( configuration.sky_x[1], configuration.sky_y[1], 6000, 500 )
+	background_sky:setFillColor( blue )
+	skyGroup:insert( background_sky )
 
 	for i=1,4 do
 		skys[i] = display.newImage( configuration.sky_image_filename, true )
@@ -71,10 +120,13 @@ function startSky()
 
 	Runtime:addEventListener( "enterFrame", moveSky )	
 
-	return skys
+	return skys, background_sky
 end
 
-function removeSky( sky )
+function removeSky( sky, background_sky )
+
+	skyGroup:remove(background_sky)
+	background_sky:removeSelf( )
 
 	for i=1,4 do
 		skyGroup:remove( sky[i] )		

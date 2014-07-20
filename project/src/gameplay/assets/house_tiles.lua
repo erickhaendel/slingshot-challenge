@@ -45,9 +45,7 @@ function newHouseTile()
 	local house = {}
 	
 	for i=1,2 do	
-		house[i] = display.newImage( configuration.house_image_filename[i], true )
-		house[i].x = configuration.house_position_x[i]
-		house[i].y = configuration.house_position_y[i]
+		house[i] = display.newImage( configuration.house_image_filename[i], configuration.house_position_x[i], configuration.house_position_y[i] )
 	end
 	return house
 end

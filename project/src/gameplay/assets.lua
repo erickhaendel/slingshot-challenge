@@ -62,6 +62,7 @@ tree_tiles_obj 				= nil;
 score_player_tiles_obj 		= nil;
 scoreboard_tiles_obj 		= nil; 
 sky_tiles_obj 				= nil; 
+background_sky_obj 			= nil;
 slingshot_tiles_obj 		= nil; 
 stone_trajectory_tiles_obj 	= nil; 
 target_tiles_obj 			= nil;
@@ -93,7 +94,8 @@ local projectiles_container = nil;
 ---------------------------------------------------------------------------------------------------------------
 
 local function create_sky_tiles_obj()
-	sky_tiles_obj = sky_tiles_lib.startSky();	
+	sky_tiles_obj, background_sky_obj = sky_tiles_lib.startSky();	
+	sky_tiles_lib.transitionNightDay(sky_tiles_obj,background_sky_obj)
 end
 
 local function create_house_tiles_obj(  )
@@ -181,26 +183,29 @@ end
 ---------------------------------------------------------------------------------------------------------------
 
 local function remove_sky_tiles_obj()
+
+	timer.cancel( configuration.sky_transition_event )
+
 	if sky_tiles_obj then		
-		sky_tiles_lib.removeSky( sky_tiles_obj )
+		sky_tiles_lib.removeSky( sky_tiles_obj, background_sky_obj )
 	end
 end
 
 local function remove_house_tiles_obj(  )
-	if house_tile_obj then
-		for i=1, #house_tile_obj do
-			assetsGroup:remove( house_tile_obj[i] )	
-			house_tile_lib[i].removeHouseTile( house_tile_obj[i] )			
+	if house_tiles_obj then
+		for i=1, #house_tiles_obj do
+			assetsGroup:remove( house_tiles_obj[i] )			
 		end	
+		house_tiles_lib.removeHouseTile( house_tiles_obj )			
 	end
 end
 
 local function remove_tree_tiles_obj(  )
-	if tree_tile_obj then
-		for i=1, #tree_tile_obj do
-			assetsGroup:remove( tree_tile_obj[i] )	
-			tree_tile_lib[i].removeTreeTile( tree_tile_obj[i] )			
+	if tree_tiles_obj then
+		for i=1, #tree_tiles_obj do
+			assetsGroup:remove( tree_tiles_obj[i] )			
 		end	
+		tree_tiles_lib.removeTreeTile( tree_tiles_obj )			
 	end
 end
 
