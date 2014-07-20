@@ -56,6 +56,9 @@ local network_pregameplay   	= require( "src.network.gameplaysync" )
 local player1_obj           	= require( "src.player.player1" )
 local player2_obj           	= require( "src.player.player2" )
 
+-- sprite
+local donottouch_sprite_lib 	= require( "src.gameplay.assets.donottouch_sprite" )
+
 -------------------------------------------
 -- GROUPS
 -------------------------------------------
@@ -66,7 +69,7 @@ local slingshot_container = display.newGroup();
 ----------------------------------------------
 -- PROTOTYPE METHODS
 ----------------------------------------------
-local projectileTouchListener, remove_projectile_animation, new_projectile_animation, next_round, next_turn
+local projectileTouchListener, remove_projectile_animation, new_projectile_animation, next_round, next_turn, donottouch_warn
 
 ---------------------------------------------
 -- METHODS
@@ -101,51 +104,55 @@ function projectileTouchListener(e)
 	local stone = e.target;
 
 		-- If the projectile is 'ready' to be used
-		if(stone.ready) then
+		if(stone.ready) then		
 
-			if(e.phase == "began") then -- if the touch event has started...
+				if(e.phase == "began") then -- if the touch event has started...
 
-				stone = projectile_process_lib.ready_to_launch_process(stone)
-				-- copia da pedra, usado pelo pubnub
-				configuration.projectile_object = stone				
+					stone = projectile_process_lib.ready_to_launch_process(stone)
+					-- copia da pedra, usado pelo pubnub
+					configuration.projectile_object = stone				
 
-				-- Init the elastic band.
-				local myLine = nil;
-				local myLineBack = nil;
-			
-			elseif(stone.isFocus) then -- If the target of the touch event is the focus...
+					-- Init the elastic band.
+					local myLine = nil;
+					local myLineBack = nil;
+				
+				elseif(stone.isFocus) then -- If the target of the touch event is the focus...
 
-				if(e.phase == "moved") then -- If the target of the touch event moves...
+					if configuration.game_current_player == configuration.game_i_am_player_number then 					
 
-					-- If the band exists... refresh the drawing of the line on the stage.
-					band_line_tiles_lib.removeBandLine( )
+					if(e.phase == "moved") then -- If the target of the touch event moves...
 
-					myLineBack, myLine = band_line_tiles_lib.newBandLine( stone )
-					
-					-- Insert the components of the catapult into a group.
-					--slingshot_container:insert(slingshot_tiles_obj);
-					slingshot_container:insert(myLineBack);
-					slingshot_container:insert(stone);
-					slingshot_container:insert(myLine);
+						-- If the band exists... refresh the drawing of the line on the stage.
+						band_line_tiles_lib.removeBandLine( )
 
-					-- Boundary for the projectile when grabbed	
-					-- evita que estique o elastico infinitamente	
-					stone = projectile_process_lib.launching_process(stone, e)
+						myLineBack, myLine = band_line_tiles_lib.newBandLine( stone )
+						
+						-- Insert the components of the catapult into a group.
+						--slingshot_container:insert(slingshot_tiles_obj);
+						slingshot_container:insert(myLineBack);
+						slingshot_container:insert(stone);
+						slingshot_container:insert(myLine);
 
-				-- If the projectile touch event ends (player lets go)...
-				elseif(e.phase == "ended" or e.phase == "cancelled") then
+						-- Boundary for the projectile when grabbed	
+						-- evita que estique o elastico infinitamente	
+						stone = projectile_process_lib.launching_process(stone, e)
 
-					-- Remove projectile touch so player can't grab it back and re-use after firing.
-					projectiles_container:removeEventListener("touch", projectileTouchListener);
+					-- If the projectile touch event ends (player lets go)...
+					elseif(e.phase == "ended" or e.phase == "cancelled") then
 
-					-- Remove the elastic band
-					band_line_tiles_lib.removeBandLine( )
+						-- Remove projectile touch so player can't grab it back and re-use after firing.
+						projectiles_container:removeEventListener("touch", projectileTouchListener);
 
-					stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
-											
+						-- Remove the elastic band
+						band_line_tiles_lib.removeBandLine( )
+
+						stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
+												
+					end
+				end
+				
 				end
 			
-			end
 		
 		end
 
@@ -166,7 +173,9 @@ function configuration.state_object:change(e)
 			    	assets_image.removeGameplayScenario()
 
 			    	-- Destroi eventos criados
-					configuration.state_object:removeEventListener("change", configuration.state_object);	
+					configuration.state_object:removeEventListener("change", configuration.state_object);
+
+					Runtime:removeEventListener("touch", donottouch_warn)		
 					
 					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 					projectiles_container:removeEventListener("touch", projectileTouchListener);
@@ -262,6 +271,21 @@ function next_round()
 
 end
 
+function donottouch_warn( event )
+
+	local animation
+
+	if configuration.game_current_player ~= configuration.game_i_am_player_number then
+		
+		animation = donottouch_sprite_lib.newDonottouchSprite(event.x,event.y)
+		
+		timer.performWithDelay( 400, function( e )
+			donottouch_sprite_lib.removeDonottouchSprite(animation)
+		end)
+		
+	end
+end
+
 function start_game()
 	-- fisica ligado
 	physics.start();	
@@ -293,12 +317,12 @@ function start_game()
 		spawnProjectile(); -- Spawn the first projectile.
 
 		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+
+		Runtime:addEventListener("touch", donottouch_warn)		
 		end)
 
 	-- Inicia a musica do gameplay
 	assets_audio.startBackgroundMusic( )
-
-
 end
 
 ---------------------------------------------------------------------------------

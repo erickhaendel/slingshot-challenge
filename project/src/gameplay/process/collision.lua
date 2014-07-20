@@ -40,7 +40,6 @@ require( "src.infra.includeall" )
 
 -- my libs
 local assets_audio			= require( "src.gameplay.assets_audio" )
-local smoke_sprite_lib 		= require( "src.gameplay.assets.smoke_sprite" )
 local configuration 		= require( "src.gameplay.configuration" )
 local score_process_lib 	= require( "src.gameplay.process.score" )
 

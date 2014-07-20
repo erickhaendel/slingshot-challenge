@@ -244,4 +244,8 @@ smoke_sprite_image			= "resources/images/objects/smoke-sprite.png"
 smoke_imagesheet_options 	= { width=128, height=128, numFrames=40, sheetContentWidth=1024, sheetContentHeight=1024 }
 smoke_sprite_options		= { name = "normalRun", start=1, count=40, time=900, loopCount = 1 }
 
+-- DONOTTOUCH SPRITE
+donottouch_sprite_image			= "resources/images/objects/donottouch-sprite.png"
+donottouch_imagesheet_options 	= { width=100, height=100, numFrames=5, sheetContentWidth=500, sheetContentHeight=100 }
+donottouch_sprite_options		= { name = "normalRun", start=1, count=5, time=400, loopCount = 1 }
 

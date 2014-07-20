@@ -60,7 +60,7 @@ function transitionNightDay(sky, background_sky)
 	-- 0.23,0.35,0.42,1
 	local original_red, original_green, original_blue, original_alpha = 0.73,0.85,0.92,1
 	local red, green, blue, alpha = original_red, original_green, original_blue, original_alpha
-	local offset, offset_alpha = 0.0007, 0.0007
+	local offset, offset_alpha = 0.0006, 0.0006
 
 	function animation( event )
 

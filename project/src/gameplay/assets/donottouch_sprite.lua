@@ -37,20 +37,24 @@ module(..., package.seeall)
 local configuration = require( "src.gameplay.configuration" )
 
 ----------------------------------------------------------
--- SMOKE SPRITE										--
+-- donottouch sprite											--
 ----------------------------------------------------------
--- Example assumes 'imageSheet' is already created from graphics.newImageSheet()
+function newDonottouchSprite(x,y)
 
-function newSmokeSprite(x,y)
+	mySheet = graphics.newImageSheet( configuration.donottouch_sprite_image, configuration.donottouch_imagesheet_options )
 
-	mySheet = graphics.newImageSheet( configuration.smoke_sprite_image, configuration.smoke_imagesheet_options )
-
-	animation = display.newSprite( mySheet, configuration.smoke_sprite_options )
+	animation = display.newSprite( mySheet, configuration.donottouch_sprite_options )
 	animation.x = x
 	animation.y = y
 	animation:toFront( )
 
-  	animation:play()
-  	animation:toFront( )
+	animation:play()
+	animation:toFront( )
+
+	return animation
+end
+
+function removeDonottouchSprite( animation )
+	animation:removeSelf( ); animation = nil
 end
 

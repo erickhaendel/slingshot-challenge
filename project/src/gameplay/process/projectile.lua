@@ -3,7 +3,7 @@ module(..., package.seeall)
 
 local configuration 			= require( "src.gameplay.configuration" )
 local assets_audio				= require( "src.gameplay.assets_audio" )
-local smoke_sprite_lib 		= require( "src.gameplay.assets.smoke_sprite" )
+local smoke_sprite_lib 			= require( "src.gameplay.assets.smoke_sprite" )
 local collision_process_lib 	= require( "src.gameplay.process.collision" )
 
 local network_gameplay   	= require( "src.network.gameplaysync" )
@@ -104,6 +104,11 @@ function remote_launched_process( info )
 
 			collision_process_lib.collision_process(stone, configuration.assets_image_object)
 		else
+			
+			if stone.y > 400 then
+				smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)
+			end		
+
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;
 		end			
@@ -169,7 +174,10 @@ function launched_process(stone, e, assets_image, state)
 
 			collision_process_lib.collision_process(stone, assets_image)
 		else
-			smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)			
+			if stone.y > 400 then
+				smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)
+			end			
+
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;
 		end			
