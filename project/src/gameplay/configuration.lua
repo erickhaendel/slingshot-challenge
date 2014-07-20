@@ -239,4 +239,9 @@ title_turn_image = {}
 title_turn_image[1] = "resources/images/buttons/turn1.png"
 title_turn_image[2] = "resources/images/buttons/turn2.png"
 
+-- SMOKE SPRITE
+smoke_sprite_image			= "resources/images/objects/smoke-sprite.png"
+smoke_imagesheet_options 	= { width=128, height=128, numFrames=40, sheetContentWidth=1024, sheetContentHeight=1024 }
+smoke_sprite_options		= { name = "normalRun", start=1, count=40, time=900, loopCount = 1 }
+
 

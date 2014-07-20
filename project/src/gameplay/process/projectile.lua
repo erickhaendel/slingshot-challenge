@@ -3,6 +3,7 @@ module(..., package.seeall)
 
 local configuration 			= require( "src.gameplay.configuration" )
 local assets_audio				= require( "src.gameplay.assets_audio" )
+local smoke_sprite_lib 		= require( "src.gameplay.assets.smoke_sprite" )
 local collision_process_lib 	= require( "src.gameplay.process.collision" )
 
 local network_gameplay   	= require( "src.network.gameplaysync" )
@@ -77,8 +78,6 @@ function remote_launched_process( info )
 	local stone = configuration.projectile_object
 	local assets_image = configuration.assets_image_object
 
-	print( "fui chamado" )
-
 	stone.isVisible = true
 
 	configuration.game_is_shooted = 1
@@ -117,7 +116,7 @@ function remote_launched_process( info )
 
 			if(e.count == 1) then
 				timer.cancel(stone.timer);
-				stone.timer = nil;
+				stone.timer = nil;			
 			end
 		
 		end
@@ -170,6 +169,7 @@ function launched_process(stone, e, assets_image, state)
 
 			collision_process_lib.collision_process(stone, assets_image)
 		else
+			smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)			
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;
 		end			
@@ -181,6 +181,7 @@ function launched_process(stone, e, assets_image, state)
 			state:dispatchEvent({name="change", state="fire"});
 
 			if(e.count == 1) then
+				smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)				
 				timer.cancel(stone.timer);
 				stone.timer = nil;
 			end
