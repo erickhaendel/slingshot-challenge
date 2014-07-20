@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- house_tiles.lua
+-- tree_tiles.lua
 -- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @modified 
 -- @version 1.00
--- @date 06/29/2014
+-- @date 07/20/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -40,20 +40,22 @@ local configuration = require( "src.gameplay.configuration" )
 -- HOUSE TILES											--
 ----------------------------------------------------------
 
-function newHouseTile()
+function newTreeTile()
 
-	local house = {}
+	local tree = {}
 	
-	for i=1,2 do	
-		house[i] = display.newImage( configuration.house_image_filename[i], true )
-		house[i].x = configuration.house_position_x[i]
-		house[i].y = configuration.house_position_y[i]
+	-- Por enquanto vamos deixar apenas 1 arvore
+	local num = 1
+	for i=1,num do	
+		tree[i] = display.newImage( configuration.tree_image_filename[i], true )
+		tree[i].x = configuration.tree_position_x[i]
+		tree[i].y = configuration.tree_position_y[i]
 	end
-	return house
+	return tree
 end
 
-function removeHouseTile(house)
+function removeTreeTile(tree)
 	for i=1,2 do
-		house[i]:removeSelf( ); house[i] = nil
+		tree[i]:removeSelf( ); tree[i] = nil
 	end	
 end

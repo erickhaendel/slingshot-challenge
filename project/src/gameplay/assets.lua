@@ -39,6 +39,7 @@ local configuration = require( "src.gameplay.configuration" )
 local can_tiles_lib 				= require( "src.gameplay.assets.can_tiles" )
 local ground_tiles_lib 				= require( "src.gameplay.assets.ground_tiles" )
 local house_tiles_lib 				= require( "src.gameplay.assets.house_tiles" )
+local tree_tiles_lib 				= require( "src.gameplay.assets.tree_tiles" )
 local score_player_tiles_lib 		= require( "src.gameplay.assets.score_player_tiles" )
 local scoreboard_tiles_lib 			= require( "src.gameplay.assets.scoreboard_tiles" )
 local sky_tiles_lib 				= require( "src.gameplay.assets.sky_tiles" )
@@ -57,6 +58,7 @@ band_line_tiles_obj 		= nil;
 can_tiles_obj 				= nil; 
 ground_tiles_obj 			= nil; 
 house_tiles_obj 			= nil;  
+tree_tiles_obj 				= nil;  
 score_player_tiles_obj 		= nil;
 scoreboard_tiles_obj 		= nil; 
 sky_tiles_obj 				= nil; 
@@ -98,6 +100,13 @@ local function create_house_tiles_obj(  )
 	house_tiles_obj = house_tiles_lib.newHouseTile()
 	for i=1, #house_tiles_obj do
 		assetsGroup:insert( house_tiles_obj[i] )	
+	end	
+end
+
+local function create_tree_tiles_obj(  )
+	tree_tiles_obj = tree_tiles_lib.newTreeTile()
+	for i=1, #tree_tiles_obj do
+		assetsGroup:insert( tree_tiles_obj[i] )	
 	end	
 end
 
@@ -182,6 +191,15 @@ local function remove_house_tiles_obj(  )
 		for i=1, #house_tile_obj do
 			assetsGroup:remove( house_tile_obj[i] )	
 			house_tile_lib[i].removeHouseTile( house_tile_obj[i] )			
+		end	
+	end
+end
+
+local function remove_tree_tiles_obj(  )
+	if tree_tile_obj then
+		for i=1, #tree_tile_obj do
+			assetsGroup:remove( tree_tile_obj[i] )	
+			tree_tile_lib[i].removeTreeTile( tree_tile_obj[i] )			
 		end	
 	end
 end
@@ -285,6 +303,7 @@ function removeGameplayScenario()
 
 	remove_sky_tiles_obj()
 	remove_house_tiles_obj()
+	remove_tree_tiles_obj()	
 	remove_wall_tiles_obj()
 	remove_can_tiles_obj()
 	remove_ground_tiles_obj()
@@ -300,7 +319,8 @@ function createGameplayScenario()
 
 
 	create_sky_tiles_obj() 	-- Animacao do ceu
-	create_house_tiles_obj()	-- carrega a casa
+	create_house_tiles_obj() -- carrega a casa
+	create_tree_tiles_obj()	-- carrega a tree	
 	create_wall_tiles_obj()	-- carrega a parede no cenario
 	create_can_tiles_obj()	-- carrega as latas em cima da parede
 	create_ground_tiles_obj()	-- carrega o chao

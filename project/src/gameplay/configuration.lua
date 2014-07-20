@@ -91,9 +91,26 @@ local trajetory = {} 									-- contador de pontos da trajetoria
 -----------------------
 
 -- HOUSE
-house_position_x = display.contentCenterX - 540 				-- posicao do tile casa
-house_position_y = display.contentCenterY - 280 				-- poiscao do tile casa
-house_image_filename = "resources/images/objects/house.png"		-- nome de arquivo da imagem casa
+house_position_x = {}
+house_position_y = {}
+house_position_x[1] = display.contentCenterX - 540 				-- posicao do tile casa
+house_position_y[1] = display.contentCenterY - 280 	
+house_position_x[2] = display.contentCenterX + 2750 			-- posicao do tile casa
+house_position_y[2] = display.contentCenterY - 280 				-- poiscao do tile casa
+house_image_filename = {}
+house_image_filename[1] = "resources/images/objects/house1.png"		-- nome de arquivo da imagem casa
+house_image_filename[2] = "resources/images/objects/house2.png"		-- nome de arquivo da imagem casa
+
+-- TREE
+tree_position_x = {}
+tree_position_y = {}
+tree_position_x[1] = display.contentCenterX + 700				-- posicao do tile tree
+tree_position_y[1] = display.contentCenterY - 280 	
+tree_position_x[2] = display.contentCenterX + 1050 				-- posicao do tile tree
+tree_position_y[2] = display.contentCenterY - 280 				-- poiscao do tile tree
+tree_image_filename = {}
+tree_image_filename[1] = "resources/images/objects/tree1.png"		-- nome de arquivo da imagem tree
+tree_image_filename[2] = "resources/images/objects/tree2.png"		-- nome de arquivo da imagem tree
 
 -- GRASS
 grass_position_x = {}
