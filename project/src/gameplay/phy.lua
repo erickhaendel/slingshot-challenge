@@ -12,6 +12,8 @@ gravity.z = 0 		-- gravidade no eixo Z
 stone.x 	  		-- posição atual da pedra no eixo x
 stone.y 	  		-- posição atual da pedra no eixo y
 stone.z 	  		-- posição atual da pedra no eixo z
+stone.Rx			-- posição da pedra na tela no eixo x
+stone.Ry			-- posição da pedra na tela no eixo y
 stone.velocityX 	--velocidade de movimento da pedra no eixo x
 stone.velocityY 	--velocidade de movimento da pedra no eixo y
 stone.velocityZ 	--velocidade de movimento da pedra no eixo z
@@ -37,8 +39,8 @@ function lancing( lancer.x, lancer.y )
 	stone.z = 0 - (lancer.y/100)
 
 	stone.velocityX =  (lancer.centerX - lancer.x)*((10*velocityMultiplier)/(lancer.y - lancer.centerY))
-	stone.velocityY = 
-	stone.velocityZ = 
+	stone.velocityY =  (lancer.y - lancer.centerY)/10
+	stone.velocityZ =  (stone.velocityY + stone.velocityX) / velocityMultiplier
 
 
 end
@@ -50,7 +52,7 @@ function setGravity( valueX, valueY, valueZ )
 	gravity.z = valueZ
 end
 
-function checkColision( stoneX, stoneY, collisionObjects, numberOfCollisionObjects )
+function checkCollision( stoneX, stoneY, collisionObjects, numberOfCollisionObjects )
 	-- check if any objects in colisionObjects collide with the stone
 
 	local tempCollisionIndex = 1
@@ -70,6 +72,10 @@ function checkColision( stoneX, stoneY, collisionObjects, numberOfCollisionObjec
 
 		tempCollisionIndex = tempCollisionIndex+1
 	end
+end
+
+function drawToPosition( stone )
+	-- body
 end
 
 function positionNew( stone, gravity, velocityMultiplier, wallPosition )
