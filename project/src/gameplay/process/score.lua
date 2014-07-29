@@ -45,7 +45,8 @@ local can_process_lib 		= require( "src.gameplay.process.can" )
 
 function score_animation( intend_to_hit, assets_image )
 
-	for i=1,configuration.game_score_player[intend_to_hit] do
+	print( ">>>"..configuration.game_final_score_player[intend_to_hit] )
+	for i=1,configuration.game_final_score_player[intend_to_hit] do
 		timer.performWithDelay(1+i*110, function(e)
 
 			if intend_to_hit == 1 then
@@ -114,26 +115,29 @@ function score_process(assets_image)
 		end		
 	end
 
+	print( "points_p1 "..points_p1.." points_p2"..points_p2 )
+
 	-- cenario 01, jogador 1 acerta suas proprias latas
-	print(player)
-	print(intend_to_hit)
 	if player == 1 and intend_to_hit == 1  then
 		configuration.game_score_player[1] = configuration.game_score_player[1] + points_p1
+		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + configuration.game_score_player[1]
 
 	-- cenario 01, jogador 1 acerta as latas do jogador 2
 	elseif player == 1 and intend_to_hit == 2 then
 		configuration.game_score_player[2] = configuration.game_score_player[2] + points_p2
+		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + configuration.game_score_player[2]
 
-	-- cenario 02, jogador 1 acerta as latas do jogador 1
+	-- cenario 02, jogador 2 acerta as latas do jogador 1
 	elseif player == 2 and intend_to_hit == 1 then
-		configuration.game_score_player[1] = configuration.game_score_player[1] + points_p2
+		configuration.game_score_player[1] = configuration.game_score_player[1] + points_p1
+		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + configuration.game_score_player[1]
 
 	-- cenario 02, jogador 2 acerta suas proprias latas
 	elseif player == 2 and intend_to_hit == 2 then
-		configuration.game_score_player[2] = configuration.game_score_player[2] + points_p1
+		--configuration.game_score_player[2] = configuration.game_score_player[2] + (points_p2)/2
+		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + (points_p2)/2
 	end
 
 	-- exibe os pontos na grade
-	print( "opa" )
 	score_animation( intend_to_hit, assets_image )
 end

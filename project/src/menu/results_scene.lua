@@ -33,7 +33,9 @@
 
 -- libs
 require( "src.infra.includeall" )
-local configuration = require( "src.menu.menu_settings" )
+local assets_audio            = require( "src.gameplay.assets_audio" )
+local configuration           = require( "src.menu.menu_settings" )
+local gameplay_configuration  = require( "src.gameplay.configuration" )
 
 ----------------------------------------------------------------------------------------------
 
@@ -139,6 +141,31 @@ function menuButtonPress( event )
 	composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
 end
 
+function showScoreAnimation()
+
+local score_player1, score_player2 = 0,0
+
+  for i=1,(gameplay_configuration.game_final_score_player[1]) do
+    timer.performWithDelay( 1+i*110, function( )
+      score_player1 = score_player1 + 1
+      player1ScoreLabel.text = "Score: "..score_player1  
+      
+      -- Play increasing score
+      assets_audio.playIncreasingScore()  
+    end)
+  end
+
+  for i=1,gameplay_configuration.game_final_score_player[2] do
+    timer.performWithDelay( gameplay_configuration.game_final_score_player[1] + 1+score_player2*110, function( )
+      score_player2 = score_player2 + 1
+      player2ScoreLabel.text = "Score: "..score_player2    
+      
+      -- Play increasing score
+      assets_audio.playIncreasingScore()  
+    end)      
+  end
+
+end
 
 function createAll()
   
@@ -153,6 +180,8 @@ function createAll()
   if not player2ScoreLabel then loadPlayer2ScoreLabel(); end
 
   if not menuButton then loadMenuButton();  end 
+
+  showScoreAnimation()
 
 end
 

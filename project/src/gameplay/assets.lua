@@ -354,17 +354,6 @@ function createGameplayScenario()
 	end	
 end
 
-function debugcenario( )
-			 
-	ground_tiles_obj[1].isVisible = false	
-	house_tiles_obj[1].isVisible = false
-	tree_tiles_obj[1].isVisible = false
-	score_player_tiles_obj[1].isVisible = false
-	scoreboard_tiles_obj[1].isVisible = false
-	sky_tiles_obj[1].isVisible = false
-	background_sky_obj.isVisible = false
-	wall_tiles_obj[1].isVisible = false
-end
 ---------------------------------------------------------------------------------------------------------------
 
 -- animation between of thw two players screen
@@ -413,28 +402,19 @@ function reload_can_tiles( )
 		end)
 end
 
-function reload_scoreboard_tiles()
+-- -- hide all scores from all scoreboards
+-- function hidePointsScoreboards()
 
-	-- remove
-	remove_scoreboard_tiles_obj(  )
+-- 	local M = 4 ; local N = 5
 
-	-- as latas de scores dos scoreboards
-	create_scoreboard_tiles_obj(  )
-end
+-- 	for k = 1, 4 do	
+-- 		for j = 1, M do
+-- 			for i = 1, N do
+-- 				scoreboard_tiles_obj[k][M * (i-1) + j].isVisible = false
+-- 			end
+-- 		end
+-- 	end
 
--- hide all scores from all scoreboards
-function hidePointsScoreboards()
-
-	local M = 4 ; local N = 5
-
-	for k = 1, 4 do	
-		for j = 1, M do
-			for i = 1, N do
-				scoreboard_tiles_obj[k][M * (i-1) + j].isVisible = false
-			end
-		end
-	end
-
-	return scoreboard_tiles_obj
-end
+-- 	return scoreboard_tiles_obj
+-- end
 

@@ -179,9 +179,6 @@ function configuration.state_object:change(e)
 					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 					projectiles_container:removeEventListener("touch", projectileTouchListener);
 
-					configuration.game_final_score_player[1] = configuration.game_score_player[1]
-					configuration.game_final_score_player[2] = configuration.game_score_player[2]
-
 				    composer.removeScene('src.gameplay.game')
 				    composer.gotoScene( "src.menu.results_scene", "fade", 400)
 
@@ -244,13 +241,8 @@ function next_round()
 		configuration.game_is_hit = 0
 
 		-- deal with scores
-		configuration.game_final_score_player[1] = configuration.game_score_player[1]
-		configuration.game_final_score_player[2] = configuration.game_score_player[2]
 		configuration.game_score_player[1] = 0
 		configuration.game_score_player[2] = 0	
-
-		-- reload scoreboards
-		assets_image.hidePointsScoreboards()
 
 		-- cria o label de novo round
 		assets_image.reload_round_tiles( )
