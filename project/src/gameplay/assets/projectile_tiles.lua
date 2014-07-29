@@ -37,7 +37,7 @@ function newProjectile()
 	-- Place bullet
 	bullet.x = configuration.stone_position_x; bullet.y = _H + 20;
 	-- Set up physical properties	
-	physics.addBody(bullet, "static", {density=bun_bullet.density, friction=bun_bullet.friction, bounce=bun_bullet.bounce, radius=bun_bullet.size});
+	--physics.addBody(bullet, "static", {density=bun_bullet.density, friction=bun_bullet.friction, bounce=bun_bullet.bounce, radius=bun_bullet.size});
 	
 	bullet.linearDamping = 0.3;
 	bullet.angularDamping = 0.8;

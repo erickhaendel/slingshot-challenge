@@ -14,10 +14,10 @@ local player2_obj           = require( "src.player.player2" )
 function getBoundaryProjectile( e, stone )
 	-- Boundary for the projectile when grabbed			
 	local bounds = e.target.stageBounds;
-	bounds.xMin = 250
-	bounds.yMin = display.contentHeight - 5;
-	bounds.xMax = display.contentWidth -250;
-	bounds.yMax = display.contentHeight - 250;
+	bounds.xMin = 550
+	bounds.yMin = display.contentHeight - 50;
+	bounds.xMax = display.contentWidth - 550;
+	bounds.yMax = display.contentHeight - 200;
 	
 	-- limita a corda do estilingue para não puxar infinitamente
 	if(e.y > bounds.yMax) then stone.y = e.y; end	 -- limita na parte 		
@@ -28,24 +28,6 @@ function getBoundaryProjectile( e, stone )
 	return stone.x, stone.y
 end
 
--- processa a emulacao gráfica do eixo Z para dar impressão de profundidade
-function animationProcess(stone)
-	-- Scale Balls
-	if configuration.projecttile_scale > 0 then
-		configuration.projecttile_scale = configuration.projecttile_scale - configuration.projecttile_variation	
-		stone.xScale = configuration.projecttile_scale; stone.yScale = configuration.projecttile_scale
-		local vx, vy = stone:getLinearVelocity()
-		stone:setLinearVelocity(vx*0.94,vy*0.94)
-
-		local nw, nh 
-		local myScaleX, myScaleY = configuration.projecttile_scale, configuration.projecttile_scale
-
-		nw = stone.width*myScaleX*0.5;
-		nh = stone.height*myScaleY*0.5;
-
-		physics.addBody( stone, { density=0.15, friction=0.2, bounce=0.6 , shape={-nw,-nh,nw,-nh,nw,nh,-nw,nh}} )						
-	end	
-end
 
 function ready_to_launch_process(stone)
 
@@ -54,11 +36,11 @@ function ready_to_launch_process(stone)
 
 	display.getCurrentStage():setFocus( stone ); -- Set the stage focus to the touched projectile
 	stone.isFocus = true;
-	stone.bodyType = "kinematic";			
+	--stone.bodyType = "kinematic";			
 	
-	stone:setLinearVelocity(0,0); -- Stop current physics motion, if any
+	--stone:setLinearVelocity(0,0); -- Stop current physics motion, if any
 
-	stone.angularVelocity = 0;
+	--stone.angularVelocity = 0;
 
 	return stone
 end
@@ -70,6 +52,41 @@ function launching_process(stone, touch_event)
 	stone.x,stone.y = getBoundaryProjectile( touch_event, stone )
 
 	return stone
+end
+
+
+-- A trajectory in world space
+function trajectory(v,elevation,x0,y0,g)
+    x0 = x0 or 0
+    y0 = y0 or 0
+    local th = math.rad(elevation or 45)
+    g = g or 9.81
+
+    return function(x)
+        x = x-x0
+        local a = x*math.tan(th)
+		local temp
+		if (2*(v*math.cos(th))^2) == 0 then temp = 0.01 else temp = (2*(v*math.cos(th))^2); end
+        local b = (g*x^2)/temp
+        return y0+a-b
+    end
+end
+
+-- convert between screen and world
+function converter(iso)
+    iso = math.rad(iso or 0)
+    return function(toscreen,x,y)
+        if toscreen then
+            y = y+x*math.sin(iso)
+            x = x*math.cos(iso)
+        else
+			local temp
+			if math.cos(iso) == 0 then temp = math.cos(iso - 1); else temp = math.cos(iso) end
+            x = x/temp
+            y = y-x*math.sin(iso)
+        end
+        return x,y
+    end
 end
 
 -- Metodo de lancamneto de pedra multiplayer
@@ -86,29 +103,76 @@ function remote_launched_process( info )
 	display.getCurrentStage():setFocus(nil);
 	stone.isFocus = false;	
 	-- Launch projectile
-	stone.bodyType = "dynamic";
-	stone:applyForce(info["projectile"]["x_force"], info["projectile"]["y_force"], info["projectile"]["stone.x"], info["projectile"]["stone.y"]);
 
-	stone:applyTorque( configuration.projecttile_torque )
-	stone.isFixedRotation = false;	
+	configuration.projecttile_scale = 1.0
 
-	configuration.projecttile_scale = 1.1	
+-- velocity, angle, x, y
+	-- SYNC NETWORK
+	--info["projectile"]["player"] = configuration.game_i_am_player_number
+	local angle = info["projectile"]["angle"]
+	local dx = info["projectile"]["dx"] 
+	local dy = info["projectile"]["dy"] 
+	local sentido = info["projectile"]["sentido"]	
 
+	t = trajectory(120,angle,dx,dy)
+
+	-- iso projection of 1 deg
+	c = converter(1)
+
+		timer.performWithDelay(1, function(e)
+				local xx = c(false,dx,0) -- x in world co-ords
+				local y = t(xx) -- y in world co-ords
+				local _,yy = c(true,xx,y) -- y in screen co-ords
+				local _,y0 = c(true,xx,0) --ground in screen co-ords
+				yy = math.floor(yy) -- not needed 
+				
+				dx = dx + 6
+					
+				dy = yy
+
+				if yy>y0 then 
+
+					if sentido == 1 then		
+						stone.x = dx
+					else
+						stone.x = (display.contentWidth - dx)
+					end
+
+					stone.y = (display.contentHeight )	- dy 
+
+					-- abaixo do muro
+					if stone.y > 400 then
+						
+						if stone.xScale > 0.4 then
+							
+							stone.xScale = stone.xScale - dy*0.00005
+							stone.yScale = stone.yScale - dy*0.00005
+
+						else
+							timer.cancel( e.source )
+							smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)								
+							stone.isVisible = false
+												
+						end	
+					
+					-- acima do muro
+					elseif (stone.xScale - dy*0.00004) > 0 then
+												
+
+						stone.xScale = stone.xScale - dy*0.00001
+						stone.yScale = stone.yScale - dy*0.00001
+					end
+				end -- if it's above ground
+		end,1000)
 
 	stone.timer1 = timer.performWithDelay(1, function(e)
 		-- diminui a escala da pedra e traça sua trajetoria
-		animationProcess(stone)
 
 		-- monitora colisao com as latas
 		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
 
 			collision_process_lib.collision_process(stone, configuration.assets_image_object)
 		else
-			
-			if stone.y > 400 then
-				smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)
-			end		
-
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;
 		end			
@@ -128,6 +192,7 @@ function remote_launched_process( info )
 	, 1)
 end
 
+
 function launched_process(stone, e, assets_image, state)
 
 	configuration.game_is_shooted = 1
@@ -139,49 +204,111 @@ function launched_process(stone, e, assets_image, state)
 	-- Play the release sound
 	assets_audio.playProjecttileShot()
 
-	-- Launch projectile
-	stone.bodyType = "dynamic";
+	-- copia da pedra, usado pelo pubnub
+	configuration.projectile_object = stone		
 
-	-- FORCA X, FORCA Y, X, Y
-	local x_force = (display.contentCenterX - e.x)*configuration.projecttile_force_multiplier
-	local y_force = ( assets_image.slingshot_tiles_obj[configuration.game_current_player].y - e.y)*configuration.projecttile_force_multiplier
-	stone:applyForce(x_force, y_force, stone.x, stone.y);
+	configuration.projecttile_scale = 1.0
 
+	local deltay = stone.y - configuration.stone_position_y
+	local deltax = stone.x - configuration.stone_position_x
+	
+	deltax = math.sqrt( math.pow( deltax, 2 ) )
+	deltay = math.sqrt( math.pow( deltay, 2 ) )
+
+	local angle = math.deg(math.atan( deltay/deltax ))	
+
+	print(angle)
+
+	dx = configuration.stone_position_x
+	dy = (display.contentHeight ) - configuration.stone_position_y
+
+	stone.isVisible = true
+
+	-- x in screen co-ords
+	local sentido = 1	
+	if e.x < configuration.stone_position_x then
+		sentido = 1
+	else
+		sentido = -1
+	end
+	
+	-- velocity, angle, x, y
 	-- SYNC NETWORK
 	local info = {}
 	info["projectile"] = {}
 	info["projectile"]["player"] = configuration.game_i_am_player_number
-	info["projectile"]["x_force"] = x_force
-	info["projectile"]["y_force"] = y_force
-	info["projectile"]["stone.x"] = stone.x
-	info["projectile"]["stone.y"] = stone.y	
+	info["projectile"]["angle"] = angle
+	info["projectile"]["dx"] =dx
+	info["projectile"]["dy"] = dy
+	info["projectile"]["sentido"] = sentido	
 
-	-- copia da pedra, usado pelo pubnub
-	configuration.projectile_object = stone		
 	network_gameplay.updateMyProjectile(info)			
 	
-	stone:applyTorque( configuration.projecttile_torque )
-	stone.isFixedRotation = false;	
+	t = trajectory(120,angle,dx,dy)
 
-	configuration.projecttile_scale = 1.1
+	-- iso projection of 1 deg
+	c = converter(1)
 
 	stone.timer1 = timer.performWithDelay(1, function(e)
 		-- diminui a escala da pedra e traça sua trajetoria
-		animationProcess(stone)
 
 		-- monitora colisao com as latas
 		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
 
-			collision_process_lib.collision_process(stone, assets_image)
+			collision_process_lib.collision_process(stone, configuration.assets_image_object)
 		else
-			if stone.y > 400 then
-				smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)
-			end			
-
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;
 		end			
 	end,0)	
+
+	timer.performWithDelay(1, function(e)
+			local xx = c(false,dx,0) -- x in world co-ords
+			local y = t(xx) -- y in world co-ords
+			local _,yy = c(true,xx,y) -- y in screen co-ords
+			local _,y0 = c(true,xx,0) --ground in screen co-ords
+			yy = math.floor(yy) -- not needed 
+			
+			dx = dx + 6
+				
+			dy = yy
+
+			if yy>y0 then 
+
+				if sentido == 1 then		
+					stone.x = dx
+				else
+					stone.x = (display.contentWidth - dx)
+				end
+
+				stone.y = (display.contentHeight )	- dy 
+
+				-- abaixo do muro
+				if stone.y > 400 then
+					
+					if stone.xScale > 0.4 then
+						
+						stone.xScale = stone.xScale - dy*0.00005
+						stone.yScale = stone.yScale - dy*0.00005
+
+					else
+						timer.cancel( e.source )
+						smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)								
+						stone.isVisible = false
+											
+					end	
+				
+				-- acima do muro
+				elseif (stone.xScale - dy*0.00004) > 0 then
+											
+
+					stone.xScale = stone.xScale - dy*0.00001
+					stone.yScale = stone.yScale - dy*0.00001
+				end
+			end -- if it's above ground
+	end,1000)
+
+
 
 	-- Wait a second before the catapult is reloaded (Avoids conflicts).
 	stone.timer = timer.performWithDelay(1000, 
@@ -189,7 +316,7 @@ function launched_process(stone, e, assets_image, state)
 			state:dispatchEvent({name="change", state="fire"});
 
 			if(e.count == 1) then
-				smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)				
+			
 				timer.cancel(stone.timer);
 				stone.timer = nil;
 			end

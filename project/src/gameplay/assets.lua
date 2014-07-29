@@ -354,6 +354,17 @@ function createGameplayScenario()
 	end	
 end
 
+function debugcenario( )
+			 
+	ground_tiles_obj[1].isVisible = false	
+	house_tiles_obj[1].isVisible = false
+	tree_tiles_obj[1].isVisible = false
+	score_player_tiles_obj[1].isVisible = false
+	scoreboard_tiles_obj[1].isVisible = false
+	sky_tiles_obj[1].isVisible = false
+	background_sky_obj.isVisible = false
+	wall_tiles_obj[1].isVisible = false
+end
 ---------------------------------------------------------------------------------------------------------------
 
 -- animation between of thw two players screen
