@@ -51,9 +51,11 @@ function score_animation( intend_to_hit, assets_image )
 			if intend_to_hit == 1 then
 				-- cenario 1
 				assets_image.scoreboard_tiles_obj[1][i].isVisible = true -- could index 1 or 2 - i did this to not write an if/else statemment
-				
+				assets_image.scoreboard_tiles_obj[1][i]:toFront( )	
+
 				-- cenario 2
 				assets_image.scoreboard_tiles_obj[4][i].isVisible = true -- could be index 4 or 3	
+				assets_image.scoreboard_tiles_obj[4][i]:toFront( )	
 
 				-- cenario 1
 				assets_image.score_player_tiles_obj[1].text = "Player 1 >> "..i -- could index 1 or 2 - i did this to not write an if/else statemment
@@ -61,11 +63,14 @@ function score_animation( intend_to_hit, assets_image )
 				-- cenario 2
 				assets_image.score_player_tiles_obj[4].text = "Player 1 >> "..i-- could be index 4 or 3							
 			elseif intend_to_hit == 2 then
+
 				-- cenario 1
 				assets_image.scoreboard_tiles_obj[2][i].isVisible = true -- could index 1 or 2 - i did this to not write an if/else statemment
-				
+				assets_image.scoreboard_tiles_obj[2][i]:toFront( )			
+
 				-- cenario 2
 				assets_image.scoreboard_tiles_obj[3][i].isVisible = true -- could be index 4 or 3	
+				assets_image.scoreboard_tiles_obj[3][i]:toFront( )					
 
 				-- cenario 1
 				assets_image.score_player_tiles_obj[2].text = "Player 2 >> "..i -- could index 1 or 2 - i did this to not write an if/else statemment
@@ -129,5 +134,6 @@ function score_process(assets_image)
 	end
 
 	-- exibe os pontos na grade
+	print( "opa" )
 	score_animation( intend_to_hit, assets_image )
 end

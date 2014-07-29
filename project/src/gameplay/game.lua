@@ -48,7 +48,6 @@ local configuration 			= require( "src.gameplay.configuration" )
 
 -- Process
 local collision_process_lib 	= require( "src.gameplay.process.collision" )
-local score_process_lib 		= require( "src.gameplay.process.score" )
 local projectile_process_lib 	= require( "src.gameplay.process.projectile" )
 
 -- Network

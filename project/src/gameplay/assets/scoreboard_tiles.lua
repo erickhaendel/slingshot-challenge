@@ -46,15 +46,18 @@ function new_scoreboard()
 
 	-- arrays dos scores das grades
 	local score_cans = {}
-	score_cans[1] = {}; score_cans[2] = {}
-	score_cans[3] = {}; score_cans[4] = {}
+	
+	score_cans[1] = {}
+	score_cans[2] = {}
+	score_cans[3] = {}
+	score_cans[4] = {}
 
 	-- nome de arquivos das imagens de scores - latas
 	filename = {}
 	filename[1] = configuration.can_image_dir..configuration.player1_score_can;
 	filename[2] = configuration.can_image_dir..configuration.player2_score_can; 
-	filename[3] = filename[2]
-	filename[4] = filename[1]
+	filename[3] = configuration.can_image_dir..configuration.player2_score_can; 
+	filename[4] = configuration.can_image_dir..configuration.player1_score_can;
 
 	-- define a inclinacao da matriz de latas
 	local offset_inclination_right = 50 -- se mudar a imagem de grass vai ter que ajustar esses valores
