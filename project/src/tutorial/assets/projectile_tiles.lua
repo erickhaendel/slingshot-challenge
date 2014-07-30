@@ -17,9 +17,9 @@ function newProjectile()
 
 	if configuration.game_stage == 1 then
 		stone_name = "gray-stone"
-	elseif configuration.game_stage == 2 or configuration.game_stage == 3 or configuration.game_stage == 4 then
+	elseif configuration.game_stage == 2  then
 		stone_name = "yellow-stone"
-	elseif configuration.game_stage == 5 then
+	elseif configuration.game_stage == 3 or configuration.game_stage == 4 or configuration.game_stage == 5 then
 		stone_name = "green-stone"		
 	end
 

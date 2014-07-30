@@ -128,7 +128,10 @@ function launched_process(stone, e, assets_image, state)
 		-- monitora colisao com as latas
 		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
 
-			--collision_process_lib.collision_process(stone, configuration.assets_image_object)
+			-- verifica a colisao entre a pedra e a unica lata do cenario
+			if configuration.game_stage == 2 then
+				collision_process_lib.collision_process(stone, configuration.assets_image_object)
+			end
 		else
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;

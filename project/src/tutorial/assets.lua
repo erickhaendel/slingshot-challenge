@@ -53,7 +53,6 @@ local hand_tiles_lib 				= require( "src.tutorial.assets.hand_tiles" )
 ---------------------------------------------------------------------------------------------------------------
 project_tiles_obj			= nil;
 band_line_tiles_obj 		= nil; 
-can_tiles_obj 				= nil; 
 ground_tiles_obj 			= nil; 
 house_tiles_obj 			= nil;  
 tree_tiles_obj 				= nil;  
@@ -117,19 +116,11 @@ local function create_wall_tiles_obj(  )
 	end		
 end
 
-local function create_can_tiles_obj(  )
-	can_tiles_obj = can_tiles_lib.newCanTile()
-	for i=1, #can_tiles_obj do
-		for j=1, #can_tiles_obj do
-			assetsGroup:insert( can_tiles_obj[i][j] )	
-		end
-	end		
-end
-
 -- cria apenas uma lata com as configuracoes passadas por parâmetro
 local function create_single_can_tiles_obj( color, x, y )
 	single_can_tiles_obj = can_tiles_lib.newSingleCanTile(color, x, y)
 	assetsGroup:insert( single_can_tiles_obj )	
+	single_can_tiles_obj:toFront( )
 end
 
 local function create_ground_tiles_obj(  )
@@ -216,27 +207,6 @@ local function remove_wall_tiles_obj(  )
 	end
 end
 
-local function remove_can_tiles_obj(  )
-
-	if can_tiles_obj then
-
-		local M = 2 ; local N = 2
-
-		-- removendo as ltas do grupo
-		for k=1,4 do
-			for i = 1, N do
-				for j = 1, M do
-					assetsGroup:remove( can_tiles_obj[k][M * (i-1) + j] )	
-				end
-			end
-		end	
-
-		-- remove todas as latas
-		can_tiles_lib.removeCanTiles(can_tiles_obj)
-	end
-end
-
-
 local function remove_single_can_tiles_obj(  )
 
 	if single_can_tiles_obj then
@@ -302,7 +272,7 @@ end
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
-function removeStage6()
+function removeStage()
 	remove_sky_tiles_obj()
 	remove_house_tiles_obj()
 	remove_tree_tiles_obj()	
@@ -330,7 +300,9 @@ function createStage1()
 end
 
 function createStage2()
-	create_single_can_tiles_obj("yellow",configuration.cans_x[1],configuration.cans_x[2])
+
+	create_single_can_tiles_obj("yellow",display.contentCenterX - 200, display.contentCenterY - 120)
+
 	single_can_tiles_obj:toFront( )
 end
 

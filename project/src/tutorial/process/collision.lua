@@ -59,30 +59,23 @@ end
 
 function animationProcess(assets_image, number, stone)
 
-	-- adiciona uma fisica proporcional a essa nova dimensao
-	local cans = assets_image.can_tiles_obj[number]
+	if configuration.game_stage == 2 then
+		-- adiciona uma fisica proporcional a essa nova dimensao
+		local can = assets_image.single_can_tiles_obj
 
-	for i=1,4 do
-		physics.addBody( cans[i],  { density=0.02, friction=0.10, bounce=3.0} )						
-	end
+		physics.addBody( can,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can:applyForce( -10, -10, can.x, can.y);	
+		
+		assets_image.single_can_tiles_obj = can	
 
-	cans[1]:applyForce( -10, -10, cans[1].x, cans[1].y);	
-	cans[2]:applyForce( 10, -10, cans[2].x, cans[2].y);	
-	cans[3]:applyForce( 10, -10, cans[3].x, cans[3].y);	
-	cans[4]:applyForce( -10, -10, cans[4].x, cans[4].y);	
+		-- Play the hit can
+		assets_audio.playHitCan()	
+		
+		-- stone
+		stone.isVisible = false
+		stone.isSensor = false
+		stone:toBack( )
 
-	assets_image.can_tiles_obj[number] = cans
-
-	-- Play the hit can
-	assets_audio.playHitCan()
-
-	-- stone
-	stone.isVisible = false
-	stone.isSensor = false
-	stone:toBack( )
-
-
-	if number == 1 or number == 2 then
 		-- paredes		
 		assets_image.wall_tiles_obj[1]:toFront()	
 		assets_image.wall_tiles_obj[2]:toFront()	
@@ -92,35 +85,27 @@ function animationProcess(assets_image, number, stone)
 
 		-- estilingue
 		assets_image.slingshot_tiles_obj[1]:toFront()
-	else
-		-- paredes		
-		assets_image.wall_tiles_obj[3]:toFront()	
-		assets_image.wall_tiles_obj[4]:toFront()
 
-		-- chao
-		assets_image.ground_tiles_obj[2]:toFront()
-
-		-- estilingue
-		assets_image.slingshot_tiles_obj[2]:toFront()		
+		configuration.game_is_hit = 1		
 	end
 
-	-- scoreboard
-	local Mm = 4 ; local Nn = 5
+	-- -- scoreboard
+	-- local Mm = 4 ; local Nn = 5
 
-	for kk = 1, 4 do	
-		for jj = 1, Mm do
-			for ii = 1, Nn do
-				assets_image.scoreboard_tiles_obj[kk][Mm * (ii-1) + jj]:toFront( )	
-			end
-		end
-	end
+	-- for kk = 1, 4 do	
+	-- 	for jj = 1, Mm do
+	-- 		for ii = 1, Nn do
+	-- 			assets_image.scoreboard_tiles_obj[kk][Mm * (ii-1) + jj]:toFront( )	
+	-- 		end
+	-- 	end
+	-- end
 
-	-- score
-	for i=1,4 do
-		assets_image.score_player_tiles_obj[i]:toFront( )	
-	end
+	-- -- score
+	-- for i=1,4 do
+	-- 	assets_image.score_player_tiles_obj[i]:toFront( )	
+	-- end
 
-	configuration.game_is_hit = 1
+
 
 	stone:toBack( )		
 end
@@ -132,34 +117,20 @@ function collision_process(stone, assets_image)
 
 	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 
-		local M = 2; local N = 2;	
+		if configuration.game_stage == 2 then
 
-		for i = 1, N do
-			for j = 1, M do
-				-- k is the position of the wall 1,2,3,4
-				for k=1,4 do
+			local test = hitTestObjects( stone, assets_image.single_can_tiles_obj)
 
-					local test = hitTestObjects( stone, assets_image.can_tiles_obj[k][M * (i-1) + j])
+			if test then
 
-					if test then
+				animationProcess(assets_image, k, stone)	
+				
+				--score_process_lib.score_process(assets_image)	
+			end	
+		elseif configuration.game_stage == 3 then
 
-						animationProcess(assets_image, k, stone)
 
-						if k == 1 or k==4 then
-							side = 1	
-							configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = side -- own can
-						else
-							side = 2	
-							configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = side -- own can
-						end
+		end	
 
-						score_process_lib.score_process(assets_image)					
-					
-						return
-					end -- end of if test statement
-
-				end -- end of for k <- walls
-			end -- end of for j <- cans
-		end -- end of for i <- cans
-	end -- end of if
+	end
 end -- end of function
