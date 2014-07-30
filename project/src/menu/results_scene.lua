@@ -69,7 +69,7 @@ end
 
 function loadPlayer1ScoreLabel()
   player1ScoreLabel = display.newText( 
-  	"Score: ", 
+  	"Score: 0", 
   	configuration.results_player1_score_label_x, 
   	configuration.results_player1_score_label_y, 
   	configuration.results_font_name, 
@@ -93,7 +93,7 @@ end
 
 function loadPlayer2ScoreLabel()
   player2ScoreLabel = display.newText( 
-  	"Score: ", 
+  	"Score: 0", 
   	configuration.results_player2_score_label_x, 
   	configuration.results_player2_score_label_y, 
   	configuration.results_font_name, 

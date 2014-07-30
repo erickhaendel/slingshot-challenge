@@ -126,7 +126,7 @@ function remote_launched_process( info )
 				local _,y0 = c(true,xx,0) --ground in screen co-ords
 				yy = math.floor(yy) -- not needed 
 				
-				dx = dx + 6
+				dx = dx + 7
 					
 				dy = yy
 
@@ -269,7 +269,7 @@ function launched_process(stone, e, assets_image, state)
 			local _,y0 = c(true,xx,0) --ground in screen co-ords
 			yy = math.floor(yy) -- not needed 
 			
-			dx = dx + 6
+			dx = dx + 7
 				
 			dy = yy
 

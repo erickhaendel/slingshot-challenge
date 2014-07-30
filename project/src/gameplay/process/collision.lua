@@ -66,10 +66,10 @@ function animationProcess(assets_image, number, stone)
 		physics.addBody( cans[i],  { density=0.02, friction=0.10, bounce=3.0} )						
 	end
 
-	cans[1]:applyForce( -1, -4.0, cans[1].x, cans[1].y);	
-	cans[2]:applyForce( 1, -4.0, cans[2].x, cans[2].y);	
-	cans[3]:applyForce( 1, -4.0, cans[3].x, cans[3].y);	
-	cans[4]:applyForce( -1, -4.0, cans[4].x, cans[4].y);	
+	cans[1]:applyForce( -10, -10, cans[1].x, cans[1].y);	
+	cans[2]:applyForce( 10, -10, cans[2].x, cans[2].y);	
+	cans[3]:applyForce( 10, -10, cans[3].x, cans[3].y);	
+	cans[4]:applyForce( -10, -10, cans[4].x, cans[4].y);	
 
 	assets_image.can_tiles_obj[number] = cans
 

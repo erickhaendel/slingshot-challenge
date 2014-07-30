@@ -48,7 +48,7 @@ local scene = composer.newScene()
 
 -- -------------------------------------------------------------------------------
 
-local  btnSettings , btnPlay, btnCredits, btnAbout
+local  btnSettings , btnPlay, btnTutorial, btnCredits, btnAbout
 -- Metodos
 local onBtnAboutEvent, onBtnCreditsEvent, onBtnPlayEvent, onBtnPlayEvent
 
@@ -67,7 +67,9 @@ function scene:create( event )
     -- Buttons
     btnX = display.contentCenterX / 2  
     btnY = ( display.contentCenterY  ) 
+
     btnPlay     = display.newImage( "resources/images/buttons/play.png", display.contentCenterX , display.contentCenterY - 100, true  )
+    btnTutorial = display.newImage( "resources/images/buttons/tutorial.png",  btnX + 750, btnY + 30, true  )
 
     btnAbout    = display.newImage( "resources/images/buttons/about.png", btnX - 100, btnY + 30, true  )
     btnCredits  = display.newImage( "resources/images/buttons/credits.png", btnX + 20, btnY + 140, true  )
@@ -76,6 +78,7 @@ function scene:create( event )
     --Insert elements to scene
     sceneGroup:insert( background ) -- insert background to group
     sceneGroup:insert( btnPlay ) 
+    sceneGroup:insert( btnTutorial )     
     sceneGroup:insert( btnAbout ) 
     sceneGroup:insert( btnCredits ) 
     sceneGroup:insert( btnSettings )
@@ -95,10 +98,10 @@ function scene:show( event )
 
         -- Eventos
         btnPlay:addEventListener( "touch" , onBtnPlayEvent )
+        btnTutorial:addEventListener( "touch" , onBtnTutorialEvent )
         btnSettings:addEventListener( "touch" , onBtnSettingsEvent )
         btnCredits:addEventListener( "touch" , onBtnCreditsEvent )
         btnAbout:addEventListener( "touch" , onBtnAboutEvent )
-
     end
 end
 
@@ -129,6 +132,7 @@ end
 function removeAll( sceneGroup )
     removeObject( background , sceneGroup)  -- destroi imagem de fundo
     removeObject( btnPlay , sceneGroup)  -- destroi botao back
+    removeObject( btnTutorial , sceneGroup)  -- destroi botao back    
     removeObject( btnCredits , sceneGroup)  -- destroi botao
     removeObject( btnAbout , sceneGroup)  -- destroi botao
     removeObject( btnSettings , sceneGroup)  -- destroi botao
@@ -141,6 +145,13 @@ function onBtnPlayEvent( event )
     composer.removeScene('src.menu.menu_scene')
     --composer.gotoScene( "src.gameplay.game", "fade", 400)
     composer.gotoScene( "src.menu.pregameplay_scene", "fade", 400)
+end
+
+-- Events for Button Play
+function onBtnTutorialEvent( event )
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.tutorial.tutorial_gameplay", "fade", 400)
 end
 
 -- Events for Button Credits
