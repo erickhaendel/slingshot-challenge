@@ -65,6 +65,7 @@ slingshot_tiles_obj 		= nil;
 target_tiles_obj 			= nil;
 wall_tiles_obj 				= nil;
 hand_tiles_obj 				= nil;
+single_can_tiles_obj 		= nil;
 
 ---------------------------------------------------------------------------------------------------------------
 -- GROUPS
@@ -123,6 +124,12 @@ local function create_can_tiles_obj(  )
 			assetsGroup:insert( can_tiles_obj[i][j] )	
 		end
 	end		
+end
+
+-- cria apenas uma lata com as configuracoes passadas por parâmetro
+local function create_single_can_tiles_obj( color, x, y )
+	single_can_tiles_obj = can_tiles_lib.newSingleCanTile(color, x, y)
+	assetsGroup:insert( single_can_tiles_obj )	
 end
 
 local function create_ground_tiles_obj(  )
@@ -229,6 +236,17 @@ local function remove_can_tiles_obj(  )
 	end
 end
 
+
+local function remove_single_can_tiles_obj(  )
+
+	if single_can_tiles_obj then
+
+		assetsGroup:remove( single_can_tiles_obj )	
+
+		can_tiles_lib.removeSingleCanTiles(single_can_tiles_obj)
+	end
+end
+
 local function remove_ground_tiles_obj(  )
 
 	if ground_tiles_obj then
@@ -301,11 +319,19 @@ function createStage1()
 	create_wall_tiles_obj()	-- carrega a parede no cenario
 	create_ground_tiles_obj()	-- carrega o chao
 	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
+	
+	sky_tiles_lib.skyGroup:toBack( )	
+
 	create_hand_tiles_obj()
 
 	timer.performWithDelay( 6500, function( )
 		remove_hand_tiles_obj(  )
 	end )
+end
+
+function createStage2()
+	create_single_can_tiles_obj("yellow",configuration.cans_x[1],configuration.cans_x[2])
+	single_can_tiles_obj:toFront( )
 end
 
 ---------------------------------------------------------------------------------------------------------------

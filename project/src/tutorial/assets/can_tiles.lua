@@ -41,6 +41,28 @@ local can_process_lib 		= require( "src.gameplay.process.can" )
 -- CAN TILES									--
 ----------------------------------------------------------
 
+function newSingleCanTile(color, x, y)
+
+	local filename = nil
+	local can = nil
+
+	if color == "yellow" then
+		filename = configuration.can_image_dir..configuration.player1_can; 
+	elseif color == "green" then
+		filename = configuration.can_image_dir..configuration.player2_can; 
+	else
+		filename = configuration.can_image_dir..configuration.neutral_can; 
+	end
+
+	can = display.newImage( filename, x, y )
+
+	return can
+end
+
+function removeSingleCanTile(can)
+ 	can:removeSelf( ); can = nil;
+end
+
 -- cria conjuntos de latas para o player 1 e 2
 function newCanTile()
 				
