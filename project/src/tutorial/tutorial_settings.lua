@@ -229,3 +229,67 @@ donottouch_sprite_image			= "resources/images/objects/donottouch-sprite.png"
 donottouch_imagesheet_options 	= { width=100, height=100, numFrames=5, sheetContentWidth=500, sheetContentHeight=100 }
 donottouch_sprite_options		= { name = "normalRun", start=1, count=5, time=400, loopCount = 1 }
 
+-- CHECKED SPRITE
+checked_sprite_image			= "resources/images/objects/checked-sprite.png"
+checked_imagesheet_options 		= {  width=236, height=213, numFrames=5, sheetContentWidth=1180, sheetContentHeight=213 }
+checked_sprite_options			= { name = "normalRun", start=1, count=5, time=900, loopCount = 1 }
+
+-- MAN_YELLOW_RIGHT SPRITE
+man_yellow_right_sprite_image				= "resources/images/objects/man-yellow-right-sprite.png"
+man_yellow_right_imagesheet_options 		= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
+man_yellow_right_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+
+-- MAN_GREEN_RIGHT SPRITE
+man_green_right_sprite_image				= "resources/images/objects/man-green-right-sprite.png"
+man_green_right_imagesheet_options 			= { width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
+man_green_right_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+
+-- MAN_YELLOW_LEFT SPRITE
+man_yellow_left_sprite_image				= "resources/images/objects/man-yellow-left-sprite.png"
+man_yellow_left_imagesheet_options 			= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
+man_yellow_left_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+
+-- MAN_GREEN_LEFT SPRITE
+man_green_left_sprite_image					= "resources/images/objects/man-green-left-sprite.png"
+man_green_left_imagesheet_options 			= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
+man_green_left_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+
+-- ARROW_UPWARDS SPRITE
+arrow_0_sprite_image			= "resources/images/objects/arrow-0-sprite.png"
+arrow_0_imagesheet_options 	= { width=82, height=350, numFrames=4, sheetContentWidth=82, sheetContentHeight=1400 }
+arrow_0_sprite_options		= { name = "normalRun", start=1, count=4, time=900 }
+
+-- ARROW DIAGONAL UPWARDS TO THE RIGHT SPRITE
+arrow_45_sprite_image			= "resources/images/objects/arrow-45-sprite.png"
+arrow_45_imagesheet_options 	= { width=350, height=350, numFrames=4, sheetContentWidth=350, sheetContentHeight=1400 }
+arrow_45_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
+
+-- ARROW TO THE RIGHT SPRITE
+arrow_90_sprite_image			= "resources/images/objects/arrow-90-sprite.png"
+arrow_90_imagesheet_options 	= {  width=350, height=82, numFrames=4, sheetContentWidth=1400, sheetContentHeight=82 }
+arrow_90_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
+
+-- ARROW DIAGONAL DOWNWARDS TO THE RIGHT SPRITE
+arrow_135_sprite_image			= "resources/images/objects/arrow-135-sprite.png"
+arrow_135_imagesheet_options 	= { width=350, height=350, numFrames=4, sheetContentWidth=1400, sheetContentHeight=350 }
+arrow_135_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
+
+-- ARROW DOWN SPRITE
+arrow_180_sprite_image			= "resources/images/objects/arrow-180-sprite.png"
+arrow_180_imagesheet_options 	= { width=85, height=350, numFrames=4, sheetContentWidth=85, sheetContentHeight=1400 }
+arrow_180_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
+
+-- ARROW DIAGONAL DOWNWARDS TO THE LEFT SPRITE
+arrow_45_sprite_image			= "resources/images/objects/arrow-225-sprite.png"
+arrow_45_imagesheet_options 	= { width=350, height=350, numFrames=4, sheetContentWidth=350, sheetContentHeight=1400 }
+arrow_45_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
+
+-- ARROW TO THE LEFT SPRITE
+arrow_90_sprite_image			= "resources/images/objects/arrow-270-sprite.png"
+arrow_90_imagesheet_options 	= { width=350, height=85, numFrames=4, sheetContentWidth=1400, sheetContentHeight=85 }
+arrow_90_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
+
+-- ARROW DIAGONAL UPWARDS TO THE LEFT SPRITE
+arrow_135_sprite_image			= "resources/images/objects/arrow-315-sprite.png"
+arrow_135_imagesheet_options 	= { width=350, height=350, numFrames=4, sheetContentWidth=1400, sheetContentHeight=350 }
+arrow_135_sprite_options		= { name = "normalRun", start=1, count=40, time=900 }
