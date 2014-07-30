@@ -234,29 +234,29 @@ checked_sprite_position_y 		= display.contentCenterY
 
 -- MAN_YELLOW_RIGHT SPRITE
 man_yellow_right_sprite_image				= "resources/images/objects/man-yellow-right-sprite.png"
-man_yellow_right_imagesheet_options 		= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
-man_yellow_right_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_yellow_right_imagesheet_options 		= {  width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500 }
+man_yellow_right_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_yellow_right_sprite_position_x 			= display.contentCenterX 		
 man_yellow_right_sprite_position_y 			= display.contentHeight - 80
 
 -- MAN_GREEN_RIGHT SPRITE
 man_green_right_sprite_image				= "resources/images/objects/man-green-right-sprite.png"
-man_green_right_imagesheet_options 			= { width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
-man_green_right_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_green_right_imagesheet_options 			= {  width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500}
+man_green_right_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_green_right_sprite_position_x 			= display.contentCenterX 		
 man_green_right_sprite_position_y 			= display.contentHeight - 80
 
 -- MAN_YELLOW_LEFT SPRITE
 man_yellow_left_sprite_image				= "resources/images/objects/man-yellow-left-sprite.png"
-man_yellow_left_imagesheet_options 			= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
-man_yellow_left_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_yellow_left_imagesheet_options 			= {  width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500 }
+man_yellow_left_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_yellow_left_sprite_position_x 			= display.contentCenterX 		
 man_yellow_left_sprite_position_y 			= display.contentHeight - 80
 
 -- MAN_GREEN_LEFT SPRITE
 man_green_left_sprite_image					= "resources/images/objects/man-green-left-sprite.png"
-man_green_left_imagesheet_options 			= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
-man_green_left_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_green_left_imagesheet_options 			= { width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500 }
+man_green_left_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_green_left_sprite_position_x 			= display.contentCenterX 		
 man_green_left_sprite_position_y 			= display.contentHeight - 80
 
