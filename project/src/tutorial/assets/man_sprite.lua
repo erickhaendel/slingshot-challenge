@@ -94,7 +94,7 @@ function newManGreenLeftSprite(x,y,way)
 	animation.x = x
 	animation.y = y
 	animation:toFront( )
-	animation: setSequence(way)
+	animation:setSequence(way)
   	animation:play()
   	animation:toFront( )
 

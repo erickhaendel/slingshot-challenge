@@ -241,13 +241,23 @@ end
 
 function stage_2( )
 
-	local man_sprite = man_sprite_lib.newManYellowRightSprite(
-		configuration.man_yellow_right_sprite_position_x, 
-		configuration.man_yellow_right_sprite_position_y)
+	timer.performWithDelay( 750, function()
+		local man_sprite = man_sprite_lib.newManYellowRightSprite(
+			configuration.man_yellow_right_sprite_position_x, 
+			configuration.man_yellow_right_sprite_position_y)
 
-	timer.performWithDelay( 6500, function( )
-		man_sprite_lib.removeManSprite( man_sprite )
-	end )
+		transition.to(man_sprite, {time=1600, x = configuration.stone_position_x- 120, transition = easingx.easeOut});
+	
+		timer.performWithDelay( 3200, function()
+			transition.to(man_sprite, {time=1200, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
+		end)
+	end)
+
+
+
+	-- timer.performWithDelay( 4500, function( )
+	-- 	man_sprite_lib.removeManSprite( man_sprite )
+	-- end )
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 

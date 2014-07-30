@@ -55,7 +55,7 @@ game_stage = 1
 
 -- ANIMATION CONFIG
 camera_velocity = 12 									-- velocidade da animcao de transicao de tela
-time_delay_toshow_slingshot = 36000 / camera_velocity   -- tempo de espera para que o estilingue fique pronto para uso
+time_delay_toshow_slingshot = 2400 / camera_velocity   -- tempo de espera para que o estilingue fique pronto para uso
 
 time_cantile_animation_delay = 1000						-- 
 time_cantile_transition_delay = 500						--
@@ -236,29 +236,29 @@ checked_sprite_position_y 		= display.contentCenterY
 man_yellow_right_sprite_image				= "resources/images/objects/man-yellow-right-sprite.png"
 man_yellow_right_imagesheet_options 		= {  width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500 }
 man_yellow_right_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
-man_yellow_right_sprite_position_x 			= display.contentCenterX 		
-man_yellow_right_sprite_position_y 			= display.contentHeight - 80
+man_yellow_right_sprite_position_x 			= 100		
+man_yellow_right_sprite_position_y 			= display.contentHeight - 150
 
 -- MAN_GREEN_RIGHT SPRITE
 man_green_right_sprite_image				= "resources/images/objects/man-green-right-sprite.png"
 man_green_right_imagesheet_options 			= {  width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500}
 man_green_right_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_green_right_sprite_position_x 			= display.contentCenterX 		
-man_green_right_sprite_position_y 			= display.contentHeight - 80
+man_green_right_sprite_position_y 			= display.contentHeight - 150
 
 -- MAN_YELLOW_LEFT SPRITE
 man_yellow_left_sprite_image				= "resources/images/objects/man-yellow-left-sprite.png"
 man_yellow_left_imagesheet_options 			= {  width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500 }
 man_yellow_left_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_yellow_left_sprite_position_x 			= display.contentCenterX 		
-man_yellow_left_sprite_position_y 			= display.contentHeight - 80
+man_yellow_left_sprite_position_y 			= display.contentHeight - 150
 
 -- MAN_GREEN_LEFT SPRITE
 man_green_left_sprite_image					= "resources/images/objects/man-green-left-sprite.png"
 man_green_left_imagesheet_options 			= { width=250, height=250, numFrames=8, sheetContentWidth=1000, sheetContentHeight=500 }
 man_green_left_sprite_options				= {{ name = "normalRun", start=1, count=8, time=800 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=800 }}
 man_green_left_sprite_position_x 			= display.contentCenterX 		
-man_green_left_sprite_position_y 			= display.contentHeight - 80
+man_green_left_sprite_position_y 			= display.contentHeight - 150
 
 -- ARROW_UPWARDS SPRITE
 arrow_0_sprite_image			= "resources/images/objects/arrow-0-sprite.png"
