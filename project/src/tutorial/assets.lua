@@ -44,11 +44,9 @@ local score_player_tiles_lib 		= require( "src.tutorial.assets.score_player_tile
 local scoreboard_tiles_lib 			= require( "src.tutorial.assets.scoreboard_tiles" )
 local sky_tiles_lib 				= require( "src.tutorial.assets.sky_tiles" )
 local slingshot_tiles_lib 			= require( "src.tutorial.assets.slingshot_tiles" )
-local stone_trajectory_tiles_lib 	= require( "src.tutorial.assets.stone_trajectory_tiles" )
 local target_tiles_lib 				= require( "src.tutorial.assets.target_tiles" )
-local title_player_tiles_lib 		= require( "src.tutorial.assets.title_player_tiles" )
-local title_round_tiles_lib 		= require( "src.tutorial.assets.title_round_tiles" )
 local wall_tiles_lib 				= require( "src.tutorial.assets.wall_tiles" )
+local hand_tiles_lib 				= require( "src.tutorial.assets.hand_tiles" )
 
 ---------------------------------------------------------------------------------------------------------------
 -- OBJECTS
@@ -64,11 +62,9 @@ scoreboard_tiles_obj 		= nil;
 sky_tiles_obj 				= nil; 
 background_sky_obj 			= nil;
 slingshot_tiles_obj 		= nil; 
-stone_trajectory_tiles_obj 	= nil; 
 target_tiles_obj 			= nil;
-title_player_tiles_obj 		= nil; 
-score_round_tiles_obj 		= nil; 
 wall_tiles_obj 				= nil;
+hand_tiles_obj 				= nil;
 
 ---------------------------------------------------------------------------------------------------------------
 -- GROUPS
@@ -96,6 +92,7 @@ local projectiles_container = nil;
 local function create_sky_tiles_obj()
 	sky_tiles_obj, background_sky_obj = sky_tiles_lib.startSky();	
 	sky_tiles_lib.transitionNightDay(sky_tiles_obj,background_sky_obj)
+	background_sky_obj:toBack( )
 end
 
 local function create_house_tiles_obj(  )
@@ -144,20 +141,6 @@ local function create_slingshot_tiles_obj(  )
 
 end
 
-local function create_title_player_tiles_obj(  )
-	title_player_tiles_obj = title_player_tiles_lib.newTitlePlayerLabel()
-	for i=1, #title_player_tiles_obj do
-		assetsGroup:insert( title_player_tiles_obj[i] )	
-	end		
-end
-
-local function create_title_round_tiles_obj(  )	
-	title_round_tiles_obj = title_round_tiles_lib.newRoundLabel()
-	for i=1, #title_round_tiles_obj do
-		assetsGroup:insert( title_round_tiles_obj[i] )	
-	end	
-end
-
 -- GRADE DE PONTOS
 local function create_scoreboard_tiles_obj(  )
 	scoreboard_tiles_obj = scoreboard_tiles_lib.new_scoreboard()
@@ -178,6 +161,12 @@ local function create_score_player_tiles_obj(  )
 	for i=1, #score_player_tiles_obj do
 		assetsGroup:insert( score_player_tiles_obj[i] )	
 	end	
+end
+
+local function create_hand_tiles_obj(  )
+	hand_tiles_obj = hand_tiles_lib.newHandTile();
+	assetsGroup:insert( hand_tiles_obj )	
+	hand_tiles_obj:toFront( )
 end
 
 ---------------------------------------------------------------------------------------------------------------
@@ -259,24 +248,6 @@ local function remove_slingshot_tiles_obj(  )
 	end
 end
 
-local function remove_title_player_tiles_obj(  )
-	if title_player_tiles_obj then
-		for i=1, #title_player_tiles_obj do
-			assetsGroup:remove( title_player_tiles_obj[i] )	
-		end	
-		title_player_tiles_lib.removeTitlePlayerLabel( title_player_tiles_obj )
-	end
-end
-
-local function remove_title_round_tiles_obj(  )
-	if title_round_tiles_obj then
-		for i=1, #title_round_tiles_obj do
-			assetsGroup:remove( title_round_tiles_obj[i] )	
-		end	
-		title_round_tiles_lib.removeRoundLabel( title_round_tiles_obj )
-	end
-end
-
 local function remove_scoreboard_tiles_obj(  )
 	if scoreboard_tiles_obj then
 		-- matriz de 20 - 4 linhas da grade por 5 colunas
@@ -301,11 +272,18 @@ local function remove_score_player_tiles_obj(  )
 	end
 end
 
+local function remove_hand_tiles_obj(  )
+	if hand_tiles_obj then
+		assetsGroup:remove( hand_tiles_obj )		
+		hand_tiles_lib.removeWallTiles( hand_tiles_obj )
+	end
+end
+
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
 function removeStage1()
-
+	remove_hand_tiles_obj()
 end
 
 function removeStage2()
@@ -341,6 +319,7 @@ function createStage1()
 	create_wall_tiles_obj()	-- carrega a parede no cenario
 	create_ground_tiles_obj()	-- carrega o chao
 	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
+	create_hand_tiles_obj()
 end
 
 function createStage2()
@@ -387,27 +366,3 @@ function moveCamera( )
 		end
 	end
 end
-
-function reload_round_tiles( )
-
-	-- carrega os titulos dos rounds
-	timer.performWithDelay( configuration.time_show_round_label, function ( event )	
-		create_title_round_tiles_obj(  )
-
-		timer.performWithDelay( configuration.time_hide_round_label, function ( event )	
-				remove_title_round_tiles_obj(  )
-			end)
-		end)
-end
-
-function reload_can_tiles( )
-
-	-- remove as latas do round anterior
-	remove_can_tiles_obj(  )
-
-	-- carrega as latas em cima da parede
-	timer.performWithDelay(1000, function ( event )	
-		create_can_tiles_obj(  )
-		end)
-end
-

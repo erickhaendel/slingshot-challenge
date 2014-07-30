@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- stone_trajectory_tiles.lua
+-- hand_tiles.lua
 -- Description: 
 -- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @modified 
 -- @version 1.00
--- @date 06/29/2014
+-- @date 07/30/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -34,18 +34,17 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration = require( "src.tutorial.tutorial_settings" )
 
 ----------------------------------------------------------
--- trajectory TILES											--
+-- HAND TILES											--
 ----------------------------------------------------------
 
-function newTrajectory(x,y,r,g,b)
-	local myCircle = display.newCircle( x, y, 5 )
-	myCircle:setFillColor(r, g, b) 
-	--myCircle:setStrokeColor(140, 140, 140) 
-	--myCircle.strokeWidth = 5
-	--myCircle:setStrokeColor( .255, .0, .0 )	
+function newHandTile()
+	local hand = display.newImage( configuration.hand_image_filename, configuration.hand_position_x, configuration.hand_position_y )
+	return hand
+end
 
-	return myCircle
+function removeHandTile(hand)
+	hand:removeSelf( ); hand = nil
 end
