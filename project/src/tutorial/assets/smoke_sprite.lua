@@ -34,7 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration 			= require( "src.tutorial.tutorial_settings" )
 
 ----------------------------------------------------------
 -- SMOKE SPRITE										--

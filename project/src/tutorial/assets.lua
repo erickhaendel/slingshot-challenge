@@ -164,8 +164,10 @@ local function create_score_player_tiles_obj(  )
 end
 
 local function create_hand_tiles_obj(  )
-	hand_tiles_obj = hand_tiles_lib.newHandTile();
+	hand_tiles_obj = hand_tiles_lib.newHandTile()
+
 	assetsGroup:insert( hand_tiles_obj )	
+	
 	hand_tiles_obj:toFront( )
 end
 
@@ -275,33 +277,13 @@ end
 local function remove_hand_tiles_obj(  )
 	if hand_tiles_obj then
 		assetsGroup:remove( hand_tiles_obj )		
-		hand_tiles_lib.removeWallTiles( hand_tiles_obj )
+		hand_tiles_lib.removeHandTiles( hand_tiles_obj )
 	end
 end
 
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
-function removeStage1()
-	remove_hand_tiles_obj()
-end
-
-function removeStage2()
-
-end
-
-function removeStage3()
-
-end
-
-function removeStage4()
-
-end
-
-function removeStage5()
-
-end
-
 function removeStage6()
 	remove_sky_tiles_obj()
 	remove_house_tiles_obj()
@@ -320,26 +302,10 @@ function createStage1()
 	create_ground_tiles_obj()	-- carrega o chao
 	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
 	create_hand_tiles_obj()
-end
 
-function createStage2()
-
-end
-
-function createStage3()
-
-end
-
-function createStage4()
-
-end
-
-function createStage5()
-
-end
-
-function createStage6()
-
+	timer.performWithDelay( 6500, function( )
+		remove_hand_tiles_obj(  )
+	end )
 end
 
 ---------------------------------------------------------------------------------------------------------------

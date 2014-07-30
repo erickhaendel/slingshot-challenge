@@ -6,10 +6,6 @@ local assets_audio				= require( "src.tutorial.assets_audio" )
 local smoke_sprite_lib 			= require( "src.tutorial.assets.smoke_sprite" )
 local collision_process_lib 	= require( "src.tutorial.process.collision" )
 
-local network_gameplay   	= require( "src.network.gameplaysync" )
-local player1_obj           = require( "src.player.player1" )
-local player2_obj           = require( "src.player.player2" )
-
 -- verifica o limite do eslatico do estilingue e devolve os valores corretos
 function getBoundaryProjectile( e, stone )
 	-- Boundary for the projectile when grabbed			
@@ -36,11 +32,6 @@ function ready_to_launch_process(stone)
 
 	display.getCurrentStage():setFocus( stone ); -- Set the stage focus to the touched projectile
 	stone.isFocus = true;
-	--stone.bodyType = "kinematic";			
-	
-	--stone:setLinearVelocity(0,0); -- Stop current physics motion, if any
-
-	--stone.angularVelocity = 0;
 
 	return stone
 end
@@ -53,7 +44,6 @@ function launching_process(stone, touch_event)
 
 	return stone
 end
-
 
 -- A trajectory in world space
 function trajectory(v,elevation,x0,y0,g)
@@ -90,8 +80,6 @@ function converter(iso)
 end
 
 function launched_process(stone, e, assets_image, state)
-
-	configuration.game_is_shooted = 1
 
 	-- Reset the stage focus
 	display.getCurrentStage():setFocus(nil);

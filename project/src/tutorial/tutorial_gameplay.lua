@@ -52,6 +52,8 @@ local projectile_process_lib 	= require( "src.tutorial.process.projectile" )
 
 -- sprite
 local donottouch_sprite_lib 	= require( "src.tutorial.assets.donottouch_sprite" )
+local checked_sprite_lib 		= require( "src.tutorial.assets.checked_sprite" )
+local man_sprite_lib 			= require( "src.tutorial.assets.man_sprite" )
 
 -------------------------------------------
 -- GROUPS
@@ -87,7 +89,7 @@ function spawnProjectile()
 		-- Add an event listener to the projectile.
 		projectiles_container:addEventListener("touch", projectileTouchListener);
 
-		configuration.projectile_object = projectiles_container
+		configuration.projectile_object = projectiles_container	
 	end	
 end
 
@@ -97,61 +99,102 @@ function projectileTouchListener(e)
 	-- The current projectile on screen
 	local stone = e.target;
 
-		-- If the projectile is 'ready' to be used
-		if(stone.ready) then		
+	-- If the projectile is 'ready' to be used
+	if(stone.ready) then		
 
-				if(e.phase == "began") then -- if the touch event has started...
+		if(e.phase == "began") then -- if the touch event has started...
 
-					stone = projectile_process_lib.ready_to_launch_process(stone)
-					-- copia da pedra, usado pelo pubnub
-					configuration.projectile_object = stone				
+			stone = projectile_process_lib.ready_to_launch_process(stone)
+			-- copia da pedra, usado pelo pubnub
+			configuration.projectile_object = stone				
 
-					-- Init the elastic band.
-					local myLine = nil;
-					local myLineBack = nil;
-				
-				elseif(stone.isFocus) then -- If the target of the touch event is the focus...
-
-					if configuration.game_current_player == configuration.game_i_am_player_number then 					
-
-					if(e.phase == "moved") then -- If the target of the touch event moves...
-
-						-- If the band exists... refresh the drawing of the line on the stage.
-						band_line_tiles_lib.removeBandLine( )
-
-						myLineBack, myLine = band_line_tiles_lib.newBandLine( stone )
-						
-						-- Insert the components of the catapult into a group.
-						--slingshot_container:insert(slingshot_tiles_obj);
-						slingshot_container:insert(myLineBack);
-						slingshot_container:insert(stone);
-						slingshot_container:insert(myLine);
-
-						-- Boundary for the projectile when grabbed	
-						-- evita que estique o elastico infinitamente	
-						stone = projectile_process_lib.launching_process(stone, e)
-
-					-- If the projectile touch event ends (player lets go)...
-					elseif(e.phase == "ended" or e.phase == "cancelled") then
-
-						-- Remove projectile touch so player can't grab it back and re-use after firing.
-						projectiles_container:removeEventListener("touch", projectileTouchListener);
-
-						-- Remove the elastic band
-						band_line_tiles_lib.removeBandLine( )
-
-						stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
-												
-					end
-				end
-				
-				end
-			
+			-- Init the elastic band.
+			local myLine = nil;
+			local myLineBack = nil;
 		
+		elseif(stone.isFocus) then -- If the target of the touch event is the focus...
+
+			if configuration.game_current_player == configuration.game_i_am_player_number then 					
+
+				if(e.phase == "moved") then -- If the target of the touch event moves...
+
+					-- If the band exists... refresh the drawing of the line on the stage.
+					band_line_tiles_lib.removeBandLine( )
+
+					myLineBack, myLine = band_line_tiles_lib.newBandLine( stone )
+					
+					-- Insert the components of the catapult into a group.
+					slingshot_container:insert(myLineBack);
+					slingshot_container:insert(stone);
+					slingshot_container:insert(myLine);
+
+					-- Boundary for the projectile when grabbed	
+					-- evita que estique o elastico infinitamente	
+					stone = projectile_process_lib.launching_process(stone, e)
+
+				-- If the projectile touch event ends (player lets go)...
+				elseif(e.phase == "ended" or e.phase == "cancelled") then
+
+					configuration.game_is_shooted = configuration.game_is_shooted + 1
+
+					print( "configuration.game_stage: "..configuration.game_stage )
+					print( "configuration.game_is_shooted: "..configuration.game_is_shooted )
+
+					if configuration.game_stage == 1 then
+
+						if configuration.game_is_shooted >= 1 then
+							-- aparece o checked verde
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
+
+							-- fim do estagio 1
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 2
+						end
+					end
+
+					if configuration.game_stage == 2 then
+
+						if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							-- fim do estagio 2
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 3
+						end
+					end
+
+					if configuration.game_stage == 3 then
+
+					    if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							-- fim do estagio 3
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 4
+						end
+					end
+
+					-- Remove projectile touch so player can't grab it back and re-use after firing.
+					projectiles_container:removeEventListener("touch", projectileTouchListener);
+
+					-- Remove the elastic band
+					band_line_tiles_lib.removeBandLine( )
+
+					stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
+											
+				end
+			end		
 		end
-
-	--end
-
+	end
 end
 
 -- GAME STATE CHANGE FUNCTION
@@ -159,43 +202,29 @@ function configuration.state_object:change(e)
 
 	if(e.state == "fire") then
 		--
-		timer.performWithDelay( configuration.time_start_next_round, function ( event )	
+		
+		if configuration.game_stage == 1 then stage_1()				
+		elseif configuration.game_stage == 2 then stage_2()				
+		elseif configuration.game_stage == 3 then stage_3()				
+		elseif configuration.game_stage == 4 then stage_4()				
+		elseif configuration.game_stage == 5 then stage_5()				
+		elseif configuration.game_stage == 6 then stage_6()
+		-- terminou o jogo
+		elseif configuration.game_stage > 6 then					
 
-				-- 
-				if configuration.game_stage == 1 then					
-					stage_1()				
-				-- 
-				elseif configuration.game_stage == 2 then					
-					stage_2()				
-				-- 
-				elseif configuration.game_stage == 3 then					
-					stage_3()				
-				-- 
-				elseif configuration.game_stage == 4 then					
-					stage_4()				
-				--
-				elseif configuration.game_stage == 5 then					
-					stage_5()				
-				--
-				elseif configuration.game_stage == 6 then					
-					stage_6()
-				-- terminou o jogo
-				elseif configuration.game_stage > 6 then					
+	    	assets_image.removeGameplayScenario()
 
-			    	assets_image.removeGameplayScenario()
+	    	-- Destroi eventos criados
+			configuration.state_object:removeEventListener("change", configuration.state_object);
 
-			    	-- Destroi eventos criados
-					configuration.state_object:removeEventListener("change", configuration.state_object);
+			Runtime:removeEventListener("touch", donottouch_warn)		
+			
+			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+			projectiles_container:removeEventListener("touch", projectileTouchListener);
 
-					Runtime:removeEventListener("touch", donottouch_warn)		
-					
-					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
-					projectiles_container:removeEventListener("touch", projectileTouchListener);
-
-				    composer.removeScene('src.tutorial.game')
-				    composer.gotoScene( "src.menu.results_scene", "fade", 400)
-				end
-			end)
+		    composer.removeScene('src.tutorial.game')
+		    composer.gotoScene( "src.menu.results_scene", "fade", 400)
+		end
 
 	end
 end
@@ -205,35 +234,58 @@ function stage_1()
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		-- collision detection mode on
-		configuration.game_is_shooted = 0
-		configuration.game_is_hit = 0
-
 		spawnProjectile(); -- Spawn the first projectile.
-
-		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 
 		end)	
 end
 
 function stage_2( )
-	
+
+	local man_sprite = man_sprite_lib.newManYellowRightSprite(
+		configuration.man_yellow_right_sprite_position_x, 
+		configuration.man_yellow_right_sprite_position_y)
+
+	timer.performWithDelay( 6500, function( )
+		man_sprite_lib.removeManSprite( man_sprite )
+	end )
+
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
 end
 
 function stage_3()
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
 end
 
 function stage_4()
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
 end
 
 function stage_5()
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
 end
 
 function stage_6()
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
 end
 
 

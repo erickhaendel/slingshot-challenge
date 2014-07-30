@@ -36,15 +36,37 @@ module(..., package.seeall)
 
 local configuration = require( "src.tutorial.tutorial_settings" )
 
+
+newHandTile, removeHandTiles = nil, nil
+
 ----------------------------------------------------------
 -- HAND TILES											--
 ----------------------------------------------------------
 
 function newHandTile()
 	local hand = display.newImage( configuration.hand_image_filename, configuration.hand_position_x, configuration.hand_position_y )
+
+	timer.performWithDelay( 100, function()
+
+		timer.performWithDelay( 1000, function( )	
+			-- Transition the hand into position each time it's spawned	
+			transition.to(hand, {time=1000, x = configuration.stone_position_x+50, y = configuration.stone_position_y + 50, transition = easingx.easeOut});
+		end )
+
+		timer.performWithDelay( 2000, function( )
+			-- Transition the hand into position each time it's spawned	
+			transition.to(hand, {time=2000, x = configuration.stone_position_x+50, y = configuration.stone_position_y + 250, transition = easingx.easeOut});
+		end )
+
+		timer.performWithDelay( 4000, function( )
+			-- Transition the hand into position each time it's spawned	
+			transition.to(hand, {time=2000, x = configuration.stone_position_x+50, y = configuration.stone_position_y + 50, transition = easingx.easeOutBounce});
+		end )	
+	end,1 )
+	
 	return hand
 end
 
-function removeHandTile(hand)
+function removeHandTiles(hand)
 	hand:removeSelf( ); hand = nil
 end

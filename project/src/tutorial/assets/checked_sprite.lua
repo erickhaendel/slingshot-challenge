@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------------------
 -- house_tiles.lua
 -- Description: 
--- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @author Guilherme Cabral <samuellunamartins@gmail.com>
 -- @modified 
 -- @version 1.00
--- @date 06/29/2014
+-- @date 07/30/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -34,7 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration 			= require( "src.tutorial.tutorial_settings" )
 
 ----------------------------------------------------------
 -- checked SPRITE										--
@@ -52,5 +52,11 @@ function newCheckedSprite(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+	return animation  	
+end
+
+function removeCheckedSprite( animation )
+	animation:removeSelf( ); animation = nil
 end
 

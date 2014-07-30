@@ -55,11 +55,7 @@ game_stage = 1
 
 -- ANIMATION CONFIG
 camera_velocity = 12 									-- velocidade da animcao de transicao de tela
-time_hide_title_player_label = 64000 / camera_velocity	-- tempo de duracao de exibicao do nome player
-time_delay_toshow_slingshot = 72000 / camera_velocity   -- tempo de espera para que o estilingue fique pronto para uso
-time_show_round_label =  64000 / camera_velocity 		-- tempo de espera para que apareca o titulo do round atual
-time_hide_round_label = 2000							-- tempo de espera para ocultar o titulo de round atual
-time_start_next_round = 4000 							-- espera 5 segundos para iniciar a proxima rodada
+time_delay_toshow_slingshot = 36000 / camera_velocity   -- tempo de espera para que o estilingue fique pronto para uso
 
 time_cantile_animation_delay = 1000						-- 
 time_cantile_transition_delay = 500						--
@@ -214,8 +210,8 @@ score_player_label_x[4] = display.contentCenterX + 1890
 score_player_label_y[4] = display.contentCenterY + 375
 
 -- HAND
-hand_position_x = display.contentCenterX 				-- posicao do tile hand
-hand_position_y = display.contentCenterY
+hand_position_x = display.contentWidth - 100 					-- posicao do tile hand
+hand_position_y = 100
 hand_image_filename = "resources/images/objects/hand.png"		-- nome de arquivo da imagem hand
 
 
@@ -231,28 +227,38 @@ donottouch_sprite_options		= { name = "normalRun", start=1, count=5, time=400, l
 
 -- CHECKED SPRITE
 checked_sprite_image			= "resources/images/objects/checked-sprite.png"
-checked_imagesheet_options 		= {  width=236, height=213, numFrames=5, sheetContentWidth=1180, sheetContentHeight=213 }
+checked_imagesheet_options 		= { width=236, height=213, numFrames=5, sheetContentWidth=1180, sheetContentHeight=213 }
 checked_sprite_options			= { name = "normalRun", start=1, count=5, time=900, loopCount = 1 }
+checked_sprite_position_x 		= display.contentCenterX 		
+checked_sprite_position_y 		= display.contentCenterY 
 
 -- MAN_YELLOW_RIGHT SPRITE
 man_yellow_right_sprite_image				= "resources/images/objects/man-yellow-right-sprite.png"
 man_yellow_right_imagesheet_options 		= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
 man_yellow_right_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_yellow_right_sprite_position_x 			= display.contentCenterX 		
+man_yellow_right_sprite_position_y 			= display.contentHeight - 80
 
 -- MAN_GREEN_RIGHT SPRITE
 man_green_right_sprite_image				= "resources/images/objects/man-green-right-sprite.png"
 man_green_right_imagesheet_options 			= { width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
 man_green_right_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_green_right_sprite_position_x 			= display.contentCenterX 		
+man_green_right_sprite_position_y 			= display.contentHeight - 80
 
 -- MAN_YELLOW_LEFT SPRITE
 man_yellow_left_sprite_image				= "resources/images/objects/man-yellow-left-sprite.png"
 man_yellow_left_imagesheet_options 			= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
 man_yellow_left_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_yellow_left_sprite_position_x 			= display.contentCenterX 		
+man_yellow_left_sprite_position_y 			= display.contentHeight - 80
 
 -- MAN_GREEN_LEFT SPRITE
 man_green_left_sprite_image					= "resources/images/objects/man-green-left-sprite.png"
 man_green_left_imagesheet_options 			= {  width=125, height=125, numFrames=8, sheetContentWidth=500, sheetContentHeight=250 }
 man_green_left_sprite_options				= {{ name = "normalRun", start=1, count=5, time=1200 }, { name = "moonWalker", frames={ 8,7,6,5,4,3,2,1 }, time=1200 }}
+man_green_left_sprite_position_x 			= display.contentCenterX 		
+man_green_left_sprite_position_y 			= display.contentHeight - 80
 
 -- ARROW_UPWARDS SPRITE
 arrow_0_sprite_image			= "resources/images/objects/arrow-0-sprite.png"
