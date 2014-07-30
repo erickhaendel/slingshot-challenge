@@ -47,6 +47,7 @@ local slingshot_tiles_lib 			= require( "src.tutorial.assets.slingshot_tiles" )
 local target_tiles_lib 				= require( "src.tutorial.assets.target_tiles" )
 local wall_tiles_lib 				= require( "src.tutorial.assets.wall_tiles" )
 local hand_tiles_lib 				= require( "src.tutorial.assets.hand_tiles" )
+local upperScore_tiles_lib			= require( "src.tutorial.assets.upperScore_tiles")
 
 ---------------------------------------------------------------------------------------------------------------
 -- OBJECTS
