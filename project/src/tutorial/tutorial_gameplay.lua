@@ -54,7 +54,7 @@ local projectile_process_lib 	= require( "src.tutorial.process.projectile" )
 local donottouch_sprite_lib 	= require( "src.tutorial.assets.donottouch_sprite" )
 local checked_sprite_lib 		= require( "src.tutorial.assets.checked_sprite" )
 local man_sprite_lib 			= require( "src.tutorial.assets.man_sprite" )
-local arrows_sprite_lib 		= require( "src.tutorial.assets.arrows_sprite" )
+local arrow_sprite_lib 			= require( "src.tutorial.assets.arrow_sprite" )
 
 -------------------------------------------
 -- GROUPS
@@ -260,8 +260,9 @@ function stage_2( )
 		assets_image.createStage2()
 
 		-- seta indicando que é para acertar a lata
-		--arrows_sprite_lib.newArrowSprite_0(display.contentCenterX - 200, display.contentCenterY - 120)	
-		print( arrows_sprite_lib )
+		-- arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 200, display.contentCenterY - 120)			
+		arrow_sprite_lib.newArrowSprite_315(display.contentCenterX, display.contentCenterY)	
+		--print( arrows_sprite_lib )
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()

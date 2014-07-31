@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- arrows_sprite.lua
+-- house_tiles.lua
 -- Description: 
 -- @author Guilherme Cabral <grecabral@gmail.com>
 -- @modified 
@@ -36,11 +36,6 @@ module(..., package.seeall)
 
 local configuration 			= require( "src.tutorial.tutorial_settings" )
 
-----------------------------------------------------------
--- arrow SPRITE										--
-----------------------------------------------------------
--- Example assumes 'imageSheet' is already created from graphics.newImageSheet()
-
 function newArrowSprite_0(x,y)
 
 	mySheet = graphics.newImageSheet( configuration.arrow_0_sprite_image, configuration.arrow_0_imagesheet_options )
@@ -56,6 +51,7 @@ function newArrowSprite_0(x,y)
   	return animation
 end
 
+
 function newArrowSprite_45(x,y)
 
 	mySheet = graphics.newImageSheet( configuration.arrow_45_sprite_image, configuration.arrow_45_imagesheet_options )
@@ -68,7 +64,7 @@ function newArrowSprite_45(x,y)
   	animation:play()
   	animation:toFront( )
 
-  	return animation  	
+  	return animation
 end
 
 function newArrowSprite_90(x,y)
@@ -83,7 +79,7 @@ function newArrowSprite_90(x,y)
   	animation:play()
   	animation:toFront( )
 
-  	return animation  	
+  	return animation
 end
 
 function newArrowSprite_135(x,y)
@@ -98,7 +94,7 @@ function newArrowSprite_135(x,y)
   	animation:play()
   	animation:toFront( )
 
-  	return animation  	
+  	return animation
 end
 
 function newArrowSprite_180(x,y)
@@ -113,22 +109,7 @@ function newArrowSprite_180(x,y)
   	animation:play()
   	animation:toFront( )
 
-  	return animation  	
-end
-
-function newArrowSprite_225(x,y)
-
-	mySheet = graphics.newImageSheet( configuration.arrow_225_sprite_image, configuration.arrow_225_imagesheet_options )
-
-	animation = display.newSprite( mySheet, configuration.arrow_225_sprite_options )
-	animation.x = x
-	animation.y = y
-	animation:toFront( )
-
-  	animation:play()
-  	animation:toFront( )
-
-  	return animation  	
+  	return animation
 end
 
 function newArrowSprite_270(x,y)
@@ -143,7 +124,7 @@ function newArrowSprite_270(x,y)
   	animation:play()
   	animation:toFront( )
 
-  	return animation  	
+  	return animation
 end
 
 function newArrowSprite_315(x,y)
@@ -158,5 +139,5 @@ function newArrowSprite_315(x,y)
   	animation:play()
   	animation:toFront( )
 
-  	return animation  	
+  	return animation
 end
