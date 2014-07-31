@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- house_tiles.lua
+-- arrows_sprite.lua
 -- Description: 
--- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @author Guilherme Cabral <grecabral@gmail.com>
 -- @modified 
 -- @version 1.00
--- @date 06/29/2014
+-- @date 07/30/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -34,7 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration 			= require( "src.tutorial.tutorial_settings" )
 
 ----------------------------------------------------------
 -- arrow SPRITE										--
@@ -52,6 +52,8 @@ function newArrowSprite_0(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation
 end
 
 function newArrowSprite_45(x,y)
@@ -65,6 +67,8 @@ function newArrowSprite_45(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end
 
 function newArrowSprite_90(x,y)
@@ -78,6 +82,8 @@ function newArrowSprite_90(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end
 
 function newArrowSprite_135(x,y)
@@ -91,6 +97,8 @@ function newArrowSprite_135(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end
 
 function newArrowSprite_180(x,y)
@@ -104,6 +112,8 @@ function newArrowSprite_180(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end
 
 function newArrowSprite_225(x,y)
@@ -117,6 +127,8 @@ function newArrowSprite_225(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end
 
 function newArrowSprite_270(x,y)
@@ -130,6 +142,8 @@ function newArrowSprite_270(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end
 
 function newArrowSprite_315(x,y)
@@ -143,4 +157,6 @@ function newArrowSprite_315(x,y)
 
   	animation:play()
   	animation:toFront( )
+
+  	return animation  	
 end

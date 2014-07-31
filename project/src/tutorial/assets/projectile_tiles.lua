@@ -78,6 +78,31 @@ function newProjectile()
 			transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 		end
 
+	elseif configuration.game_stage == 3 or configuration.game_stage == 4 then
+		
+		-- essa animacao ocorre apenas uma vez nesse estagio
+		if configuration.game_is_shooted == 0 then
+			-- pedra cinza que vira verde		
+			local bullet2 = display.newImage("resources/images/objects/ammo/gray-stone.png");
+			bullet2.x = configuration.stone_position_x; 
+			bullet2.y = _H - 50;
+			bullet.y = _H - 50;
+
+			-- destruicao da pedra cinza
+			timer.performWithDelay( 3000, function( )
+				bullet2:removeSelf( ); bullet2 = nil;
+			end )
+
+			timer.performWithDelay( 6000, function( )
+				-- surge a pedra verde
+				transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
+			end )
+
+		else
+			-- Transition the bullet into position each time it's spawned	
+			transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
+		end
+		
 	elseif configuration.game_stage == 5 then
 
 		-- Transition the bullet into position each time it's spawned	

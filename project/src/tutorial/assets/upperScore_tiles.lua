@@ -1,10 +1,10 @@
 ------------------------------------------------------------------------------------------------------------------------------
 -- sky_tiles.lua
 -- Description: 
--- @author Samuel Martins <samuellunamartins@gmail.com>
+-- @author Guilherme Cabral <grecabral@gmail.com>
 -- @modified 
 -- @version 1.00
--- @date 06/29/2014
+-- @date 07/30/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -40,18 +40,71 @@ local configuration 			= require( "src.tutorial.tutorial_settings" )
 -- UPPER SCORES TILES											--
 ----------------------------------------------------------
 
+upperScoreBoardGroup = nil
+
 -----------------------------------------------------
--- UPPER SOCRES CREATION										--
+-- UPPER SCORES CREATION										--
 ----------------------------------------------------------
 
-local upperScoreBoardYellow = display.newRoundedRect(display.contentCenterX - 500, 50, 350, 250,12)
-upperScoreBoardYellow.strokeWidth = 50
-upperScoreBoardYellow:setFillColor(0.8, 0.8, 0.8)
-upperScoreBoardYellow:setStrokeColor(1, 1, 0)
-upperScoreBoardYellow:toFront()
+function newUpperBoardTile()
 
-local upperScoreBoardGreen = display.newRoundedRect(display.contentCenterX + 500, 50, 350, 250,12)
-upperScoreBoardGreen.strokeWidth = 50
-upperScoreBoardGreen:setFillColor(0.8, 0.8, 0.8)
-upperScoreBoardGreen:setStrokeColor(0, 1, 0)
-upperScoreBoardGreen:toFront()
+	upperScoreBoardGroup = display.newGroup();
+
+	local upperScoreBoard = {}
+	
+	upperScoreBoard[1] = display.newRoundedRect(display.contentCenterX - 410, 85, 230, 120,8)
+	upperScoreBoard[1].strokeWidth = 25
+	upperScoreBoard[1]:setFillColor(0.8, 0.8, 0.8)
+	upperScoreBoard[1]:setStrokeColor(1, 1, 0)
+	upperScoreBoard[1]:toFront()
+	upperScoreBoardGroup:insert( upperScoreBoard[1] )
+
+	upperScoreBoard[2] = display.newRoundedRect(display.contentCenterX + 410, 85, 230, 120,8)
+	upperScoreBoard[2].strokeWidth = 25
+	upperScoreBoard[2]:setFillColor(0.8, 0.8, 0.8)
+	upperScoreBoard[2]:setStrokeColor(0, 1, 0)
+	upperScoreBoard[2]:toFront()
+	upperScoreBoardGroup:insert( upperScoreBoard[2] )
+
+	myCircleYellow = {}
+	myCircleGreen = {}	
+	for i=1,3 do
+		myCircleYellow[i] = {}	
+		myCircleGreen[i] = {}	
+		for j=1,7 do
+			-- x, y, raio
+			myCircleYellow[i][j] = display.newCircle( display.contentCenterX - 530 + j*30, 25 + i*30, 10 )
+			myCircleYellow[i][j]:setFillColor(1, 1, 0)
+			myCircleYellow[i][j].strokeWidth = 5			
+			myCircleYellow[i][j]:setStrokeColor(0.1, 0.1, 0.1)			
+			upperScoreBoardGroup:insert( myCircleYellow[i][j] )
+			myCircleYellow[i][j].isVisible = false	
+
+			-- x, y, raio
+			myCircleGreen[i][j] = display.newCircle( display.contentCenterX +290 + j*30, 25 + i*30, 10 )
+			myCircleGreen[i][j]:setFillColor(0, 1, 0)
+			myCircleGreen[i][j].strokeWidth = 5			
+			myCircleGreen[i][j]:setStrokeColor(0.1, 0.1, 0.1)			
+			upperScoreBoardGroup:insert( myCircleGreen[i][j] )
+			myCircleGreen[i][j].isVisible = false						
+		end
+	end
+
+	return upperScoreBoard, myCircleYellow, myCircleGreen
+end
+
+function removeUpperBoardTile(upperScoreBoard, myCircleYellow, myCircleGreen)
+
+	for i=1,2 do
+		upperScoreBoard[i]:removeSelf( ); upperScoreBoard[i] = nil		
+	end
+
+	for k=1,3 do
+		for l=1,7 do
+			myCircleYellow[i][j]:removeSelf( ); myCircleYellow[i][j] = nil	
+			myCircleGreen[i][j]:removeSelf( ); myCircleGreen[i][j] = nil				
+		end
+	end
+
+end
+

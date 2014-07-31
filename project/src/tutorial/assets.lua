@@ -52,20 +52,23 @@ local upperScore_tiles_lib			= require( "src.tutorial.assets.upperScore_tiles")
 ---------------------------------------------------------------------------------------------------------------
 -- OBJECTS
 ---------------------------------------------------------------------------------------------------------------
-project_tiles_obj			= nil;
-band_line_tiles_obj 		= nil; 
-ground_tiles_obj 			= nil; 
-house_tiles_obj 			= nil;  
-tree_tiles_obj 				= nil;  
-score_player_tiles_obj 		= nil;
-scoreboard_tiles_obj 		= nil; 
-sky_tiles_obj 				= nil; 
-background_sky_obj 			= nil;
-slingshot_tiles_obj 		= nil; 
-target_tiles_obj 			= nil;
-wall_tiles_obj 				= nil;
-hand_tiles_obj 				= nil;
-single_can_tiles_obj 		= nil;
+project_tiles_obj						= nil;
+band_line_tiles_obj 					= nil; 
+ground_tiles_obj 						= nil; 
+house_tiles_obj 						= nil;  
+tree_tiles_obj 							= nil;  
+score_player_tiles_obj 					= nil;
+scoreboard_tiles_obj 					= nil; 
+sky_tiles_obj 							= nil; 
+background_sky_obj 						= nil;
+slingshot_tiles_obj 					= nil; 
+target_tiles_obj 						= nil;
+wall_tiles_obj 							= nil;
+hand_tiles_obj 							= nil;
+single_can_tiles_obj 					= nil;
+upperScore_tiles_obj					= nil;
+myCircleYellow_upperScore_tiles_obj		= nil;
+myCircleGreen_upperScore_tiles_obj		= nil;
 
 ---------------------------------------------------------------------------------------------------------------
 -- GROUPS
@@ -170,6 +173,17 @@ local function create_hand_tiles_obj(  )
 	hand_tiles_obj:toFront( )
 end
 
+local function create_upperScore_tiles_obj(  )
+
+	upperScore_tiles_obj, myCircleYellow_upperScore_tiles_obj, myCircleGreen_upperScore_tiles_obj  = upperScore_tiles_lib.newUpperBoardTile()
+
+	for i=1,2 do
+		assetsGroup:insert( upperScore_tiles_obj[i] )	
+		
+		upperScore_tiles_obj[i]:toFront( )
+	end
+
+end
 ---------------------------------------------------------------------------------------------------------------
 
 local function remove_sky_tiles_obj()
@@ -214,7 +228,7 @@ local function remove_single_can_tiles_obj(  )
 
 		assetsGroup:remove( single_can_tiles_obj )	
 
-		can_tiles_lib.removeSingleCanTiles(single_can_tiles_obj)
+		can_tiles_lib.removeSingleCanTile(single_can_tiles_obj)
 	end
 end
 
@@ -270,6 +284,15 @@ local function remove_hand_tiles_obj(  )
 	end
 end
 
+local function remove_upperScore_tiles_obj(  )
+	if upperScore_tiles_obj then 
+		for i=1, #upperScore_tiles_obj do
+			assetsGroup:remove( upperScore_tiles_obj[i] )	
+		end	
+		upperScore_tiles_lib.removeUpperBoardTile( upperScore_tiles_obj )
+	end
+end
+
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
@@ -305,6 +328,19 @@ function createStage2()
 	create_single_can_tiles_obj("yellow",display.contentCenterX - 200, display.contentCenterY - 120)
 
 	single_can_tiles_obj:toFront( )
+
+	create_upperScore_tiles_obj()
+end
+
+function createStage3()
+
+	remove_single_can_tiles_obj()
+
+	create_single_can_tiles_obj("green",display.contentCenterX + 200, display.contentCenterY - 120)
+
+	single_can_tiles_obj:toFront( )
+
+	create_upperScore_tiles_obj()
 end
 
 ---------------------------------------------------------------------------------------------------------------

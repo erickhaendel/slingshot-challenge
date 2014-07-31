@@ -39,9 +39,9 @@ module(..., package.seeall)
 require( "src.infra.includeall" )
 
 -- my libs
-local assets_audio			= require( "src.gameplay.assets_audio" )
+local assets_audio			= require( "src.tutorial.assets_audio" )
 local configuration 		= require( "src.tutorial.tutorial_settings" )
-local score_process_lib 	= require( "src.gameplay.process.score" )
+local score_process_lib 	= require( "src.tutorial.process.score" )
 
 -- verifica se houve colisao entre dois objetos
 function hitTestObjects(obj1, obj2)
@@ -89,6 +89,35 @@ function animationProcess(assets_image, number, stone)
 		configuration.game_is_hit = 1		
 	end
 
+	if configuration.game_stage == 3 then
+		-- adiciona uma fisica proporcional a essa nova dimensao
+		local can = assets_image.single_can_tiles_obj
+
+		physics.addBody( can,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can:applyForce( 10, -10, can.x, can.y);	
+		
+		assets_image.single_can_tiles_obj = can	
+
+		-- Play the hit can
+		assets_audio.playHitCan()	
+		
+		-- stone
+		stone.isVisible = false
+		stone.isSensor = false
+		stone:toBack( )
+
+		-- paredes		
+		assets_image.wall_tiles_obj[1]:toFront()	
+		assets_image.wall_tiles_obj[2]:toFront()	
+
+		-- chao
+		assets_image.ground_tiles_obj[1]:toFront()	
+
+		-- estilingue
+		assets_image.slingshot_tiles_obj[1]:toFront()
+
+		configuration.game_is_hit = 1		
+	end
 	-- -- scoreboard
 	-- local Mm = 4 ; local Nn = 5
 
@@ -125,11 +154,18 @@ function collision_process(stone, assets_image)
 
 				animationProcess(assets_image, k, stone)	
 				
-				--score_process_lib.score_process(assets_image)	
+				score_process_lib.score_process(assets_image)	
 			end	
 		elseif configuration.game_stage == 3 then
 
+			local test = hitTestObjects( stone, assets_image.single_can_tiles_obj)
 
+			if test then
+
+				animationProcess(assets_image, k, stone)	
+				
+				score_process_lib.score_process(assets_image)	
+			end	
 		end	
 
 	end

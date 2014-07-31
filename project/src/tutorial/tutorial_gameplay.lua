@@ -54,6 +54,7 @@ local projectile_process_lib 	= require( "src.tutorial.process.projectile" )
 local donottouch_sprite_lib 	= require( "src.tutorial.assets.donottouch_sprite" )
 local checked_sprite_lib 		= require( "src.tutorial.assets.checked_sprite" )
 local man_sprite_lib 			= require( "src.tutorial.assets.man_sprite" )
+local arrows_sprite_lib 		= require( "src.tutorial.assets.arrows_sprite" )
 
 -------------------------------------------
 -- GROUPS
@@ -61,6 +62,11 @@ local man_sprite_lib 			= require( "src.tutorial.assets.man_sprite" )
 configuration.state_object = display.newGroup();
 
 local slingshot_container = display.newGroup();
+
+-------------------------------------------
+-- SPRITES
+-------------------------------------------
+local man_yellow_sprite, man_green_sprite, arrows_sprite_lib
 
 ----------------------------------------------
 -- PROTOTYPE METHODS
@@ -170,7 +176,11 @@ function projectileTouchListener(e)
 
 						if configuration.game_is_hit == 1 then
 							-- aparece o checked verde
-							checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
 
 							-- fim do estagio 2
 							configuration.game_is_shooted = 0
@@ -183,7 +193,11 @@ function projectileTouchListener(e)
 
 					    if configuration.game_is_hit == 1 then
 							-- aparece o checked verde
-							checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
 
 							-- fim do estagio 3
 							configuration.game_is_shooted = 0
@@ -245,25 +259,24 @@ function stage_2( )
 
 		assets_image.createStage2()
 
+		-- seta indicando que é para acertar a lata
+		--arrows_sprite_lib.newArrowSprite_0(display.contentCenterX - 200, display.contentCenterY - 120)	
+		print( arrows_sprite_lib )
+
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
-			local man_sprite = man_sprite_lib.newManYellowRightSprite(
+			man_yellow_sprite = man_sprite_lib.newManYellowRightSprite(
 				configuration.man_yellow_right_sprite_position_x, 
 				configuration.man_yellow_right_sprite_position_y)
 
-			transition.to(man_sprite, {time=1600, x = configuration.stone_position_x- 120, transition = easingx.easeOut});
+			transition.to(man_yellow_sprite, {time=1600, x = configuration.stone_position_x- 120, transition = easingx.easeOut});
 		
 			timer.performWithDelay( 3200, function()
-				transition.to(man_sprite, {time=1200, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
+				transition.to(man_yellow_sprite, {time=1200, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
 			end)
 		end)
 
 	end
-
-	-- remove o man sprite
-	-- timer.performWithDelay( 4500, function( )
-	-- 	man_sprite_lib.removeManSprite( man_sprite )
-	-- end )
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
@@ -273,6 +286,40 @@ function stage_2( )
 end
 
 function stage_3()
+
+	if configuration.game_is_shooted == 0 then
+
+		assets_image.createStage3()
+
+		-- transporta o man sprite para perto do estilingue
+		timer.performWithDelay( 750, function()
+
+			-- o homem amarelo sai de cena
+			man_sprite_lib.removeManSprite( man_yellow_sprite )					
+			man_yellow_sprite = man_sprite_lib.newManYellowLeftSprite(
+				configuration.stone_position_x - 400, 
+				configuration.man_yellow_left_sprite_position_y)
+		
+			transition.to(man_yellow_sprite, {time=3500, x = -300, transition = easingx.easeOut});
+		
+			-- homem verde entra em cena
+			man_green_sprite = man_sprite_lib.newManGreenLeftSprite(
+				configuration.man_green_left_sprite_position_x, 
+				configuration.man_green_left_sprite_position_y)
+
+			transition.to(man_green_sprite, {time=1600, x = configuration.stone_position_x + 120, transition = easingx.easeOut});
+		
+			timer.performWithDelay( 3200, function()
+				transition.to(man_green_sprite, {time=1200, x = configuration.stone_position_x + 400, transition = easingx.easeOut});
+			end)
+		end)
+
+	end
+
+	-- timer.performWithDelay( 7500, function( )
+	-- 	man_sprite_lib.removeManSprite( man_yellow_sprite )
+	-- end )
+
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
 		spawnProjectile(); -- Spawn the first projectile.

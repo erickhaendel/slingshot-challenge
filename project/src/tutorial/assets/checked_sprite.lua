@@ -1,7 +1,7 @@
 ------------------------------------------------------------------------------------------------------------------------------
 -- house_tiles.lua
 -- Description: 
--- @author Guilherme Cabral <samuellunamartins@gmail.com>
+-- @author Guilherme Cabral <grecabral@gmail.com>
 -- @modified 
 -- @version 1.00
 -- @date 07/30/2014
