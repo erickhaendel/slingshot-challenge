@@ -66,7 +66,7 @@ local slingshot_container = display.newGroup();
 -------------------------------------------
 -- SPRITES
 -------------------------------------------
-local man_yellow_sprite, man_green_sprite, arrows_sprite_lib
+local man_yellow_sprite, man_green_sprite, arrow_sprite, current_arrow
 
 ----------------------------------------------
 -- PROTOTYPE METHODS
@@ -259,10 +259,8 @@ function stage_2( )
 
 		assets_image.createStage2()
 
-		-- seta indicando que é para acertar a lata
-		-- arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 200, display.contentCenterY - 120)			
-		arrow_sprite_lib.newArrowSprite_315(display.contentCenterX, display.contentCenterY)	
-		--print( arrows_sprite_lib )
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_270(display.contentCenterX + 60, display.contentCenterY - 120)	
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
@@ -284,6 +282,13 @@ function stage_2( )
 		spawnProjectile(); -- Spawn the first projectile.
 
 		end)	
+
+
+	timer.performWithDelay( 8000, function( )
+		if current_arrow then			
+			current_arrow:removeSelf( ); current_arrow = nil;
+		end			
+	end )
 end
 
 function stage_3()
@@ -291,6 +296,9 @@ function stage_3()
 	if configuration.game_is_shooted == 0 then
 
 		assets_image.createStage3()
+
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
@@ -326,30 +334,39 @@ function stage_3()
 		spawnProjectile(); -- Spawn the first projectile.
 
 		end)	
+
+
+		timer.performWithDelay( 8000, function( )
+			if current_arrow then			
+				current_arrow:removeSelf( ); current_arrow = nil;
+			end			
+		end )
+
 end
 
 function stage_4()
-	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		spawnProjectile(); -- Spawn the first projectile.
+	if man_green_sprite then
+		man_green_sprite:removeSelf( ); man_green_sprite = nil;
+	end
 
-		end)	
-end
 
-function stage_5()
-	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+	if man_yellow_sprite then
+		man_yellow_sprite:removeSelf( ); man_green_sprite = nil;
+	end
 
-		spawnProjectile(); -- Spawn the first projectile.
+	assets_image.removeStage()
 
-		end)	
-end
+	-- Destroi eventos criados
+	configuration.state_object:removeEventListener("change", configuration.state_object);
 
-function stage_6()
-	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+	Runtime:removeEventListener("touch", donottouch_warn)		
+	
+	Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+	projectiles_container:removeEventListener("touch", projectileTouchListener);
 
-		spawnProjectile(); -- Spawn the first projectile.
-
-		end)	
+    composer.removeScene('src.tutorial.game')
+    composer.gotoScene( "src.menu.results_scene", "fade", 400)
 end
 
 

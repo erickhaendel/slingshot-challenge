@@ -45,6 +45,8 @@ local configuration 		= require( "src.tutorial.tutorial_settings" )
 
 local can_process_lib 		= require( "src.gameplay.process.can" )
 
+local arrow_sprite_lib 		= require( "src.tutorial.assets.arrow_sprite" )
+
 score_animation, score_process = nil, nil
 
 
@@ -56,11 +58,29 @@ function score_animation( assets_image )
 
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][1].isVisible = true	
 
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 500, display.contentCenterY)	
+
+		timer.performWithDelay( 3000, function( )
+			if current_arrow then			
+				current_arrow:removeSelf( ); current_arrow = nil;
+			end			
+		end )
+
+
 	elseif configuration.game_stage == 3 then
-		print( "oi" )
 		-- Play increasing score
 		assets_audio.playIncreasingScore()		
 		assets_image.myCircleGreen_upperScore_tiles_obj[1][1].isVisible = true	
+
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 320, display.contentCenterY)	
+
+		timer.performWithDelay( 3000, function( )
+			if current_arrow then			
+				current_arrow:removeSelf( ); current_arrow = nil;
+			end			
+		end )		
 	end
 
 	-- local count = 0

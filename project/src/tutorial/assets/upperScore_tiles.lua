@@ -57,17 +57,17 @@ function newUpperBoardTile()
 	upperScoreBoard[1]:setFillColor(0.8, 0.8, 0.8)
 	upperScoreBoard[1]:setStrokeColor(1, 1, 0)
 	upperScoreBoard[1]:toFront()
-	upperScoreBoardGroup:insert( upperScoreBoard[1] )
+	--upperScoreBoardGroup:insert( upperScoreBoard[1] )
 
 	upperScoreBoard[2] = display.newRoundedRect(display.contentCenterX + 410, 85, 230, 120,8)
 	upperScoreBoard[2].strokeWidth = 25
 	upperScoreBoard[2]:setFillColor(0.8, 0.8, 0.8)
 	upperScoreBoard[2]:setStrokeColor(0, 1, 0)
 	upperScoreBoard[2]:toFront()
-	upperScoreBoardGroup:insert( upperScoreBoard[2] )
+	--upperScoreBoardGroup:insert( upperScoreBoard[2] )
 
-	myCircleYellow = {}
-	myCircleGreen = {}	
+	local myCircleYellow = {}
+	local myCircleGreen = {}	
 	for i=1,3 do
 		myCircleYellow[i] = {}	
 		myCircleGreen[i] = {}	
@@ -77,7 +77,7 @@ function newUpperBoardTile()
 			myCircleYellow[i][j]:setFillColor(1, 1, 0)
 			myCircleYellow[i][j].strokeWidth = 5			
 			myCircleYellow[i][j]:setStrokeColor(0.1, 0.1, 0.1)			
-			upperScoreBoardGroup:insert( myCircleYellow[i][j] )
+			--upperScoreBoardGroup:insert( myCircleYellow[i][j] )
 			myCircleYellow[i][j].isVisible = false	
 
 			-- x, y, raio
@@ -85,7 +85,7 @@ function newUpperBoardTile()
 			myCircleGreen[i][j]:setFillColor(0, 1, 0)
 			myCircleGreen[i][j].strokeWidth = 5			
 			myCircleGreen[i][j]:setStrokeColor(0.1, 0.1, 0.1)			
-			upperScoreBoardGroup:insert( myCircleGreen[i][j] )
+			--upperScoreBoardGroup:insert( myCircleGreen[i][j] )
 			myCircleGreen[i][j].isVisible = false						
 		end
 	end
@@ -99,8 +99,8 @@ function removeUpperBoardTile(upperScoreBoard, myCircleYellow, myCircleGreen)
 		upperScoreBoard[i]:removeSelf( ); upperScoreBoard[i] = nil		
 	end
 
-	for k=1,3 do
-		for l=1,7 do
+	for i=1,3 do
+		for j=1,7 do
 			myCircleYellow[i][j]:removeSelf( ); myCircleYellow[i][j] = nil	
 			myCircleGreen[i][j]:removeSelf( ); myCircleGreen[i][j] = nil				
 		end

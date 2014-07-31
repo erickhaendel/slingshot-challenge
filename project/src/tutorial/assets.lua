@@ -289,7 +289,7 @@ local function remove_upperScore_tiles_obj(  )
 		for i=1, #upperScore_tiles_obj do
 			assetsGroup:remove( upperScore_tiles_obj[i] )	
 		end	
-		upperScore_tiles_lib.removeUpperBoardTile( upperScore_tiles_obj )
+		upperScore_tiles_lib.removeUpperBoardTile( upperScore_tiles_obj, myCircleYellow_upperScore_tiles_obj, myCircleGreen_upperScore_tiles_obj )
 	end
 end
 
@@ -303,6 +303,7 @@ function removeStage()
 	remove_wall_tiles_obj()
 	remove_ground_tiles_obj()
 	remove_slingshot_tiles_obj()
+	remove_upperScore_tiles_obj()
 end
 
 -- create all basic elements to the scene
