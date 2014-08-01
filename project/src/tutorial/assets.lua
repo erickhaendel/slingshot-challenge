@@ -359,8 +359,8 @@ function createStage5()
 	remove_single_can_tiles_obj(can_stage4_tiles_obj[1])
 	remove_single_can_tiles_obj(can_stage4_tiles_obj[2])
 
-	create_single_can_tiles_obj("green",display.contentCenterX + 200, display.contentCenterY - 120)
-	create_single_can_tiles_obj("neutral",display.contentCenterX - 150, display.contentCenterY - 120)
+	can_stage5_tiles_obj[1] = create_single_can_tiles_obj("green",display.contentCenterX + 200, display.contentCenterY - 120, can_stage5_tiles_obj[1])
+	can_stage5_tiles_obj[2] = create_single_can_tiles_obj("neutral",display.contentCenterX + 150, display.contentCenterY - 120, can_stage5_tiles_obj[1])
 
 	can_stage5_tiles_obj[1]:toFront( )
 	can_stage5_tiles_obj[2]:toFront( )

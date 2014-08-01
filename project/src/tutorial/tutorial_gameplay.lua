@@ -382,7 +382,7 @@ function stage_5()
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage4()
+		assets_image.createStage5()
 
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			

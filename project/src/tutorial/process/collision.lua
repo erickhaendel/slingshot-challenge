@@ -165,9 +165,9 @@ function animationProcess(assets_image, number, stone)
 		local can2 = assets_image.can_stage5_tiles_obj[2]
 
 		physics.addBody( can1,  { density=0.02, friction=0.10, bounce=3.0} )						
-		can1:applyForce( 10, -10, can.x, can.y);	
+		can1:applyForce( 10, -10, can1.x, can1.y);	
 		physics.addBody( can2,  { density=0.02, friction=0.10, bounce=3.0} )						
-		can2:applyForce( 10, -10, can.x, can.y);			
+		can2:applyForce( 10, -10, can2.x, can2.y);			
 
 		assets_image.can_stage5_tiles_obj[1] = can1	
 		assets_image.can_stage5_tiles_obj[2] = can2
