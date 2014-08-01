@@ -65,7 +65,11 @@ slingshot_tiles_obj 					= nil;
 target_tiles_obj 						= nil;
 wall_tiles_obj 							= nil;
 hand_tiles_obj 							= nil;
-single_can_tiles_obj 					= nil;
+can_stage2_tiles_obj 					= nil;
+can_stage3_tiles_obj 					= {};
+can_stage4_tiles_obj 					= {};
+can_stage5_tiles_obj 					= {};
+can_stage6_tiles_obj 					= {};
 upperScore_tiles_obj					= nil;
 myCircleYellow_upperScore_tiles_obj		= nil;
 myCircleGreen_upperScore_tiles_obj		= nil;
@@ -121,10 +125,11 @@ local function create_wall_tiles_obj(  )
 end
 
 -- cria apenas uma lata com as configuracoes passadas por parâmetro
-local function create_single_can_tiles_obj( color, x, y )
-	single_can_tiles_obj = can_tiles_lib.newSingleCanTile(color, x, y)
-	assetsGroup:insert( single_can_tiles_obj )	
-	single_can_tiles_obj:toFront( )
+local function create_single_can_tiles_obj( color, x, y, can_object )
+	can_object = can_tiles_lib.newSingleCanTile(color, x, y)
+	assetsGroup:insert( can_object )	
+	can_object:toFront( )
+	return can_object
 end
 
 local function create_ground_tiles_obj(  )
@@ -141,20 +146,6 @@ local function create_slingshot_tiles_obj(  )
 		slingshot_tiles_obj[i]:toFront( )		
 	end	
 
-end
-
--- GRADE DE PONTOS
-local function create_scoreboard_tiles_obj(  )
-	scoreboard_tiles_obj = scoreboard_tiles_lib.new_scoreboard()
-	-- matriz de 20 - 4 linhas da grade por 5 colunas
-	local M = 4 ; local N = 5	
-	for k = 1, 4 do	
-		for j = 1, M do
-			for i = 1, N do
-				assetsGroup:insert( scoreboard_tiles_obj[k][M * (i-1) + j] )
-			end
-		end
-	end	
 end
 
 -- LABEL DA GRADE
@@ -222,13 +213,13 @@ local function remove_wall_tiles_obj(  )
 	end
 end
 
-local function remove_single_can_tiles_obj(  )
+local function remove_single_can_tiles_obj( can_object )
 
-	if single_can_tiles_obj then
+	if can_object then
 
-		assetsGroup:remove( single_can_tiles_obj )	
+		assetsGroup:remove( can_object )	
 
-		can_tiles_lib.removeSingleCanTile(single_can_tiles_obj)
+		can_tiles_lib.removeSingleCanTile(can_object)
 	end
 end
 
@@ -306,7 +297,7 @@ function removeStage()
 	remove_upperScore_tiles_obj()
 end
 
--- create all basic elements to the scene
+-- estagio 1: ensina o jogador a usar o estilingue
 function createStage1()
 	create_sky_tiles_obj() 	-- Animacao do ceu
 	create_house_tiles_obj() -- carrega a casa
@@ -318,32 +309,64 @@ function createStage1()
 	sky_tiles_lib.skyGroup:toBack( )	
 
 	create_hand_tiles_obj()
-
-	timer.performWithDelay( 6500, function( )
-		remove_hand_tiles_obj(  )
-	end )
 end
 
+-- estagio 2: ensina o jogador a acertar suas latas e marcar ponto
 function createStage2()
 
-	create_single_can_tiles_obj("yellow",display.contentCenterX - 200, display.contentCenterY - 120)
+	if hand_tiles_obj then
+		remove_hand_tiles_obj(  )
+	end
+	can_stage2_tiles_obj = create_single_can_tiles_obj("yellow",display.contentCenterX - 200, display.contentCenterY - 120, can_stage2_tiles_obj)
 
-	single_can_tiles_obj:toFront( )
+	can_stage2_tiles_obj:toFront( )
 
 	create_upperScore_tiles_obj()
 end
 
+-- estagio 3: ensina o jogador que latas neutras nao valem pontos
 function createStage3()
 
-	remove_single_can_tiles_obj()
+	remove_single_can_tiles_obj(can_stage2_tiles_obj)
 
-	create_single_can_tiles_obj("green",display.contentCenterX + 200, display.contentCenterY - 120)
+	can_stage3_tiles_obj[1] = create_single_can_tiles_obj("yellow",display.contentCenterX - 200, display.contentCenterY - 120, can_stage3_tiles_obj[1])
+	can_stage3_tiles_obj[2] = create_single_can_tiles_obj("neutral",display.contentCenterX - 150, display.contentCenterY - 120, can_stage3_tiles_obj[2])
 
-	single_can_tiles_obj:toFront( )
+	can_stage3_tiles_obj[1]:toFront( )
+	can_stage3_tiles_obj[2]:toFront( )
 
 	create_upperScore_tiles_obj()
 end
 
+-- estagio 4: mostra ao jogador que acertar as latas verdes marcam pontos para o jogador 2
+function createStage4()
+
+	remove_single_can_tiles_obj(can_stage3_tiles_obj[1])
+	remove_single_can_tiles_obj(can_stage3_tiles_obj[2])
+
+	can_stage4_tiles_obj[1] = create_single_can_tiles_obj("green",display.contentCenterX + 200, display.contentCenterY - 120, can_stage4_tiles_obj[1])
+	can_stage4_tiles_obj[2] = create_single_can_tiles_obj("green",display.contentCenterX + 150, display.contentCenterY - 120, can_stage4_tiles_obj[2])
+
+	can_stage4_tiles_obj[1]:toFront( )
+	can_stage4_tiles_obj[2]:toFront( )
+
+	create_upperScore_tiles_obj()
+end
+
+-- estagio 5: assiste o jogador 5 jogar 
+function createStage5()
+
+	remove_single_can_tiles_obj(can_stage4_tiles_obj[1])
+	remove_single_can_tiles_obj(can_stage4_tiles_obj[2])
+
+	create_single_can_tiles_obj("green",display.contentCenterX + 200, display.contentCenterY - 120)
+	create_single_can_tiles_obj("neutral",display.contentCenterX - 150, display.contentCenterY - 120)
+
+	can_stage5_tiles_obj[1]:toFront( )
+	can_stage5_tiles_obj[2]:toFront( )
+
+	create_upperScore_tiles_obj()
+end
 ---------------------------------------------------------------------------------------------------------------
 
 -- animation between of thw two players screen

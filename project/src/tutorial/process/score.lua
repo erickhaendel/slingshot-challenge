@@ -71,17 +71,47 @@ function score_animation( assets_image )
 	elseif configuration.game_stage == 3 then
 		-- Play increasing score
 		assets_audio.playIncreasingScore()		
-		assets_image.myCircleGreen_upperScore_tiles_obj[1][1].isVisible = true	
+		assets_image.myCircleYellow_upperScore_tiles_obj[1][2].isVisible = true	
 
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 320, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 500, display.contentCenterY)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
 		end )		
-	end
+
+	elseif configuration.game_stage == 4 then
+		-- Play increasing score
+		assets_audio.playIncreasingScore()		
+		assets_image.myCircleGreen_upperScore_tiles_obj[1][1].isVisible = true	
+		assets_image.myCircleGreen_upperScore_tiles_obj[1][2].isVisible = true	
+				
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
+
+		timer.performWithDelay( 3000, function( )
+			if current_arrow then			
+				current_arrow:removeSelf( ); current_arrow = nil;
+			end			
+		end )	
+
+	elseif configuration.game_stage == 5 then
+		-- Play increasing score
+		assets_audio.playIncreasingScore()		
+		assets_image.myCircleGreen_upperScore_tiles_obj[1][1].isVisible = true	
+		assets_image.myCircleGreen_upperScore_tiles_obj[1][2].isVisible = true	
+				
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
+
+		timer.performWithDelay( 3000, function( )
+			if current_arrow then			
+				current_arrow:removeSelf( ); current_arrow = nil;
+			end			
+		end )		
+	end	
 
 	-- local count = 0
 	-- for k=1,3 do
@@ -98,16 +128,30 @@ end
 function score_process(assets_image)
 
 	if configuration.game_stage == 2 then
-		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + 1
+		configuration.game_final_score_player[1] = 1
 
 		-- exibe os pontos na grade
 		score_animation( assets_image )		
 	end
 
 	if configuration.game_stage == 3 then
-		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + 1
+		configuration.game_final_score_player[1] = 2
 
 		-- exibe os pontos na grade
 		score_animation( assets_image )		
 	end
+
+	if configuration.game_stage == 4 then
+		configuration.game_final_score_player[2] = 2
+
+		-- exibe os pontos na grade
+		score_animation( assets_image )		
+	end	
+
+	if configuration.game_stage == 5 then
+		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + 1
+
+		-- exibe os pontos na grade
+		score_animation( assets_image )		
+	end	
 end

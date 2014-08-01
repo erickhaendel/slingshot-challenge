@@ -15,11 +15,15 @@ function newProjectile()
 	
 	local stone_name = nil
 
-	if configuration.game_stage == 1 then
+	if configuration.game_stage == 1 then -- aprendendo a usar o estilingue
 		stone_name = "gray-stone"
-	elseif configuration.game_stage == 2  then
+	elseif configuration.game_stage == 2  then -- aprendendo a acertar uma lata
 		stone_name = "yellow-stone"
-	elseif configuration.game_stage == 3 or configuration.game_stage == 4 or configuration.game_stage == 5 then
+	elseif configuration.game_stage == 3  then -- aprendendo que lata neutra nao conta ponto
+		stone_name = "yellow-stone"	
+	elseif configuration.game_stage == 4  then -- aprendendo a acertar as latas do player 2
+		stone_name = "yellow-stone"
+	elseif configuration.game_stage == 5  then -- assistir o player 2 jogar
 		stone_name = "green-stone"		
 	end
 
@@ -39,21 +43,20 @@ function newProjectile()
 	-- Place bullet
 	bullet.x = configuration.stone_position_x; 
 	bullet.y = _H + 20;
-	-- Set up physical properties	
-	--physics.addBody(bullet, "static", {density=bun_bullet.density, friction=bun_bullet.friction, bounce=bun_bullet.bounce, radius=bun_bullet.size});
-	
+
 	bullet.linearDamping = 0.3;
 	bullet.angularDamping = 0.8;
 	--bullet.isBullet = true;
 	bullet.isSensor = true;
 
-
+	-- mostra como usar o estilingue
 	if configuration.game_stage == 1 then
 
 		-- Transition the bullet into position each time it's spawned	
 		transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 
-	elseif configuration.game_stage == 2 or configuration.game_stage == 3 or configuration.game_stage == 4 then
+	-- mostra que sua cor eh amarela e mostra como acertar uma lata
+	elseif configuration.game_stage == 2 then
 		
 		-- essa animacao ocorre apenas uma vez nesse estagio
 		if configuration.game_is_shooted == 0 then
@@ -78,8 +81,21 @@ function newProjectile()
 			transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 		end
 
-	elseif configuration.game_stage == 3 or configuration.game_stage == 4 then
+	-- mostra que existe latas neutras que nao contam pontos
+	elseif configuration.game_stage == 3 then
+
+		-- Transition the bullet into position each time it's spawned	
+		transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
+
+	-- mostra que existe latas verdes que os pontos vao para o players
+	elseif configuration.game_stage == 4 then
 		
+		-- Transition the bullet into position each time it's spawned	
+		transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
+
+	-- assiste o player 2 jogar	
+	elseif configuration.game_stage == 5 then
+
 		-- essa animacao ocorre apenas uma vez nesse estagio
 		if configuration.game_is_shooted == 0 then
 			-- pedra cinza que vira verde		
@@ -102,12 +118,6 @@ function newProjectile()
 			-- Transition the bullet into position each time it's spawned	
 			transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 		end
-		
-	elseif configuration.game_stage == 5 then
-
-		-- Transition the bullet into position each time it's spawned	
-		transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
-		
 	end
 
 	return bullet;

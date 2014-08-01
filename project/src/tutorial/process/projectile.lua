@@ -135,7 +135,15 @@ function launched_process(stone, e, assets_image, state)
 			-- verifica a colisao entre a pedra e a unica lata do cenario
 			if configuration.game_stage == 3 then
 				collision_process_lib.collision_process(stone, configuration.assets_image_object)
-			end			
+			end	
+			-- verifica a colisao entre a pedra e a unica lata do cenario
+			if configuration.game_stage == 4 then
+				collision_process_lib.collision_process(stone, configuration.assets_image_object)
+			end		
+			-- verifica a colisao entre a pedra e a unica lata do cenario
+			if configuration.game_stage == 5 then
+				collision_process_lib.collision_process(stone, configuration.assets_image_object)
+			end					
 		else
 			timer.cancel(stone.timer1);
 			stone.timer1 = nil;

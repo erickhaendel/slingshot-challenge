@@ -205,7 +205,41 @@ function projectileTouchListener(e)
 							configuration.game_stage = 4
 						end
 					end
-			
+
+					if configuration.game_stage == 4 then
+
+					    if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
+
+							-- fim do estagio 3
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 5
+						end
+					end	
+
+
+					if configuration.game_stage == 5 then
+
+					    if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
+
+							-- fim do estagio 3
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 6
+						end
+					end
 				end
 			end		
 		end
@@ -253,6 +287,7 @@ function stage_1()
 		end)	
 end
 
+-- Show how to shoot a target and increase score with yellow player
 function stage_2( )
 
 	if configuration.game_is_shooted == 0 then
@@ -291,11 +326,63 @@ function stage_2( )
 	end )
 end
 
-function stage_3()
+-- Show how to shoot a target with neutral and not neutral can
+function stage_3( )
 
 	if configuration.game_is_shooted == 0 then
 
 		assets_image.createStage3()
+
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_270(display.contentCenterX + 60, display.contentCenterY - 120)	
+	end
+
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
+
+
+	timer.performWithDelay( 8000, function( )
+		if current_arrow then			
+			current_arrow:removeSelf( ); current_arrow = nil;
+		end			
+	end )
+end
+
+-- o player amarelo acerta duas latas verdes e os pontos vao para o player 2
+function stage_4()
+
+	if configuration.game_is_shooted == 0 then
+
+		assets_image.createStage4()
+
+		-- seta indicando que é para acertar a lata			
+		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
+	end
+
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+
+		spawnProjectile(); -- Spawn the first projectile.
+
+		end)	
+
+
+		timer.performWithDelay( 8000, function( )
+			if current_arrow then			
+				current_arrow:removeSelf( ); current_arrow = nil;
+			end			
+		end )
+
+end
+
+--
+function stage_5()
+
+	if configuration.game_is_shooted == 0 then
+
+		assets_image.createStage4()
 
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
@@ -344,7 +431,7 @@ function stage_3()
 
 end
 
-function stage_4()
+function stage_6()
 
 	if man_green_sprite then
 		man_green_sprite:removeSelf( ); man_green_sprite = nil;

@@ -59,14 +59,15 @@ end
 
 function animationProcess(assets_image, number, stone)
 
+	--player 1 amarelo faz colisao da pedra com uma unica lata
 	if configuration.game_stage == 2 then
 		-- adiciona uma fisica proporcional a essa nova dimensao
-		local can = assets_image.single_can_tiles_obj
+		local can = assets_image.can_stage2_tiles_obj
 
 		physics.addBody( can,  { density=0.02, friction=0.10, bounce=3.0} )						
 		can:applyForce( -10, -10, can.x, can.y);	
 		
-		assets_image.single_can_tiles_obj = can	
+		assets_image.can_stage2_tiles_obj = can	
 
 		-- Play the hit can
 		assets_audio.playHitCan()	
@@ -91,12 +92,17 @@ function animationProcess(assets_image, number, stone)
 
 	if configuration.game_stage == 3 then
 		-- adiciona uma fisica proporcional a essa nova dimensao
-		local can = assets_image.single_can_tiles_obj
+		local can1 = assets_image.can_stage3_tiles_obj[1]
+		local can2 = assets_image.can_stage3_tiles_obj[2]
 
-		physics.addBody( can,  { density=0.02, friction=0.10, bounce=3.0} )						
-		can:applyForce( 10, -10, can.x, can.y);	
+		physics.addBody( can1,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can1:applyForce( -10, -10, can1.x, can1.y);	
 		
-		assets_image.single_can_tiles_obj = can	
+		physics.addBody( can2,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can2:applyForce( 10, -10, can2.x, can2.y);
+
+		assets_image.can_stage3_tiles_obj[1] = can1	
+		assets_image.can_stage3_tiles_obj[2] = can2
 
 		-- Play the hit can
 		assets_audio.playHitCan()	
@@ -118,6 +124,74 @@ function animationProcess(assets_image, number, stone)
 
 		configuration.game_is_hit = 1		
 	end
+
+	if configuration.game_stage == 4 then
+		-- adiciona uma fisica proporcional a essa nova dimensao
+		local can1 = assets_image.can_stage4_tiles_obj[1]
+		local can2 = assets_image.can_stage4_tiles_obj[2]
+
+		physics.addBody( can1,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can1:applyForce( -10, -10, can1.x, can1.y);	
+		physics.addBody( can2,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can2:applyForce( 10, -10, can2.x, can2.y);			
+
+		assets_image.can_stage4_tiles_obj[1] = can1	
+		assets_image.can_stage4_tiles_obj[2] = can2
+
+		-- Play the hit can
+		assets_audio.playHitCan()	
+		
+		-- stone
+		stone.isVisible = false
+		stone.isSensor = false
+		stone:toBack( )
+
+		-- paredes		
+		assets_image.wall_tiles_obj[1]:toFront()	
+		assets_image.wall_tiles_obj[2]:toFront()	
+
+		-- chao
+		assets_image.ground_tiles_obj[1]:toFront()	
+
+		-- estilingue
+		assets_image.slingshot_tiles_obj[1]:toFront()
+
+		configuration.game_is_hit = 1		
+	end	
+
+	if configuration.game_stage == 5 then
+		-- adiciona uma fisica proporcional a essa nova dimensao
+		local can1 = assets_image.can_stage5_tiles_obj[1]
+		local can2 = assets_image.can_stage5_tiles_obj[2]
+
+		physics.addBody( can1,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can1:applyForce( 10, -10, can.x, can.y);	
+		physics.addBody( can2,  { density=0.02, friction=0.10, bounce=3.0} )						
+		can2:applyForce( 10, -10, can.x, can.y);			
+
+		assets_image.can_stage5_tiles_obj[1] = can1	
+		assets_image.can_stage5_tiles_obj[2] = can2
+
+		-- Play the hit can
+		assets_audio.playHitCan()	
+		
+		-- stone
+		stone.isVisible = false
+		stone.isSensor = false
+		stone:toBack( )
+
+		-- paredes		
+		assets_image.wall_tiles_obj[1]:toFront()	
+		assets_image.wall_tiles_obj[2]:toFront()	
+
+		-- chao
+		assets_image.ground_tiles_obj[1]:toFront()	
+
+		-- estilingue
+		assets_image.slingshot_tiles_obj[1]:toFront()
+
+		configuration.game_is_hit = 1		
+	end		
 	-- -- scoreboard
 	-- local Mm = 4 ; local Nn = 5
 
@@ -148,7 +222,7 @@ function collision_process(stone, assets_image)
 
 		if configuration.game_stage == 2 then
 
-			local test = hitTestObjects( stone, assets_image.single_can_tiles_obj)
+			local test = hitTestObjects( stone, assets_image.can_stage2_tiles_obj)
 
 			if test then
 
@@ -158,15 +232,32 @@ function collision_process(stone, assets_image)
 			end	
 		elseif configuration.game_stage == 3 then
 
-			local test = hitTestObjects( stone, assets_image.single_can_tiles_obj)
+			local test1 = hitTestObjects( stone, assets_image.can_stage3_tiles_obj[1])
+			local test2 = hitTestObjects( stone, assets_image.can_stage3_tiles_obj[2])
 
-			if test then
-
+			if test1 or test2 then
 				animationProcess(assets_image, k, stone)	
-				
 				score_process_lib.score_process(assets_image)	
 			end	
-		end	
+		elseif configuration.game_stage == 4 then
+
+			local test1 = hitTestObjects( stone, assets_image.can_stage4_tiles_obj[1])
+			local test2 = hitTestObjects( stone, assets_image.can_stage4_tiles_obj[2])
+
+			if test1 or test2 then
+				animationProcess(assets_image, k, stone)	
+				score_process_lib.score_process(assets_image)	
+			end	
+		elseif configuration.game_stage == 5 then
+
+			local test1 = hitTestObjects( stone, assets_image.can_stage5_tiles_obj[1])
+			local test2 = hitTestObjects( stone, assets_image.can_stage5_tiles_obj[2])
+
+			if test1 or test2 then
+				animationProcess(assets_image, k, stone)	
+				score_process_lib.score_process(assets_image)	
+			end	
+		end		
 
 	end
 end -- end of function

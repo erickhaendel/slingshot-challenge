@@ -68,5 +68,7 @@ function newHandTile()
 end
 
 function removeHandTiles(hand)
-	hand:removeSelf( ); hand = nil
+	if hand then
+		hand:removeSelf( ); hand = nil
+	end
 end

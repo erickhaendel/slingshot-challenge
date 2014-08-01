@@ -34,8 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration 		= require( "src.gameplay.configuration" )
-local can_process_lib 		= require( "src.gameplay.process.can" )
+local configuration 			= require( "src.tutorial.tutorial_settings" )
 
 ----------------------------------------------------------
 -- CAN TILES									--
@@ -50,6 +49,8 @@ function newSingleCanTile(color, x, y)
 		filename = configuration.can_image_dir..configuration.player1_can; 
 	elseif color == "green" then
 		filename = configuration.can_image_dir..configuration.player2_can; 
+	elseif color == "neutral" then
+		filename = configuration.can_image_dir..configuration.neutral_can; 
 	else
 		filename = configuration.can_image_dir..configuration.neutral_can; 
 	end
