@@ -178,12 +178,12 @@ local function create_scoreboard_tiles_obj(  )
 end
 
 -- LABEL DA GRADE
-local function create_score_player_tiles_obj(  )
-	score_player_tiles_obj = score_player_tiles_lib.newScorePlayerLabel()
-	for i=1, #score_player_tiles_obj do
-		assetsGroup:insert( score_player_tiles_obj[i] )	
-	end	
-end
+-- local function create_score_player_tiles_obj(  )
+-- 	score_player_tiles_obj = score_player_tiles_lib.newScorePlayerLabel()
+-- 	for i=1, #score_player_tiles_obj do
+-- 		assetsGroup:insert( score_player_tiles_obj[i] )	
+-- 	end	
+-- end
 
 local function create_upperScore_tiles_obj(  )
 
@@ -377,7 +377,7 @@ function createGameplayScenario()
 
 	-- create_scoreboard_tiles_obj()	-- as latas de scores dos scoreboards
 
-	create_score_player_tiles_obj()	-- carrega as labels identificando os scoreboards
+	-- create_score_player_tiles_obj()	-- carrega as labels identificando os scoreboards
 
 	if configuration.game_current_player == 1 then
 		setAssetsGroupPosition(display.contentCenterX - 2100, nil)

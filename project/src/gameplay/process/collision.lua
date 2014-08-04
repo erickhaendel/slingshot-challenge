@@ -127,9 +127,9 @@ function animationProcess(assets_image, number, stone)
 
 
 	-- score
-	for i=1,4 do
-		assets_image.score_player_tiles_obj[i]:toFront( )	
-	end
+	-- for i=1,4 do
+	-- 	assets_image.score_player_tiles_obj[i]:toFront( )	
+	-- end
 
 	configuration.game_is_hit = 1
 

@@ -71,7 +71,7 @@ function score_process(assets_image)
 
 	local player = configuration.game_current_player -- alias
 
-	print( "Player "..player )
+--	print( "Player "..player )
 	
 	local intend_to_hit = configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] -- alias
 
