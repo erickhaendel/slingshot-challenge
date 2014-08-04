@@ -89,9 +89,9 @@ function score_animation( assets_image )
 		assets_image.myCircleGreen_upperScore_tiles_obj[1][2].isVisible = true	
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 330, display.contentCenterY - 120)	
 
-		local myCircle = display.newCircle ( 970, 60, 40)
+		local myCircle = display.newCircle ( 975, 60, 30)
 		myCircle:setFillColor(0,0,0,0)
 		myCircle.strokeWidth = 5
 		myCircle:setStrokeColor( 1, 0, 0 )
@@ -109,7 +109,7 @@ function score_animation( assets_image )
 		assets_image.myCircleGreen_upperScore_tiles_obj[1][3].isVisible = true	
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 370, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
@@ -123,9 +123,9 @@ function score_animation( assets_image )
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][4].isVisible = true			
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 460, display.contentCenterY - 120)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 440, display.contentCenterY - 120)	
 
-		local myCircle = display.newCircle ( 220, 60, 40)
+		local myCircle = display.newCircle ( 215, 60, 30)
 		myCircle:setFillColor(0,0,0,0)
 		myCircle.strokeWidth = 5
 		myCircle:setStrokeColor( 1, 0, 0 )

@@ -534,7 +534,10 @@ function stage_6()
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage6()		
+		timer.performWithDelay(1500, function ( )
+		assets_image.createStage6()	
+		end)
+				
 	end
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
