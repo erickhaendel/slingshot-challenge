@@ -91,6 +91,11 @@ function score_animation( assets_image )
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
 
+		local myCircle = display.newCircle ( 970, 60, 40)
+		myCircle:setFillColor(0,0,0,0)
+		myCircle.strokeWidth = 5
+		myCircle:setStrokeColor( 1, 0, 0 )
+
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
