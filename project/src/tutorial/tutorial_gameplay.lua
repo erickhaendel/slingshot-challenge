@@ -363,10 +363,13 @@ function stage_3( )
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage3()
-
+		timer.performWithDelay(1500, function ()
+		assets_image.createStage3()	
+		
+		
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_225(display.contentCenterX + 40, display.contentCenterY - 320)	
+		end)
 	end
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
@@ -384,7 +387,7 @@ function stage_3( )
 		end)	
 
 
-	timer.performWithDelay( 2000, function( )
+	timer.performWithDelay( 3000, function( )
 		if current_arrow then			
 			current_arrow:removeSelf( ); current_arrow = nil;
 		end			
@@ -399,10 +402,13 @@ function stage_4()
 
 	if configuration.game_is_shooted == 0 then
 
+		timer.performWithDelay(1500, function ( )
 		assets_image.createStage4()
 
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
+		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)				
+		end)
+		
 	end
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
@@ -419,7 +425,7 @@ function stage_4()
 
 		end)	
 
-		timer.performWithDelay( 2000, function( )
+		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			

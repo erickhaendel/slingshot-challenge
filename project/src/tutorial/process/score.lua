@@ -61,7 +61,7 @@ function score_animation( assets_image )
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 500, display.contentCenterY - 120)	
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
@@ -76,7 +76,7 @@ function score_animation( assets_image )
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 480, display.contentCenterY - 120)	
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
@@ -96,9 +96,10 @@ function score_animation( assets_image )
 		myCircle.strokeWidth = 5
 		myCircle:setStrokeColor( 1, 0, 0 )
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
+				myCircle:removeSelf( ); current_arrow = nil;
 			end			
 		end )	
 
@@ -108,9 +109,9 @@ function score_animation( assets_image )
 		assets_image.myCircleGreen_upperScore_tiles_obj[1][3].isVisible = true	
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 370, display.contentCenterY - 120)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
@@ -122,11 +123,17 @@ function score_animation( assets_image )
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][4].isVisible = true			
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 460, display.contentCenterY - 120)	
 
-		timer.performWithDelay( 3000, function( )
+		local myCircle = display.newCircle ( 220, 60, 40)
+		myCircle:setFillColor(0,0,0,0)
+		myCircle.strokeWidth = 5
+		myCircle:setStrokeColor( 1, 0, 0 )
+
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
+				myCircle:removeSelf( ); current_arrow = nil;
 			end			
 		end )		
 	elseif configuration.game_stage == 7 then
@@ -137,7 +144,7 @@ function score_animation( assets_image )
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
