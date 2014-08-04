@@ -429,7 +429,7 @@ function stage_5()
 		end)	
 
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 8000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end	
