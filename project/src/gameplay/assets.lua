@@ -50,6 +50,7 @@ local title_player_tiles_lib 		= require( "src.gameplay.assets.title_player_tile
 local title_round_tiles_lib 		= require( "src.gameplay.assets.title_round_tiles" )
 local wall_tiles_lib 				= require( "src.gameplay.assets.wall_tiles" )
 local upperScore_tiles_lib			= require( "src.gameplay.assets.upperScore_tiles")
+local man_sprite_lib 				= require( "src.gameplay.assets.man_sprite" )
 
 ---------------------------------------------------------------------------------------------------------------
 -- OBJECTS
@@ -73,6 +74,8 @@ wall_tiles_obj 				= nil;
 upperScore_tiles_obj					= nil;
 myCircleYellow_upperScore_tiles_obj		= nil;
 myCircleGreen_upperScore_tiles_obj		= nil;
+man_yellow_sprite 			= nil;
+man_green_sprite			= nil;
 
 
 ---------------------------------------------------------------------------------------------------------------
@@ -201,6 +204,53 @@ local function create_upperScore_tiles_obj(  )
 		end
 	end
 end
+
+function create_man_sprite()
+	man_green_sprite = man_sprite_lib.newManGreenLeftSprite(
+		configuration.man_green_left_sprite_position_x, 
+		configuration.man_green_left_sprite_position_y)
+
+	man_yellow_sprite = man_sprite_lib.newManYellowRightSprite(
+		configuration.man_yellow_right_sprite_position_x, 
+		configuration.man_yellow_right_sprite_position_y)
+
+	man_green_sprite.isVisible = false
+	man_yellow_sprite.isVisible = false		
+end
+
+function load_animation_man_sprite(color)
+
+	if color == "yellow" then
+
+		man_yellow_sprite.isVisible = true
+
+		-- transporta o man sprite para perto do estilingue
+		timer.performWithDelay( 1, function()
+			man_yellow_sprite:play()			
+			transition.to(man_yellow_sprite, {time=1600, x = configuration.stone_position_x- 120, transition = easingx.easeOut});
+		
+			timer.performWithDelay( 2000, function()
+				transition.to(man_yellow_sprite, {time=1000, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
+			end)
+		end)
+	end
+
+	if color == "green" then
+
+		man_green_sprite.isVisible = true	
+
+		-- transporta o man sprite para perto do estilingue
+		timer.performWithDelay( 1, function()
+			man_green_sprite:play()			
+			transition.to(man_green_sprite, {time=1600, x = configuration.stone_position_x + 120, transition = easingx.easeOut});
+		
+			timer.performWithDelay( 2000, function()
+				transition.to(man_green_sprite, {time=1000, x = configuration.stone_position_x + 400, transition = easingx.easeOut});
+			end)
+		end)
+	end	
+end
+
 ---------------------------------------------------------------------------------------------------------------
 
 local function remove_sky_tiles_obj()
@@ -331,6 +381,16 @@ local function remove_upperScore_tiles_obj(  )
 	end
 end
 
+local function remove_man_sprite(  )
+	if man_yellow_sprite then 
+		man_sprite_lib.removeManSprite( man_yellow_sprite )
+	end
+
+	if man_green_sprite then 
+		man_sprite_lib.removeManSprite( man_green_sprite )	
+	end	
+end
+
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
@@ -348,6 +408,8 @@ function removeGameplayScenario()
 	-- remove_scoreboard_tiles_obj()
 	remove_score_player_tiles_obj()
 	remove_upperScore_tiles_obj()	
+
+	remove_man_sprite()
 end
 
 -- create all basic elements to the scene
@@ -361,6 +423,7 @@ function createGameplayScenario()
 	create_ground_tiles_obj()	-- carrega o chao
 	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
 	create_title_player_tiles_obj()	-- carrega as labels identificando os cenários
+	create_man_sprite()
 
 	timer.performWithDelay( configuration.time_hide_title_player_label, function ( event )	
 			remove_title_player_tiles_obj(  )
@@ -383,8 +446,9 @@ function createGameplayScenario()
 		setAssetsGroupPosition(display.contentCenterX - 2100, nil)
 	end	
 
-
 	create_upperScore_tiles_obj() -- carrega novo placar de pontos
+
+
 end
 
 ---------------------------------------------------------------------------------------------------------------
@@ -399,6 +463,12 @@ function moveCamera( )
 			sky_tiles_lib.skyGroup.x = sky_tiles_lib.skyGroup.x - configuration.camera_velocity 
 			sky_tiles_lib.skyGroup:toBack( )			
 			assetsGroup.x = assetsGroup.x - configuration.camera_velocity	
+			if man_green_sprite then
+				man_green_sprite.x = man_green_sprite.x - configuration.camera_velocity
+			end
+			if man_yellow_sprite then
+				man_yellow_sprite.x = man_yellow_sprite.x - configuration.camera_velocity
+			end
 		end
 
 	-- vai do cenario 2 para o 1
@@ -408,6 +478,12 @@ function moveCamera( )
 			sky_tiles_lib.skyGroup.x = sky_tiles_lib.skyGroup.x + configuration.camera_velocity 
 			sky_tiles_lib.skyGroup:toBack( )
 			assetsGroup.x = assetsGroup.x + configuration.camera_velocity
+			if man_green_sprite then
+				man_green_sprite.x = man_green_sprite.x + configuration.camera_velocity
+			end
+			if man_yellow_sprite then
+				man_yellow_sprite.x = man_yellow_sprite.x + configuration.camera_velocity
+			end		
 		end
 	end
 end

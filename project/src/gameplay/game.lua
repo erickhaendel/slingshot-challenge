@@ -219,52 +219,66 @@ function next_turn()
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		-- collision detection mode on
-		configuration.game_is_shooted = 0
-		configuration.game_is_hit = 0
+			-- collision detection mode on
+			configuration.game_is_shooted = 0
+			configuration.game_is_hit = 0
 
-		spawnProjectile(); -- Spawn the first projectile.
+			spawnProjectile(); -- Spawn the first projectile.
 
-		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 
+
+			if configuration.game_current_player == 1 then
+				assets_image.load_animation_man_sprite("yellow")
+			else 
+				assets_image.load_animation_man_sprite("green")		
+			end
+		
 		end)	
 end
 
 -- prepare the gameplay to the next round
 function next_round()
 
-		-- reset turn
-		configuration.game_current_turn = 1
+	-- reset turn
+	configuration.game_current_turn = 1
 
-		-- change the current player
-		gamelib.changeCurrentPlayer()
+	-- change the current player
+	gamelib.changeCurrentPlayer()
 
-		-- next round
-		configuration.game_current_round = configuration.game_current_round + 1
+	-- next round
+	configuration.game_current_round = configuration.game_current_round + 1
 
-		-- collision detection mode on
-		configuration.game_is_shooted = 0
-		configuration.game_is_hit = 0
+	-- collision detection mode on
+	configuration.game_is_shooted = 0
+	configuration.game_is_hit = 0
 
-		-- deal with scores
-		configuration.game_score_player[1] = 0
-		configuration.game_score_player[2] = 0	
+	-- deal with scores
+	configuration.game_score_player[1] = 0
+	configuration.game_score_player[2] = 0	
 
-		-- cria o label de novo round
-		assets_image.reload_round_tiles( )
+	-- cria o label de novo round
+	assets_image.reload_round_tiles( )
 
-		-- cria novas latas
-		assets_image.reload_can_tiles( )
+	-- cria novas latas
+	assets_image.reload_can_tiles( )
 
-		Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
+	Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
 
-		timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-			spawnProjectile(); -- Spawn the first projectile.
+		spawnProjectile(); -- Spawn the first projectile.
 
-			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 
-			end)		
+
+		if configuration.game_current_player == 1 then
+			assets_image.load_animation_man_sprite("yellow")
+		else 
+			assets_image.load_animation_man_sprite("green")		
+		end		
+
+		end)		
 
 end
 
@@ -317,6 +331,8 @@ function start_game()
 		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 
 		Runtime:addEventListener("touch", donottouch_warn)		
+
+		assets_image.load_animation_man_sprite("yellow")			
 		end)
 
 	-- Inicia a musica do gameplay
