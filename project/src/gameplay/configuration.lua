@@ -162,9 +162,9 @@ cans_x[1] = display.contentCenterX - 300
 cans_y[1] = display.contentCenterY - 40
 cans_x[2] = display.contentCenterX + 180
 cans_y[2] = cans_y[1]
-cans_x[3] = display.contentCenterX + 1060
+cans_x[3] = display.contentCenterX + 1160
 cans_y[3] = cans_y[1]
-cans_x[4] = display.contentCenterX + 1580
+cans_x[4] = display.contentCenterX + 1650
 cans_y[4] = cans_y[1]
 
 can_image_dir = "resources/images/objects/"		-- diretorio onde estao as imagens das latas
