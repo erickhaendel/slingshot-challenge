@@ -327,7 +327,9 @@ function stage_2( )
 			transition.to(man_yellow_sprite, {time=1600, x = configuration.stone_position_x- 120, transition = easingx.easeOut});
 		
 			timer.performWithDelay( 3200, function()
-				transition.to(man_yellow_sprite, {time=1200, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
+				-- transition.to(man_yellow_sprite, {time=1200, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
+				transition.to(man_yellow_sprite, {time=1200, x = 50, y = 70, transition = easingx.easeOut});
+				man_yellow_sprite:scale(0.5, 0.5)
 			end)
 		end)
 
@@ -448,11 +450,12 @@ function stage_5()
 		timer.performWithDelay( 750, function()
 
 			-- o homem amarelo sai de cena
-			man_sprite_lib.removeManSprite( man_yellow_sprite )					
+			man_sprite_lib.removeManSprite( man_yellow_sprite )	
+										
 			man_yellow_sprite = man_sprite_lib.newManYellowLeftSprite(
 				configuration.stone_position_x - 400, 
 				configuration.man_yellow_left_sprite_position_y)
-		
+
 			transition.to(man_yellow_sprite, {time=3500, x = -300, transition = easingx.easeOut});
 		
 			-- homem verde entra em cena
@@ -463,7 +466,8 @@ function stage_5()
 			transition.to(man_green_sprite, {time=1600, x = configuration.stone_position_x + 120, transition = easingx.easeOut});
 		
 			timer.performWithDelay( 3200, function()
-				transition.to(man_green_sprite, {time=1200, x = configuration.stone_position_x + 400, transition = easingx.easeOut});
+				transition.to(man_green_sprite, {time=1200, x = configuration.stone_position_x + 590, y = 70, transition = easingx.easeOut});
+				man_green_sprite:scale(0.5, 0.5)
 			end)
 		end)
 
