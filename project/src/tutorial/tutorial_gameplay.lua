@@ -95,6 +95,7 @@ function spawnProjectile()
 		-- Add an event listener to the projectile.
 		projectiles_container:addEventListener("touch", projectileTouchListener);
 
+		
 		configuration.projectile_object = projectiles_container	
 	end	
 end
@@ -276,6 +277,7 @@ end
 -- Show how to use the slingshot 
 function stage_1()
 
+	configuration.game_current_player = 1
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
 		spawnProjectile(); -- Spawn the first projectile.
@@ -285,6 +287,8 @@ end
 
 -- Show how to shoot a target and increase score with yellow player
 function stage_2( )
+
+	configuration.game_current_player = 1
 
 	if configuration.game_is_shooted == 0 then
 
@@ -325,6 +329,8 @@ end
 -- Show how to shoot a target with neutral and not neutral can
 function stage_3( )
 
+	configuration.game_current_player = 1
+
 	if configuration.game_is_shooted == 0 then
 
 		assets_image.createStage3()
@@ -350,6 +356,8 @@ end
 -- o player amarelo acerta duas latas verdes e os pontos vao para o player 2
 function stage_4()
 
+	configuration.game_current_player = 1
+
 	if configuration.game_is_shooted == 0 then
 
 		assets_image.createStage4()
@@ -373,8 +381,10 @@ function stage_4()
 
 end
 
---
+-- o player verde entra e joga no seu turno.
 function stage_5()
+
+	configuration.game_current_player = 2
 
 	if configuration.game_is_shooted == 0 then
 
@@ -408,10 +418,6 @@ function stage_5()
 
 	end
 
-	-- timer.performWithDelay( 7500, function( )
-	-- 	man_sprite_lib.removeManSprite( man_yellow_sprite )
-	-- end )
-
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
 		spawnProjectile(); -- Spawn the first projectile.
@@ -422,7 +428,44 @@ function stage_5()
 		timer.performWithDelay( 8000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
-			end			
+			end	
+
+			-- lanca automaticamente
+			configuration.game_is_shooted =  1
+
+			-- Remove projectile touch so player can't grab it back and re-use after firing.
+			projectiles_container:removeEventListener("touch", projectileTouchListener);
+
+			-- Remove the elastic band
+			band_line_tiles_lib.removeBandLine( )
+
+			configuration.projectile_object.x = 250
+			configuration.projectile_object.y = configuration.stone_position_y + 530	
+
+			local pseudo_stone = configuration.projectile_object
+
+			configuration.projectile_object = projectile_process_lib.launched_process(
+				configuration.projectile_object, 
+				pseudo_stone,  
+				assets_image, 
+				configuration.state_object)
+
+			timer.performWithDelay( 3000, function( )
+				    if configuration.game_is_hit == 1 then
+						-- aparece o checked verde
+						local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+						timer.performWithDelay( 1500, function( e )
+								checked_sprite_lib.removeCheckedSprite(checked_sprite)
+							end)
+
+						-- fim do estagio 3
+						configuration.game_is_shooted = 0
+						configuration.game_is_hit = 0
+						configuration.game_stage = 6
+					end	
+				end)		
+
 		end )
 
 end
@@ -478,7 +521,7 @@ function start_game()
     configuration.game_final_score_player[2] = 0   
     configuration.game_stage = 1
 
-    assets_image.createStage1()
+   	assets_image.createStage1() 	
 
 	-- passando o cenario para uma variavel global - utilizado pelo pubnub
 	configuration.assets_image_object = assets_image

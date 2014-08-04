@@ -218,9 +218,9 @@ function collision_process(stone, assets_image)
 
 	local side = nil
 
-	print( "configuration.game_stage: "..configuration.game_stage )
-	print( "configuration.game_is_shooted: "..configuration.game_is_shooted )
-	print( "configuration.game_is_hit: "..configuration.game_is_hit )	
+	-- print( "configuration.game_stage: "..configuration.game_stage )
+	-- print( "configuration.game_is_shooted: "..configuration.game_is_shooted )
+	-- print( "configuration.game_is_hit: "..configuration.game_is_hit )	
 
 	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 

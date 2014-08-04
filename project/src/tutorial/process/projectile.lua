@@ -79,6 +79,7 @@ function converter(iso)
     end
 end
 
+-- lanca a peedra no cenario - calculo de lenacamento
 function launched_process(stone, e, assets_image, state)
 
 	-- Reset the stage focus
