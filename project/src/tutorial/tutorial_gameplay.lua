@@ -446,54 +446,59 @@ function stage_5()
 	end
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
-
-		spawnProjectile(); -- Spawn the first projectile.
+		
+			if configuration.game_is_shooted == 0 then
+				spawnProjectile(); -- Spawn the first projectile.
+			end
 
 		end)	
 
 
-		timer.performWithDelay( 8000, function( )
-			if current_arrow then			
-				current_arrow:removeSelf( ); current_arrow = nil;
-			end	
+		if configuration.game_is_shooted == 0 then
+			timer.performWithDelay( 5000, function( )
+				if current_arrow then			
+					current_arrow:removeSelf( ); current_arrow = nil;
+				end	
 
-			-- lanca automaticamente
-			configuration.game_is_shooted =  1
+				-- lanca automaticamente
+				configuration.game_is_shooted =  1
 
-			-- Remove projectile touch so player can't grab it back and re-use after firing.
-			projectiles_container:removeEventListener("touch", projectileTouchListener);
+				-- Remove projectile touch so player can't grab it back and re-use after firing.
+				projectiles_container:removeEventListener("touch", projectileTouchListener);
 
-			-- Remove the elastic band
-			band_line_tiles_lib.removeBandLine( )
+				-- Remove the elastic band
+				band_line_tiles_lib.removeBandLine( )
 
-			configuration.projectile_object.x = 250
-			configuration.projectile_object.y = configuration.stone_position_y + 530	
+				configuration.projectile_object.x = 250
+				configuration.projectile_object.y = configuration.stone_position_y + 530	
 
-			local pseudo_stone = configuration.projectile_object
+				local pseudo_stone = configuration.projectile_object
 
-			configuration.projectile_object = projectile_process_lib.launched_process(
-				configuration.projectile_object, 
-				pseudo_stone,  
-				assets_image, 
-				configuration.state_object)
+				configuration.projectile_object = projectile_process_lib.launched_process(
+					configuration.projectile_object, 
+					pseudo_stone,  
+					assets_image, 
+					configuration.state_object)
 
-			timer.performWithDelay( 3000, function( )
-				    if configuration.game_is_hit == 1 then
-						-- aparece o checked verde
-						local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+				timer.performWithDelay( 3000, function( )
+					    if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
 
-						timer.performWithDelay( 1500, function( e )
-								checked_sprite_lib.removeCheckedSprite(checked_sprite)
-							end)
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
 
-						-- fim do estagio 3
-						configuration.game_is_shooted = 0
-						configuration.game_is_hit = 0
-						configuration.game_stage = 6
-					end	
-				end)		
+							-- fim do estagio 3
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 6
+							stage_6()
+						end	
+					end)		
 
-		end )
+			end )
+		end
 
 end
 
@@ -501,92 +506,65 @@ end
 -- o player verde entra e joga no seu turno.
 function stage_6()
 
-	print( "estagio 6 chamado" )
-
 	configuration.game_current_player = 2
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage6()
-
-		-- -- seta indicando que é para acertar a lata			
-		-- current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
-
-		-- transporta o man sprite para perto do estilingue
-		timer.performWithDelay( 750, function()
-
-			-- o homem amarelo sai de cena
-			man_sprite_lib.removeManSprite( man_yellow_sprite )					
-			man_yellow_sprite = man_sprite_lib.newManYellowLeftSprite(
-				configuration.stone_position_x - 400, 
-				configuration.man_yellow_left_sprite_position_y)
-		
-			transition.to(man_yellow_sprite, {time=3500, x = -300, transition = easingx.easeOut});
-		
-			-- homem verde entra em cena
-			man_green_sprite = man_sprite_lib.newManGreenLeftSprite(
-				configuration.man_green_left_sprite_position_x, 
-				configuration.man_green_left_sprite_position_y)
-
-			transition.to(man_green_sprite, {time=1600, x = configuration.stone_position_x + 120, transition = easingx.easeOut});
-		
-			timer.performWithDelay( 3200, function()
-				transition.to(man_green_sprite, {time=1200, x = configuration.stone_position_x + 400, transition = easingx.easeOut});
-			end)
-		end)
-
+		assets_image.createStage6()		
 	end
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
-
-		spawnProjectile(); -- Spawn the first projectile.
-
+		
+			if configuration.game_is_shooted == 0 then
+				spawnProjectile(); -- Spawn the first projectile.
+			end
 		end)	
 
-
-		timer.performWithDelay( 8000, function( )
-			if current_arrow then			
-				current_arrow:removeSelf( ); current_arrow = nil;
-			end	
-
-			-- lanca automaticamente
-			configuration.game_is_shooted =  1
-
-			-- Remove projectile touch so player can't grab it back and re-use after firing.
-			projectiles_container:removeEventListener("touch", projectileTouchListener);
-
-			-- Remove the elastic band
-			band_line_tiles_lib.removeBandLine( )
-
-			configuration.projectile_object.x = -1000
-			configuration.projectile_object.y = configuration.stone_position_y + 530	
-
-			local pseudo_stone = configuration.projectile_object
-
-			configuration.projectile_object = projectile_process_lib.launched_process(
-				configuration.projectile_object, 
-				pseudo_stone,  
-				assets_image, 
-				configuration.state_object)
-
+		if configuration.game_is_shooted == 0 then
 			timer.performWithDelay( 3000, function( )
-				    if configuration.game_is_hit == 1 then
-						-- aparece o checked verde
-						local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+				if current_arrow then			
+					current_arrow:removeSelf( ); current_arrow = nil;
+				end	
 
-						timer.performWithDelay( 1500, function( e )
-								checked_sprite_lib.removeCheckedSprite(checked_sprite)
-							end)
+				-- lanca automaticamente
+				configuration.game_is_shooted =  1
 
-						-- fim do estagio 3
-						configuration.game_is_shooted = 0
-						configuration.game_is_hit = 0
-						configuration.game_stage = 7
-					end	
-				end)		
+				-- Remove projectile touch so player can't grab it back and re-use after firing.
+				projectiles_container:removeEventListener("touch", projectileTouchListener);
 
-		end )
+				-- Remove the elastic band
+				band_line_tiles_lib.removeBandLine( )
 
+				configuration.projectile_object.x = 800
+				configuration.projectile_object.y = configuration.stone_position_y + 300	
+
+				local pseudo_stone = configuration.projectile_object
+
+				configuration.projectile_object = projectile_process_lib.launched_process(
+					configuration.projectile_object, 
+					pseudo_stone,  
+					assets_image, 
+					configuration.state_object)
+
+				timer.performWithDelay( 3000, function( )
+					    if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
+
+							-- fim do estagio 3
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 7
+							stage_7()
+						end	
+					end)		
+
+			end )
+		end
 end
 
 function stage_7()

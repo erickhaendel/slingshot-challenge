@@ -70,6 +70,7 @@ can_stage3_tiles_obj 					= {};
 can_stage4_tiles_obj 					= {};
 can_stage5_tiles_obj 					= {};
 can_stage6_tiles_obj 					= {};
+can_stage7_tiles_obj 					= {};
 upperScore_tiles_obj					= nil;
 myCircleYellow_upperScore_tiles_obj		= nil;
 myCircleGreen_upperScore_tiles_obj		= nil;
@@ -372,7 +373,7 @@ function createStage6()
 	remove_single_can_tiles_obj(can_stage5_tiles_obj[2])
 
 	can_stage6_tiles_obj[1] = create_single_can_tiles_obj("yellow",display.contentCenterX - 200, display.contentCenterY - 120, can_stage6_tiles_obj[1])
-	can_stage6_tiles_obj[2] = create_single_can_tiles_obj("yellow",display.contentCenterX + 150, display.contentCenterY - 120, can_stage6_tiles_obj[2])
+	can_stage6_tiles_obj[2] = create_single_can_tiles_obj("yellow",display.contentCenterX - 150, display.contentCenterY - 120, can_stage6_tiles_obj[2])
 
 	can_stage6_tiles_obj[1]:toFront( )
 	can_stage6_tiles_obj[2]:toFront( )

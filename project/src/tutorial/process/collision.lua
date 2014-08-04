@@ -298,12 +298,8 @@ function collision_process(stone, assets_image)
 			end	
 		elseif configuration.game_stage == 6 then
 
-			if stone and assets_image.can_stage6_tiles_obj[1] and assets_image.can_stage6_tiles_obj[2] then
-			local test1 = hitTestObjects( stone, assets_image.can_stage6_tiles_obj[1])
-			local test2 = hitTestObjects( stone, assets_image.can_stage6_tiles_obj[2])
-			else
-				test1, test2 = false, false
-			end
+				local test1 = hitTestObjects( stone, assets_image.can_stage6_tiles_obj[1])
+				local test2 = hitTestObjects( stone, assets_image.can_stage6_tiles_obj[2])
 
 			if test1 or test2 then
 				animationProcess(assets_image, k, stone)	

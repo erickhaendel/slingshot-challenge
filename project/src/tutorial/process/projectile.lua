@@ -111,6 +111,7 @@ function launched_process(stone, e, assets_image, state)
 
 	-- x in screen co-ords
 	local sentido = 1	
+	print( e.x..", "..configuration.stone_position_x )
 	if e.x < configuration.stone_position_x then
 		sentido = 1
 	else
