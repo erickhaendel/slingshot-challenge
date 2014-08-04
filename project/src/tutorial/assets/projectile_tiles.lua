@@ -25,6 +25,8 @@ function newProjectile()
 		stone_name = "yellow-stone"
 	elseif configuration.game_stage == 5  then -- assistir o player 2 jogar
 		stone_name = "green-stone"		
+	elseif configuration.game_stage == 6  then -- assistir o player 2 jogar
+		stone_name = "green-stone"		
 	end
 
 	-- Bullet properties
@@ -118,6 +120,11 @@ function newProjectile()
 			-- Transition the bullet into position each time it's spawned	
 			transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 		end
+	-- mostra que existe latas verdes que os pontos vao para o players
+	elseif configuration.game_stage == 6 then
+		
+		-- Transition the bullet into position each time it's spawned	
+		transition.to(bullet, {time=600, y = configuration.stone_position_y, transition = easingx.easeOutElastic});
 	end
 
 	return bullet;

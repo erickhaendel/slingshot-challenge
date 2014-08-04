@@ -114,6 +114,7 @@ function score_animation( assets_image )
 		-- Play increasing score
 		assets_audio.playIncreasingScore()		
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][3].isVisible = true	
+		assets_image.myCircleYellow_upperScore_tiles_obj[1][4].isVisible = true			
 				
 		-- seta indicando que é para acertar a lata			
 		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
@@ -161,9 +162,9 @@ function score_process(assets_image)
 	elseif configuration.game_stage == 5 then
 		configuration.game_final_score_player[2] = 3	
 	elseif configuration.game_stage == 6 then
-		configuration.game_final_score_player[1] = 3	
-	elseif configuration.game_stage == 7 then
 		configuration.game_final_score_player[1] = 4	
+	elseif configuration.game_stage == 7 then
+
 	end	
 	-- exibe os pontos na grade
 	score_animation( assets_image )		
