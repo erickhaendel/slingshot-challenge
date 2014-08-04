@@ -253,7 +253,7 @@ function launched_process(stone, e, assets_image, state)
 		-- diminui a escala da pedra e traça sua trajetoria
 
 		-- monitora colisao com as latas
-		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
+		if configuration.game_is_hit == 0 and configuration.game_ended == 0 and stone.xScale > 0 then
 
 			collision_process_lib.collision_process(stone, configuration.assets_image_object)
 		else

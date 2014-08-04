@@ -169,18 +169,23 @@ function configuration.state_object:change(e)
 				-- terminou o jogo
 				if configuration.game_total_rounds <= configuration.game_current_round and configuration.game_current_turn == 2 then					
 
-			    	assets_image.removeGameplayScenario()
+					configuration.game_ended = 1
 
-			    	-- Destroi eventos criados
-					configuration.state_object:removeEventListener("change", configuration.state_object);
+					timer.performWithDelay( 2000, function( )
+				    	assets_image.removeGameplayScenario()
 
-					Runtime:removeEventListener("touch", donottouch_warn)		
-					
-					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
-					projectiles_container:removeEventListener("touch", projectileTouchListener);
+				    	-- Destroi eventos criados
+						configuration.state_object:removeEventListener("change", configuration.state_object);
 
-				    composer.removeScene('src.gameplay.game')
-				    composer.gotoScene( "src.menu.results_scene", "fade", 400)
+						Runtime:removeEventListener("touch", donottouch_warn)		
+						
+						Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+						projectiles_container:removeEventListener("touch", projectileTouchListener);
+
+					    composer.removeScene('src.gameplay.game')
+					    composer.gotoScene( "src.menu.results_scene", "fade", 400)
+					end )
+
 
 				
 				elseif configuration.game_current_turn == 1 then
@@ -288,6 +293,7 @@ function start_game()
     configuration.game_score_player[2] = 0  
     configuration.game_final_score_player[1] = 0    
     configuration.game_final_score_player[2] = 0   
+    configuration.game_ended = 0
 
   	 -- carrega objetos do cenario
 	assets_image.createGameplayScenario()
