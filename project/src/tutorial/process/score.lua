@@ -59,7 +59,7 @@ function score_animation( assets_image )
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][1].isVisible = true	
 
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 500, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 500, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
@@ -74,7 +74,7 @@ function score_animation( assets_image )
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][2].isVisible = true	
 
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 500, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX - 480, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
@@ -89,7 +89,7 @@ function score_animation( assets_image )
 		assets_image.myCircleGreen_upperScore_tiles_obj[1][2].isVisible = true	
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
@@ -103,7 +103,7 @@ function score_animation( assets_image )
 		assets_image.myCircleGreen_upperScore_tiles_obj[1][3].isVisible = true	
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 370, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
@@ -117,7 +117,7 @@ function score_animation( assets_image )
 		assets_image.myCircleYellow_upperScore_tiles_obj[1][4].isVisible = true			
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
@@ -130,7 +130,7 @@ function score_animation( assets_image )
 		assets_image.myCircleYello_upperScore_tiles_obj[1][4].isVisible = true	
 				
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_0(display.contentCenterX + 350, display.contentCenterY - 120)	
 
 		timer.performWithDelay( 3000, function( )
 			if current_arrow then			

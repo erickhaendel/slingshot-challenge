@@ -309,7 +309,9 @@ function stage_2( )
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage2()
+		timer.performWithDelay(2000, function ( )
+				assets_image.createStage2()
+		end)
 
 		-- seta indicando que é para acertar a lata			
 		timer.performWithDelay(5000, function ()
@@ -338,7 +340,7 @@ function stage_2( )
 		end)	
 
 
-	timer.performWithDelay( 3000, function( )
+	timer.performWithDelay( 200, function( )
 		if current_arrow then			
 			current_arrow:removeSelf( ); current_arrow = nil;
 		end			
@@ -366,7 +368,7 @@ function stage_3( )
 		end)	
 
 
-	timer.performWithDelay( 3000, function( )
+	timer.performWithDelay( 2000, function( )
 		if current_arrow then			
 			current_arrow:removeSelf( ); current_arrow = nil;
 		end			
@@ -394,7 +396,7 @@ function stage_4()
 		end)	
 
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 2000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
@@ -409,10 +411,14 @@ function stage_5()
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage5()
+		timer.performWithDelay(4000, function () 
+			assets_image.createStage5()
+		end)
 
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
+		-- timer.performWithDelay(6000, function ()
+		-- current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
+		-- end)
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
