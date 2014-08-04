@@ -221,7 +221,8 @@ end
 function load_animation_man_sprite(color)
 
 	if color == "yellow" then
-
+		man_yellow_right_sprite_position_x =  -100 - display.contentWidth		
+		man_yellow_right_sprite_position_y = display.contentHeight - 150
 		man_yellow_sprite.isVisible = true
 
 		-- transporta o man sprite para perto do estilingue
@@ -232,12 +233,19 @@ function load_animation_man_sprite(color)
 			timer.performWithDelay( 2000, function()
 				transition.to(man_yellow_sprite, {time=1000, x = configuration.stone_position_x - 400, transition = easingx.easeOut});
 			end)
+
+			timer.performWithDelay( 3000, function() 
+				transition.to(man_yellow_sprite, {time=1200, x = 50, y = 70, transition = easingx.easeOut});
+				man_yellow_sprite:scale(0.5, 0.5)
+			end)
 		end)
 	end
 
 	if color == "green" then
 
 		man_green_sprite.isVisible = true	
+		man_yellow_left_sprite_position_x = display.contentWidth - 150		
+		man_yellow_left_sprite_position_y = display.contentHeight - 150
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 1, function()
@@ -247,6 +255,11 @@ function load_animation_man_sprite(color)
 			timer.performWithDelay( 2000, function()
 				transition.to(man_green_sprite, {time=1000, x = configuration.stone_position_x + 400, transition = easingx.easeOut});
 			end)
+
+			timer.performWithDelay( 3000, function() 
+				transition.to(man_green_sprite, {time=1200, x = configuration.stone_position_x + 590, y = 70, transition = easingx.easeOut});
+				man_green_sprite:scale(0.5, 0.5)
+			end)			
 		end)
 	end	
 end
