@@ -102,7 +102,7 @@ grass_position_x[1] = display.contentCenterX
 grass_position_y[1] = display.contentCenterY + 254
 grass_position_x[2] = display.contentCenterX + 1439
 grass_position_y[2] = display.contentCenterY + 254
-grass_image_filename = 'resources/images/objects/grass2.png'
+grass_image_filename = 'resources/images/objects/grass.png'
 grassBody = { friction=0.5, bounce=0.3 }
 
 -- SLINGSHOT
