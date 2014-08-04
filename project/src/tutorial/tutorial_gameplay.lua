@@ -72,7 +72,7 @@ local man_yellow_sprite, man_green_sprite, arrow_sprite, current_arrow
 -- PROTOTYPE METHODS
 ----------------------------------------------
 local projectileTouchListener, remove_projectile_animation, new_projectile_animation, next_round, next_turn, donottouch_warn
-local stage_1, stage_2, stage_3, stage_4, stage_5, stage_6
+local stage_1, stage_2, stage_3, stage_4, stage_5, stage_6, stage_7, stage_8
 ---------------------------------------------
 -- METHODS
 ---------------------------------------------
@@ -616,7 +616,7 @@ function stage_7()
 	projectiles_container:removeEventListener("touch", projectileTouchListener);
 
     composer.removeScene('src.tutorial.game')
-    composer.gotoScene( "src.menu.results_scene", "fade", 400)
+    composer.gotoScene( "src.menu.tutorial_results_scene", "fade", 400)
 end
 
 
@@ -643,7 +643,9 @@ function start_game()
     configuration.game_score_player[2] = 0  
     configuration.game_final_score_player[1] = 0    
     configuration.game_final_score_player[2] = 0   
-    configuration.game_stage = 1
+	configuration.game_is_shooted = 0
+	configuration.game_is_hit = 0
+	configuration.game_stage = 1
 
    	assets_image.createStage1() 	
 
