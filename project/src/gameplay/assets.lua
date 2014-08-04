@@ -224,7 +224,8 @@ function load_animation_man_sprite(color)
 		man_yellow_sprite.x =  -100 - display.contentWidth		
 		man_yellow_sprite.y = display.contentHeight - 150
 		man_yellow_sprite.isVisible = true
-		if man_yellow_sprite.xScale < 1 then man_yellow_sprite:scale(1.5, 1.5); end
+		man_yellow_sprite.xScale = 1
+		man_yellow_sprite.yScale = 1
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 1, function()
@@ -247,7 +248,8 @@ function load_animation_man_sprite(color)
 		man_green_sprite.isVisible = true	
 		man_green_sprite.x = display.contentWidth - 150		
 		man_green_sprite.y = display.contentHeight - 150
-		if man_green_sprite.xScale < 1 then man_green_sprite:scale(1.5, 1.5); end
+		man_green_sprite.xScale = 1
+		man_green_sprite.yScale = 1
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 1, function()
@@ -479,11 +481,11 @@ function moveCamera( )
 			sky_tiles_lib.skyGroup:toBack( )			
 			assetsGroup.x = assetsGroup.x - configuration.camera_velocity	
 			if man_green_sprite then
-				man_green_sprite.isVisible = false
+				--man_green_sprite.isVisible = false
 				man_green_sprite.x = man_green_sprite.x - configuration.camera_velocity
 			end
 			if man_yellow_sprite then
-				man_yellow_sprite.isVisible = false
+				--man_yellow_sprite.isVisible = false
 				man_yellow_sprite.x = man_yellow_sprite.x - configuration.camera_velocity
 			end
 		end
@@ -496,11 +498,11 @@ function moveCamera( )
 			sky_tiles_lib.skyGroup:toBack( )
 			assetsGroup.x = assetsGroup.x + configuration.camera_velocity
 			if man_green_sprite then
-				man_green_sprite.isVisible = false				
+				--man_green_sprite.isVisible = false				
 				man_green_sprite.x = man_green_sprite.x + configuration.camera_velocity
 			end
 			if man_yellow_sprite then
-				man_yellow_sprite.isVisible = false				
+				--man_yellow_sprite.isVisible = false				
 				man_yellow_sprite.x = man_yellow_sprite.x + configuration.camera_velocity
 			end		
 		end
