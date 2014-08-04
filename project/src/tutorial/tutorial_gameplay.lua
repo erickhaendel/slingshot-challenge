@@ -335,7 +335,15 @@ function stage_2( )
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		spawnProjectile(); -- Spawn the first projectile.
+			if configuration.game_is_hit == 0 then
+				spawnProjectile(); -- Spawn the first projectile.
+			else
+				-- fim do estagio 3
+				configuration.game_is_shooted = 0
+				configuration.game_is_hit = 0
+				configuration.game_stage = 3				
+				stage_3()				
+			end
 
 		end)	
 
@@ -363,7 +371,15 @@ function stage_3( )
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		spawnProjectile(); -- Spawn the first projectile.
+			if configuration.game_is_hit == 0 then
+				spawnProjectile(); -- Spawn the first projectile.
+			else
+				-- fim do estagio 3
+				configuration.game_is_shooted = 0
+				configuration.game_is_hit = 0
+				configuration.game_stage = 4					
+				stage_4()				
+			end
 
 		end)	
 
@@ -391,10 +407,17 @@ function stage_4()
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		spawnProjectile(); -- Spawn the first projectile.
+			if configuration.game_is_hit == 0 then
+				spawnProjectile(); -- Spawn the first projectile.
+			else
+				-- fim do estagio 3
+				configuration.game_is_shooted = 0
+				configuration.game_is_hit = 0
+				configuration.game_stage = 5					
+				stage_5()
+			end
 
 		end)	
-
 
 		timer.performWithDelay( 2000, function( )
 			if current_arrow then			
@@ -414,11 +437,6 @@ function stage_5()
 		timer.performWithDelay(4000, function () 
 			assets_image.createStage5()
 		end)
-
-		-- seta indicando que é para acertar a lata			
-		-- timer.performWithDelay(6000, function ()
-		-- current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
-		-- end)
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
@@ -568,9 +586,6 @@ function stage_6()
 end
 
 function stage_7()
-
-	-- current_arrow:removeSelf( )
-	-- current_arrow = nil
 
 	if man_green_sprite then
 		man_green_sprite:removeSelf( ); man_green_sprite = nil;
