@@ -49,7 +49,7 @@ local target_tiles_lib 				= require( "src.gameplay.assets.target_tiles" )
 local title_player_tiles_lib 		= require( "src.gameplay.assets.title_player_tiles" )
 local title_round_tiles_lib 		= require( "src.gameplay.assets.title_round_tiles" )
 local wall_tiles_lib 				= require( "src.gameplay.assets.wall_tiles" )
-local upperScore_tiles_lib			= require( "src.tutorial.assets.upperScore_tiles")
+local upperScore_tiles_lib			= require( "src.gameplay.assets.upperScore_tiles")
 
 ---------------------------------------------------------------------------------------------------------------
 -- OBJECTS
@@ -190,11 +190,16 @@ local function create_upperScore_tiles_obj(  )
 	upperScore_tiles_obj, myCircleYellow_upperScore_tiles_obj, myCircleGreen_upperScore_tiles_obj  = upperScore_tiles_lib.newUpperBoardTile()
 
 	for i=1,2 do
-		assetsGroup:insert( upperScore_tiles_obj[i] )	
-		
+		--assetsGroup:insert( upperScore_tiles_obj[i] )		
 		upperScore_tiles_obj[i]:toFront( )
 	end
 
+	for i=1,3 do
+		for j=1,7 do
+			myCircleYellow_upperScore_tiles_obj[i][j]:toFront( )
+			myCircleGreen_upperScore_tiles_obj[i][j]:toFront( )
+		end
+	end
 end
 ---------------------------------------------------------------------------------------------------------------
 
@@ -319,9 +324,9 @@ end
 
 local function remove_upperScore_tiles_obj(  )
 	if upperScore_tiles_obj then 
-		for i=1, #upperScore_tiles_obj do
-			assetsGroup:remove( upperScore_tiles_obj[i] )	
-		end	
+		-- for i=1, #upperScore_tiles_obj do
+		-- 	assetsGroup:remove( upperScore_tiles_obj[i] )	
+		-- end	
 		upperScore_tiles_lib.removeUpperBoardTile( upperScore_tiles_obj, myCircleYellow_upperScore_tiles_obj, myCircleGreen_upperScore_tiles_obj )
 	end
 end
@@ -347,7 +352,6 @@ end
 
 -- create all basic elements to the scene
 function createGameplayScenario()
-
 
 	create_sky_tiles_obj() 	-- Animacao do ceu
 	create_house_tiles_obj() -- carrega a casa

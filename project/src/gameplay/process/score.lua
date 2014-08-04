@@ -46,40 +46,23 @@ local can_process_lib 		= require( "src.gameplay.process.can" )
 function score_animation( intend_to_hit, assets_image )
 
 	print( ">>>"..configuration.game_final_score_player[intend_to_hit] )
-	for i=1,configuration.game_final_score_player[intend_to_hit] do
-		timer.performWithDelay(1+i*110, function(e)
-
-			-- Amarelo
-			if intend_to_hit == 1 then
-
-				local temp = 0
-				for i=1,3 do
-					for j=1,7 do
-						assets_image.myCircleYellow_upperScore_tiles_obj[i][j].isVisible = true	
-						temp = temp + 1
-						assets_audio.playIncreasingScore()							
-						if temp >= configuration.game_final_score_player[1] then
-							return;
-						end
-					end
+	local temp = 0
+	for i=1,3 do
+		for j=1,7 do
+			-- timer.performWithDelay(1+i*110, function(e)
+				if intend_to_hit == 1 then
+					assets_image.myCircleYellow_upperScore_tiles_obj[i][j].isVisible = true						
+				else
+					assets_image.myCircleGreen_upperScore_tiles_obj[i][j].isVisible = true	
 				end
+				assets_audio.playIncreasingScore()
+			-- end)
 
-			-- Verde
-			elseif intend_to_hit == 2 then
-
-				local temp = 0
-				for i=1,3 do
-					for j=1,7 do
-						assets_image.myCircleGreen_upperScore_tiles_obj[i][j].isVisible = true	
-						temp = temp + 1
-						assets_audio.playIncreasingScore()							
-						if temp >= configuration.game_final_score_player[2] then
-							return;
-						end
-					end
-				end
-			end		
-		end)
+			temp = temp + 1							
+			if temp >= configuration.game_final_score_player[intend_to_hit] then
+				return;
+			end			
+		end
 	end
 end
 
