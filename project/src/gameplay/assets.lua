@@ -49,6 +49,7 @@ local target_tiles_lib 				= require( "src.gameplay.assets.target_tiles" )
 local title_player_tiles_lib 		= require( "src.gameplay.assets.title_player_tiles" )
 local title_round_tiles_lib 		= require( "src.gameplay.assets.title_round_tiles" )
 local wall_tiles_lib 				= require( "src.gameplay.assets.wall_tiles" )
+local upperScore_tiles_lib			= require( "src.tutorial.assets.upperScore_tiles")
 
 ---------------------------------------------------------------------------------------------------------------
 -- OBJECTS
@@ -69,6 +70,10 @@ target_tiles_obj 			= nil;
 title_player_tiles_obj 		= nil; 
 score_round_tiles_obj 		= nil; 
 wall_tiles_obj 				= nil;
+upperScore_tiles_obj					= nil;
+myCircleYellow_upperScore_tiles_obj		= nil;
+myCircleGreen_upperScore_tiles_obj		= nil;
+
 
 ---------------------------------------------------------------------------------------------------------------
 -- GROUPS
@@ -180,6 +185,17 @@ local function create_score_player_tiles_obj(  )
 	end	
 end
 
+local function create_upperScore_tiles_obj(  )
+
+	upperScore_tiles_obj, myCircleYellow_upperScore_tiles_obj, myCircleGreen_upperScore_tiles_obj  = upperScore_tiles_lib.newUpperBoardTile()
+
+	for i=1,2 do
+		assetsGroup:insert( upperScore_tiles_obj[i] )	
+		
+		upperScore_tiles_obj[i]:toFront( )
+	end
+
+end
 ---------------------------------------------------------------------------------------------------------------
 
 local function remove_sky_tiles_obj()
@@ -301,6 +317,15 @@ local function remove_score_player_tiles_obj(  )
 	end
 end
 
+local function remove_upperScore_tiles_obj(  )
+	if upperScore_tiles_obj then 
+		for i=1, #upperScore_tiles_obj do
+			assetsGroup:remove( upperScore_tiles_obj[i] )	
+		end	
+		upperScore_tiles_lib.removeUpperBoardTile( upperScore_tiles_obj, myCircleYellow_upperScore_tiles_obj, myCircleGreen_upperScore_tiles_obj )
+	end
+end
+
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
@@ -315,8 +340,9 @@ function removeGameplayScenario()
 	remove_slingshot_tiles_obj()
 	remove_title_player_tiles_obj()
 	remove_title_round_tiles_obj()
-	remove_scoreboard_tiles_obj()
+	-- remove_scoreboard_tiles_obj()
 	remove_score_player_tiles_obj()
+	remove_upperScore_tiles_obj()	
 end
 
 -- create all basic elements to the scene
@@ -345,13 +371,16 @@ function createGameplayScenario()
 			end)
 		end)
 
-	create_scoreboard_tiles_obj()	-- as latas de scores dos scoreboards
+	-- create_scoreboard_tiles_obj()	-- as latas de scores dos scoreboards
 
 	create_score_player_tiles_obj()	-- carrega as labels identificando os scoreboards
 
 	if configuration.game_current_player == 1 then
 		setAssetsGroupPosition(display.contentCenterX - 2100, nil)
 	end	
+
+
+	create_upperScore_tiles_obj() -- carrega novo placar de pontos
 end
 
 ---------------------------------------------------------------------------------------------------------------

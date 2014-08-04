@@ -105,15 +105,26 @@ function animationProcess(assets_image, number, stone)
 	end
 
 	-- scoreboard
-	local Mm = 4 ; local Nn = 5
+	-- local Mm = 4 ; local Nn = 5
+
+	-- for kk = 1, 4 do	
+	-- 	for jj = 1, Mm do
+	-- 		for ii = 1, Nn do
+	-- 			assets_image.scoreboard_tiles_obj[kk][Mm * (ii-1) + jj]:toFront( )	
+	-- 		end
+	-- 	end
+	-- end
+
+	local Mm = 3 ; local Nn = 7
 
 	for kk = 1, 4 do	
 		for jj = 1, Mm do
 			for ii = 1, Nn do
-				assets_image.scoreboard_tiles_obj[kk][Mm * (ii-1) + jj]:toFront( )	
+				-- assets_image.scoreboard_tiles_obj[kk][Mm * (ii-1) + jj]:toFront( )	
 			end
 		end
-	end
+	end	
+
 
 	-- score
 	for i=1,4 do
