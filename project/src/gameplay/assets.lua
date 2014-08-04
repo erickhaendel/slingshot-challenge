@@ -221,8 +221,8 @@ end
 function load_animation_man_sprite(color)
 
 	if color == "yellow" then
-		man_yellow_right_sprite_position_x =  -100 - display.contentWidth		
-		man_yellow_right_sprite_position_y = display.contentHeight - 150
+		man_yellow_sprite.x =  -100 - display.contentWidth		
+		man_yellow_sprite.y = display.contentHeight - 150
 		man_yellow_sprite.isVisible = true
 
 		-- transporta o man sprite para perto do estilingue
@@ -244,8 +244,8 @@ function load_animation_man_sprite(color)
 	if color == "green" then
 
 		man_green_sprite.isVisible = true	
-		man_yellow_left_sprite_position_x = display.contentWidth - 150		
-		man_yellow_left_sprite_position_y = display.contentHeight - 150
+		man_green_sprite.x = display.contentWidth - 150		
+		man_green_sprite.y = display.contentHeight - 150
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 1, function()
