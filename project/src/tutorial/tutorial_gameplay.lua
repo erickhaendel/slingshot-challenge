@@ -237,6 +237,23 @@ function projectileTouchListener(e)
 							configuration.game_stage = 6
 						end
 					end
+
+					if configuration.game_stage == 6 then
+
+					    if configuration.game_is_hit == 1 then
+							-- aparece o checked verde
+							local checked_sprite = checked_sprite_lib.newCheckedSprite(configuration.checked_sprite_position_x,configuration.checked_sprite_position_y)
+
+							timer.performWithDelay( 1500, function( e )
+									checked_sprite_lib.removeCheckedSprite(checked_sprite)
+								end)
+
+							-- fim do estagio 3
+							configuration.game_is_shooted = 0
+							configuration.game_is_hit = 0
+							configuration.game_stage = 7
+						end
+					end					
 				end
 			end		
 		end
@@ -478,14 +495,16 @@ end
 -- o player verde entra e joga no seu turno.
 function stage_6()
 
+	print( "estagio 6 chamado" )
+
 	configuration.game_current_player = 2
 
 	if configuration.game_is_shooted == 0 then
 
-		assets_image.createStage5()
+		assets_image.createStage6()
 
-		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
+		-- -- seta indicando que é para acertar a lata			
+		-- current_arrow = arrow_sprite_lib.newArrowSprite_90(display.contentCenterX - 60, display.contentCenterY - 120)			
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
@@ -533,7 +552,7 @@ function stage_6()
 			-- Remove the elastic band
 			band_line_tiles_lib.removeBandLine( )
 
-			configuration.projectile_object.x = -250
+			configuration.projectile_object.x = -1000
 			configuration.projectile_object.y = configuration.stone_position_y + 530	
 
 			local pseudo_stone = configuration.projectile_object
@@ -556,7 +575,7 @@ function stage_6()
 						-- fim do estagio 3
 						configuration.game_is_shooted = 0
 						configuration.game_is_hit = 0
-						configuration.game_stage = 6
+						configuration.game_stage = 7
 					end	
 				end)		
 

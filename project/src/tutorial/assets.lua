@@ -335,7 +335,6 @@ function createStage3()
 	can_stage3_tiles_obj[1]:toFront( )
 	can_stage3_tiles_obj[2]:toFront( )
 
-	create_upperScore_tiles_obj()
 end
 
 -- estagio 4: mostra ao jogador que acertar as latas verdes marcam pontos para o jogador 2
@@ -350,7 +349,6 @@ function createStage4()
 	can_stage4_tiles_obj[1]:toFront( )
 	can_stage4_tiles_obj[2]:toFront( )
 
-	create_upperScore_tiles_obj()
 end
 
 -- estagio 5: assiste o jogador 5 jogar 
@@ -365,10 +363,9 @@ function createStage5()
 	can_stage5_tiles_obj[1]:toFront( )
 	can_stage5_tiles_obj[2]:toFront( )
 
-	create_upperScore_tiles_obj()
 end
 
--- estagio 5: assiste o jogador 5 jogar 
+-- estagio 6: assiste o jogador 2 jogar 
 function createStage6()
 
 	remove_single_can_tiles_obj(can_stage5_tiles_obj[1])
@@ -380,7 +377,6 @@ function createStage6()
 	can_stage6_tiles_obj[1]:toFront( )
 	can_stage6_tiles_obj[2]:toFront( )
 
-	create_upperScore_tiles_obj()
 end
 ---------------------------------------------------------------------------------------------------------------
 
