@@ -112,6 +112,21 @@ function newArrowSprite_180(x,y)
   	return animation
 end
 
+function newArrowSprite_225(x,y)
+
+	mySheet = graphics.newImageSheet( configuration.arrow_225_sprite_image, configuration.arrow_225_imagesheet_options )
+
+	animation = display.newSprite( mySheet, configuration.arrow_225_sprite_options )
+	animation.x = x
+	animation.y = y
+	animation:toFront( )
+
+  	animation:play()
+  	animation:toFront( )
+
+  	return animation
+end
+
 function newArrowSprite_270(x,y)
 
 	mySheet = graphics.newImageSheet( configuration.arrow_270_sprite_image, configuration.arrow_270_imagesheet_options )

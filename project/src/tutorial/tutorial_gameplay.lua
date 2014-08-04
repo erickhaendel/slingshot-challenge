@@ -295,7 +295,9 @@ function stage_2( )
 		assets_image.createStage2()
 
 		-- seta indicando que é para acertar a lata			
+		timer.performWithDelay(5000, function ()
 		current_arrow = arrow_sprite_lib.newArrowSprite_270(display.contentCenterX + 60, display.contentCenterY - 120)	
+		end)
 
 		-- transporta o man sprite para perto do estilingue
 		timer.performWithDelay( 750, function()
@@ -319,7 +321,7 @@ function stage_2( )
 		end)	
 
 
-	timer.performWithDelay( 8000, function( )
+	timer.performWithDelay( 3000, function( )
 		if current_arrow then			
 			current_arrow:removeSelf( ); current_arrow = nil;
 		end			
@@ -329,6 +331,7 @@ end
 -- Show how to shoot a target with neutral and not neutral can
 function stage_3( )
 
+
 	configuration.game_current_player = 1
 
 	if configuration.game_is_shooted == 0 then
@@ -336,7 +339,7 @@ function stage_3( )
 		assets_image.createStage3()
 
 		-- seta indicando que é para acertar a lata			
-		current_arrow = arrow_sprite_lib.newArrowSprite_270(display.contentCenterX + 60, display.contentCenterY - 120)	
+		current_arrow = arrow_sprite_lib.newArrowSprite_225(display.contentCenterX + 40, display.contentCenterY - 320)	
 	end
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
@@ -346,7 +349,7 @@ function stage_3( )
 		end)	
 
 
-	timer.performWithDelay( 8000, function( )
+	timer.performWithDelay( 3000, function( )
 		if current_arrow then			
 			current_arrow:removeSelf( ); current_arrow = nil;
 		end			
@@ -355,6 +358,7 @@ end
 
 -- o player amarelo acerta duas latas verdes e os pontos vao para o player 2
 function stage_4()
+
 
 	configuration.game_current_player = 1
 
@@ -373,7 +377,7 @@ function stage_4()
 		end)	
 
 
-		timer.performWithDelay( 8000, function( )
+		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
@@ -425,7 +429,7 @@ function stage_5()
 		end)	
 
 
-		timer.performWithDelay( 8000, function( )
+		timer.performWithDelay( 3000, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end	
@@ -471,6 +475,9 @@ function stage_5()
 end
 
 function stage_6()
+
+	-- current_arrow:removeSelf( )
+	-- current_arrow = nil
 
 	if man_green_sprite then
 		man_green_sprite:removeSelf( ); man_green_sprite = nil;
