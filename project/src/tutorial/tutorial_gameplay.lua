@@ -141,7 +141,7 @@ function projectileTouchListener(e)
 				-- If the projectile touch event ends (player lets go)...
 				elseif(e.phase == "ended" or e.phase == "cancelled") then
 
-					configuration.game_is_shooted = configuration.game_is_shooted + 1
+					configuration.game_is_shooted =  1
 
 					-- Remove projectile touch so player can't grab it back and re-use after firing.
 					projectiles_container:removeEventListener("touch", projectileTouchListener);
@@ -150,10 +150,6 @@ function projectileTouchListener(e)
 					band_line_tiles_lib.removeBandLine( )
 
 					stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
-
-					print( "configuration.game_stage: "..configuration.game_stage )
-					print( "configuration.game_is_shooted: "..configuration.game_is_shooted )
-					print( "configuration.game_is_hit: "..configuration.game_is_hit )
 
 					if configuration.game_stage == 1 then
 

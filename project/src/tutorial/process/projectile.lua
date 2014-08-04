@@ -126,7 +126,7 @@ function launched_process(stone, e, assets_image, state)
 		-- diminui a escala da pedra e traça sua trajetoria
 
 		-- monitora colisao com as latas
-		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
+			if configuration.game_is_hit == 0 and stone.xScale > 0 and configuration.game_stage > 1 then	
 
 			-- verifica a colisao entre a pedra e a unica lata do cenario
 			if configuration.game_stage == 2 then
