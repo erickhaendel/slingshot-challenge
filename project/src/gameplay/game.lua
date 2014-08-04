@@ -171,16 +171,17 @@ function configuration.state_object:change(e)
 
 					configuration.game_ended = 1
 
+			    	-- Destroi eventos criados
+					configuration.state_object:removeEventListener("change", configuration.state_object);
+
+					Runtime:removeEventListener("touch", donottouch_warn)		
+					
+					Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+					projectiles_container:removeEventListener("touch", projectileTouchListener);
+					
 					timer.performWithDelay( 2000, function( )
+
 				    	assets_image.removeGameplayScenario()
-
-				    	-- Destroi eventos criados
-						configuration.state_object:removeEventListener("change", configuration.state_object);
-
-						Runtime:removeEventListener("touch", donottouch_warn)		
-						
-						Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
-						projectiles_container:removeEventListener("touch", projectileTouchListener);
 
 					    composer.removeScene('src.gameplay.game')
 					    composer.gotoScene( "src.menu.results_scene", "fade", 400)
