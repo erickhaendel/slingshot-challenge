@@ -335,7 +335,7 @@ function stage_2( )
 
 	end
 
-	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
+	timer.performWithDelay(200, function ( event )	
 
 			if configuration.game_is_hit == 0 then
 				spawnProjectile(); -- Spawn the first projectile.
@@ -365,7 +365,7 @@ function stage_3( )
 
 	if configuration.game_is_shooted == 0 then
 
-		timer.performWithDelay(1500, function ()
+		timer.performWithDelay(750, function ()
 		assets_image.createStage3()	
 		
 		
@@ -389,7 +389,7 @@ function stage_3( )
 		end)	
 
 
-	timer.performWithDelay( 3000, function( )
+	timer.performWithDelay( 1500, function( )
 		if current_arrow then			
 			current_arrow:removeSelf( ); current_arrow = nil;
 		end			
@@ -404,7 +404,7 @@ function stage_4()
 
 	if configuration.game_is_shooted == 0 then
 
-		timer.performWithDelay(1500, function ( )
+		timer.performWithDelay(750, function ( )
 		assets_image.createStage4()
 
 		-- seta indicando que é para acertar a lata			
@@ -427,7 +427,7 @@ function stage_4()
 
 		end)	
 
-		timer.performWithDelay( 3000, function( )
+		timer.performWithDelay( 1500, function( )
 			if current_arrow then			
 				current_arrow:removeSelf( ); current_arrow = nil;
 			end			
@@ -468,6 +468,7 @@ function stage_5()
 			timer.performWithDelay( 3200, function()
 				transition.to(man_green_sprite, {time=1200, x = configuration.stone_position_x + 590, y = 70, transition = easingx.easeOut});
 				man_green_sprite:scale(0.5, 0.5)
+				
 			end)
 		end)
 
