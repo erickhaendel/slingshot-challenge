@@ -229,7 +229,7 @@ function next_turn()
 
 			if configuration.game_current_player == 1 and configuration.game_current_round == 1 then
 				assets_image.load_animation_man_sprite("yellow")
-			else 
+			elseif configuration.game_current_player == 2 and configuration.game_current_round == 1 then 
 				assets_image.load_animation_man_sprite("green")		
 			end
 
@@ -268,14 +268,7 @@ function next_round()
 
 		spawnProjectile(); -- Spawn the first projectile.
 
-		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
-
-
-		-- if configuration.game_current_player == 1 then
-		-- 	assets_image.load_animation_man_sprite("yellow")
-		-- else 
-		-- 	assets_image.load_animation_man_sprite("green")		
-		-- end		
+		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )	
 
 		end)		
 
