@@ -209,11 +209,10 @@ end
 -- prepare the gameplay to the next round
 function next_turn()
 
-	if configuration.game_current_turn == 1 and configuration.game_current_round == 1  then 
-
+	if configuration.game_current_turn == 1  then 
 		configuration.game_current_turn = 2
 		gamelib.changeCurrentPlayer()
-	end
+	end	
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
 
@@ -228,7 +227,7 @@ function next_turn()
 			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 
 
-			if configuration.game_current_player == 1 then
+			if configuration.game_current_player == 1 and configuration.game_current_round == 1 then
 				assets_image.load_animation_man_sprite("yellow")
 			else 
 				assets_image.load_animation_man_sprite("green")		
