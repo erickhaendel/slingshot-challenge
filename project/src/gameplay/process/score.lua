@@ -108,13 +108,13 @@ function score_process(assets_image)
 
 	-- cenario 02, jogador 2 acerta as latas do jogador 1
 	elseif player == 2 and intend_to_hit == 1 then
-		configuration.game_score_player[1] = configuration.game_score_player[1] + points_p1
+		configuration.game_score_player[1] = configuration.game_score_player[1] + points_p2
 		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + configuration.game_score_player[1]
 
 	-- cenario 02, jogador 2 acerta suas proprias latas
 	elseif player == 2 and intend_to_hit == 2 then
 		--configuration.game_score_player[2] = configuration.game_score_player[2] + (points_p2)/2
-		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + (points_p2)/2
+		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + points_p1
 	end
 
 	-- exibe os pontos na grade
