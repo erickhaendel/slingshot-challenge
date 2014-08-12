@@ -34,7 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration = require( "src.singleplayer.configuration" )
 
 function prepare_can_organization(  )
 

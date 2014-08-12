@@ -33,10 +33,10 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration = require( "src.singleplayer.configuration" )
 
 
--- musica de fundo gameplay
+-- musica de fundo singleplayer
 function startBackgroundMusic( )
 	local gameplay_song = audio.loadStream( "resources/audio/songs/gameplay.wav" )
 	audio.stop( 1 )

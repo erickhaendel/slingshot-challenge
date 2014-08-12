@@ -39,9 +39,9 @@ module(..., package.seeall) -- este arquivo é uma biblioteca
 require( "src.infra.includeall" )
 
 -- my libs
-local assets_audio			= require( "src.gameplay.assets_audio" )
-local configuration 		= require( "src.gameplay.configuration" )
-local can_process_lib 		= require( "src.gameplay.process.can" )
+local assets_audio			= require( "src.singleplayer.assets_audio" )
+local configuration 		= require( "src.singleplayer.configuration" )
+local can_process_lib 		= require( "src.singleplayer.process.can" )
 
 function score_animation( intend_to_hit, assets_image )
 

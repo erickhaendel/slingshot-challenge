@@ -39,9 +39,9 @@ module(..., package.seeall)
 require( "src.infra.includeall" )
 
 -- my libs
-local assets_audio			= require( "src.gameplay.assets_audio" )
-local configuration 		= require( "src.gameplay.configuration" )
-local score_process_lib 	= require( "src.gameplay.process.score" )
+local assets_audio			= require( "src.singleplayer.assets_audio" )
+local configuration 		= require( "src.singleplayer.configuration" )
+local score_process_lib 	= require( "src.singleplayer.process.score" )
 
 -- verifica se houve colisao entre dois objetos
 function hitTestObjects(obj1, obj2)

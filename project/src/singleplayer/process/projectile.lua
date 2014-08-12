@@ -1,10 +1,10 @@
 
 module(..., package.seeall)
 
-local configuration 			= require( "src.gameplay.configuration" )
-local assets_audio				= require( "src.gameplay.assets_audio" )
-local smoke_sprite_lib 			= require( "src.gameplay.assets.smoke_sprite" )
-local collision_process_lib 	= require( "src.gameplay.process.collision" )
+local configuration 			= require( "src.singleplayer.configuration" )
+local assets_audio				= require( "src.singleplayer.assets_audio" )
+local smoke_sprite_lib 			= require( "src.singleplayer.assets.smoke_sprite" )
+local collision_process_lib 	= require( "src.singleplayer.process.collision" )
 
 local network_gameplay   	= require( "src.network.gameplaysync" )
 local player1_obj           = require( "src.player.player1" )
