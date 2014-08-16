@@ -213,6 +213,9 @@ function next_turn()
 		gamelib.changeCurrentPlayer()
 	end	
 
+	print( "currente turn: "..configuration.game_current_turn )
+	print( "current player: "..configuration.game_current_player )
+
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
@@ -234,6 +237,12 @@ function next_turn()
 				configuration.assets_image_object = assets_image				
 			end
 
+			timer.performWithDelay(2000, function ( event )	
+				if configuration.game_current_player == 2 then
+					-- chama o npc pra jogar
+					npc_lib.npc("random")
+				end
+			end)
 		end)	
 end
 
@@ -269,10 +278,16 @@ function next_round()
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		spawnProjectile(); -- Spawn the first projectile.
+			spawnProjectile(); -- Spawn the first projectile.
 
-		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )	
+			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )	
 
+			timer.performWithDelay(2000, function ( event )	
+				if configuration.game_current_player == 2 then
+					-- chama o npc pra jogar
+					npc_lib.npc("random")
+				end
+			end)
 		end)		
 
 end
@@ -306,6 +321,7 @@ function start_game()
     configuration.game_ended = 0
 
 	configuration.game_current_player = 2 -- começa pelo verde sempre para o singleplayer    
+	configuration.game_i_am_player_number = 1 -- o jogador humano sera sempre o amarelo
 
   	 -- carrega objetos do cenario
 	assets_image.createGameplayScenario()
@@ -335,7 +351,12 @@ function start_game()
 				assets_image.load_animation_man_sprite("yellow")	
 			end			
 
-			npc_lib.npc("random")
+			timer.performWithDelay(2000, function ( event )	
+				if configuration.game_current_player == 2 then
+					-- chama o npc pra jogar
+					npc_lib.npc("random")
+				end
+			end)
 		end)
 
 	-- Inicia a musica do singleplayer

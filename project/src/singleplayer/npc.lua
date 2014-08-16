@@ -49,7 +49,7 @@ function npc( type )
 	local left_side_y = configuration.stone_position_y + 300
 
 	-- localizacao das latas à direita
-	local right_side_x = 1600
+	local right_side_x = 350
 	local right_side_y = configuration.stone_position_y + 300
 
 	if type == "tit-for-tat" then
@@ -66,7 +66,7 @@ function npc( type )
 	elseif type == "random" then
 
 		local side = math.random(1,2)
-
+		print( "NPC choosed"..side )
 		if side == 1 then
 			configuration.projectile_object.x = left_side_x
 			configuration.projectile_object.y = left_side_y
