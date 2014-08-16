@@ -43,18 +43,21 @@ _H = display.contentHeight;
 ------------------------------------------------
 
 -- BUTTONS IMAGES
-signup_button_image 	= "resources/images/buttons/signup.png"
-login_button_image 		= "resources/images/buttons/login.png"
-cancel_button_image 	= "resources/images/buttons/cancel.png"
-back_button_image 		= "resources/images/buttons/back.png"
-menu_button_image 		= "resources/images/buttons/menu.png"
-confirm_button_image 	= "resources/images/buttons/confirm.png"
-ok_button_image 		= "resources/images/buttons/ok.png"
-play_button_image 		= "resources/images/buttons/play.png"
-invite_button_image 	= "resources/images/buttons/invite.png"
-settings_button_image 	= "resources/images/buttons/settings.png"
-credits_button_image 	= "resources/images/buttons/credits.png"
-about_button_image 		= "resources/images/buttons/about.png"
+signup_button_image 		= "resources/images/buttons/signup.png"
+login_button_image 			= "resources/images/buttons/login.png"
+cancel_button_image 		= "resources/images/buttons/cancel.png"
+back_button_image 			= "resources/images/buttons/back.png"
+menu_button_image 			= "resources/images/buttons/menu.png"
+confirm_button_image 		= "resources/images/buttons/confirm.png"
+ok_button_image 			= "resources/images/buttons/ok.png"
+play_button_image 			= "resources/images/buttons/play.png"
+singleplayer1_button_image 	= "resources/images/buttons/singleplayer1.png"
+singleplayer2_button_image 	= "resources/images/buttons/singleplayer2.png"
+tutorial_button_image 		= "resources/images/buttons/tutorial.png"
+invite_button_image 		= "resources/images/buttons/invite.png"
+settings_button_image 		= "resources/images/buttons/settings.png"
+credits_button_image 		= "resources/images/buttons/credits.png"
+about_button_image 			= "resources/images/buttons/about.png"
 
 -- BACKGROUND IMAGES
 signup_background_image 	= "resources/images/backgrounds/signup.png"
@@ -82,6 +85,25 @@ press_button_sound					= ""
 ------------------------------------------------
 -- POSITIONS, FONTS, COLORS, TYPES, SIZES	  --
 ------------------------------------------------
+
+-- MENU_SCENE OBJECT POSITIONS
+
+tutorial_button_x			= display.contentCenterX/2 + 750
+tutorial_button_y			= display.contentCenterY + 100
+play_button_x				= display.contentCenterX
+play_button_y				= display.contentCenterY - 100
+singleplayer1_button_x		= display.contentCenterX/2 - 100
+singleplayer1_button_y		= display.contentCenterY + 100
+singleplayer2_button_x		= display.contentCenterX 
+singleplayer2_button_y		= display.contentCenterY + 100
+
+about_button_x				= display.contentCenterX/2 - 100
+about_button_y				= display.contentCenterY + 280
+credits_button_x			= display.contentCenterX - 100
+credits_button_y			= display.contentCenterY + 280
+settings_button_x			= display.contentCenterX + 270
+settings_button_y			= display.contentCenterY + 280
+
 
 -- LOGIN SCENE OBJECT POSITIONS
 

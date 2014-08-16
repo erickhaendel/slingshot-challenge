@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- welcome.lua
--- Dewcription: welcome screen
+-- menu.lua
+-- Dewcription: menu screen
 -- @author Erick <erickhaendel@gmail.com>
 -- @modified 
 -- @version 1.00
@@ -36,157 +36,230 @@
 require( "src.infra.includeall" )
 local configuration = require( "src.menu.menu_settings" )
 
---local util =  require( "src.infra.util" )
-
 local scene = composer.newScene()
 
--- -----------------------------------------------------------------------------------------------------------------
--- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
--- -----------------------------------------------------------------------------------------------------------------
+menuGroup = display.newGroup( )
 
--- local forward references should go here
+-- objetos com valor nil
+local  background, btnSettings, btnPlay, btnTutorial, btnCredits, btnAbout, btnSinglePlayer1, btnSinglePlayer2
 
--- -------------------------------------------------------------------------------
+-- Declaracao dos Metodos com valor nil
+local playPress, tutorialPress, creditsPress, aboutPress, settingsPress, singleplayer1Press, singleplayer2Press
+local loadBtnSettings, loadBtnPlay, loadBtnTutorial, loadBtnCredits, loadBtnAbout,loadBtnSinglePlayer1, loadBtnSinglePlayer2
+local removeAll, createAll
 
-local  btnSettings , btnPlay, btnTutorial, btnCredits, btnAbout , btnSgPlayer
--- Metodos
-local onBtnAboutEvent, onBtnCreditsEvent, onBtnPlayEvent, onBtnPlayEvent , onbtnSgPlayerPress
-
-local function removeObject(object, group)
-    if group then group:remove( object ); end
-    if object then object = nil; end 
+--------------------------------------------------------------------------------------------------------------
+-- Load object Methods
+function loadBackground()
+    background = display.newImage( configuration.menu_background_image, 
+        display.contentCenterX, 
+        display.contentCenterY, 
+        true )
+    menuGroup:insert( background )    
 end
 
--- "scene:create()"
-function scene:create( event )
-    local sceneGroup = self.view
-
-    -- Create elements
-    -- Background & box  welcome
-    local background = display.newImage( "resources/images/backgrounds/menu.png", display.contentCenterX , display.contentCenterY , true )
-    -- Buttons
-    btnX = display.contentCenterX / 2  
-    btnY = ( display.contentCenterY  ) 
-
-    btnPlay     = display.newImage( "resources/images/buttons/play.png", display.contentCenterX , display.contentCenterY - 100, true  )
-    btnSgPlayer = display.newImage( "resources/images/buttons/singleplayer.png", display.contentCenterX , display.contentCenterY + 100, true)
-    btnTutorial = display.newImage( "resources/images/buttons/tutorial.png",  btnX + 750, btnY + 30, true  )
-
-    btnAbout    = display.newImage( "resources/images/buttons/about.png", btnX - 100, btnY + 30, true  )
-    btnCredits  = display.newImage( "resources/images/buttons/credits.png", btnX + 20, btnY + 140, true  )
-    btnSettings = display.newImage( "resources/images/buttons/settings.png", btnX + 170, btnY + 280, true  )
-
-    --Insert elements to scene
-    sceneGroup:insert( background ) -- insert background to group
-    sceneGroup:insert( btnSgPlayer)
-    sceneGroup:insert( btnPlay ) 
-    sceneGroup:insert( btnTutorial )     
-    sceneGroup:insert( btnAbout ) 
-    sceneGroup:insert( btnCredits ) 
-    sceneGroup:insert( btnSettings )
-    
-
+function loadBtnSettings()
+    btnSettings = display.newImage( configuration.settings_button_image, 
+        configuration.settings_button_x, 
+        configuration.settings_button_y, 
+        true  )
+    menuGroup:insert( btnSettings )
+    btnSettings:addEventListener( "touch" , settingsPress )
 end
 
-
--- "scene:show()"
-function scene:show( event )
-
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if ( phase == "will" ) then
-        -- Called when the scene is still off screen (but is about to come on screen).
-    elseif ( phase == "did" ) then
-
-        -- Eventos
-        btnPlay:addEventListener( "touch" , onBtnPlayEvent )
-        btnTutorial:addEventListener( "touch" , onBtnTutorialEvent )
-        btnSettings:addEventListener( "touch" , onBtnSettingsEvent )
-        btnCredits:addEventListener( "touch" , onBtnCreditsEvent )
-        btnAbout:addEventListener( "touch" , onBtnAboutEvent )
-        btnSgPlayer:addEventListener( "touch" , onbtnSgPlayerPress )
-    end
+function loadBtnPlay()
+    btnPlay     = display.newImage( configuration.play_button_image, 
+        configuration.play_button_x, 
+        configuration.play_button_y, 
+        true  )
+    menuGroup:insert( btnPlay ) 
+    btnPlay:addEventListener( "touch" , playPress )
 end
 
-
--- "scene:hide()"
-function scene:hide( event )
-    removeAll()
-    local sceneGroup = self.view
-    local phase = event.phase
-
-    if ( phase == "will" ) then
-        -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
-    elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
-    end
+function loadBtnTutorial()
+    btnTutorial = display.newImage( configuration.tutorial_button_image,  
+        configuration.tutorial_button_x, 
+        configuration.tutorial_button_y, 
+        true  )
+    menuGroup:insert( btnTutorial )     
+    btnTutorial:addEventListener( "touch" , tutorialPress )
 end
 
-
--- "scene:destroy()"
-function scene:destroy( event )
-    local sceneGroup = self.view
-    removeAll()
+function loadBtnCredits()
+    btnCredits  = display.newImage( configuration.credits_button_image, 
+        configuration.credits_button_x, 
+        configuration.credits_button_y, 
+        true  )
+    menuGroup:insert( btnCredits )  
+    btnCredits:addEventListener( "touch" , creditsPress )   
 end
 
-
-function removeAll( sceneGroup )
-    removeObject( background , sceneGroup)  -- destroi imagem de fundo
-    removeObject( btnPlay , sceneGroup)  -- destroi botao back
-    removeObject( btnTutorial , sceneGroup)  -- destroi botao back    
-    removeObject( btnCredits , sceneGroup)  -- destroi botao
-    removeObject( btnAbout , sceneGroup)  -- destroi botao
-    removeObject( btnSettings , sceneGroup)  -- destroi botao
-    removeObject( onOffSwitch , sceneGroup)  -- destroi botao
-    removeObject( btnSgPlayer , sceneGroup)  -- destroi botao
+function loadBtnAbout()
+    btnAbout    = display.newImage( configuration.about_button_image, 
+        configuration.about_button_x, 
+        configuration.about_button_y, 
+        true  )
+    menuGroup:insert( btnAbout )
+    btnAbout:addEventListener( "touch" , aboutPress )     
 end
 
--- Events for Button Play
-function onBtnPlayEvent( event )
+function loadBtnSinglePlayer1()
+   btnSinglePlayer1 = display.newImage( configuration.singleplayer1_button_image, 
+        configuration.singleplayer1_button_x, 
+        configuration.singleplayer1_button_y, 
+    true)
+    menuGroup:insert( btnSinglePlayer1 ) 
+    btnSinglePlayer1:addEventListener( "touch" , singleplayer1Press )
+end
+
+function loadBtnSinglePlayer2()
+   btnSinglePlayer2 = display.newImage( configuration.singleplayer2_button_image, 
+        configuration.singleplayer2_button_x, 
+        configuration.singleplayer2_button_y, 
+    true)
+    menuGroup:insert( btnSinglePlayer2 ) 
+    btnSinglePlayer2:addEventListener( "touch" , singleplayer2Press )   
+end
+--------------------------------------------------------------------------------------------------------------
+-- EVENT METHODS
+function playPress( event )
     removeAll()
     composer.removeScene('src.menu.menu_scene')
-    --composer.gotoScene( "src.gameplay.game", "fade", 400)
     composer.gotoScene( "src.menu.pregameplay_scene", "fade", 400)
 end
 
--- Events for Button Play
-function onBtnTutorialEvent( event )
+function tutorialPress( event )
     removeAll()
     composer.removeScene('src.menu.menu_scene')
     composer.gotoScene( "src.tutorial.tutorial_gameplay", "fade", 400)
 end
 
--- Events for Button Credits
-function onBtnCreditsEvent( event )
+function creditsPress( event )
     removeAll()
     composer.removeScene('src.menu.menu_scene')
     composer.gotoScene( "src.menu.credits_scene", "fade", 400)
 end
 
--- Events for Button About
-function onBtnAboutEvent( event )
+function aboutPress( event )
     removeAll()
     composer.removeScene('src.menu.menu_scene')
     composer.gotoScene( "src.menu.about_scene", "fade", 400)
 end
 
--- Events for Button Settings
-function onBtnSettingsEvent( event )
+function settingsPress( event )
     removeAll()
-    if( event.phase == "began") then
-        composer.removeScene('src.menu.menu_scene')
-        composer.gotoScene( "src.menu.settings_scene", "fade", 400)
-    end
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.menu.settings_scene", "fade", 400)
 end
 
--- Events for Button Singleplayer
-function onbtnSgPlayerPress( event )
+function singleplayer1Press( event )
     removeAll()
     composer.removeScene('src.menu.menu_scene')
     composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)
+end
+
+function singleplayer2Press( event )
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)
+end
+
+function createAll()
+
+  if not background then loadBackground(); end
+
+  if not btnSettings then loadBtnSettings(); end
+
+  if not btnPlay then loadBtnPlay(); end
+
+  if not btnTutorial then loadBtnTutorial(); end
+
+  if not btnCredits then loadBtnCredits(); end
+
+  if not btnAbout then loadBtnAbout();  end 
+
+  if not btnSinglePlayer1 then loadBtnSinglePlayer1(); end
+
+  if not btnSinglePlayer2 then loadBtnSinglePlayer2(); end
+
+end
+
+function removeAll()
+
+    if(background) then 
+        menuGroup:remove( background ); 
+        background:removeSelf(); 
+        background = nil; 
+    end    
+
+    if(btnSettings) then 
+        btnSettings:removeEventListener( "touch" , settingsPress ); 
+        menuGroup:remove( btnSettings ); 
+        btnSettings:removeSelf(); 
+        btnSettings = nil;  
+    end
+
+    if(btnPlay) then 
+        btnPlay:removeEventListener( "touch" , playPress ); 
+        menuGroup:remove( btnPlay ); 
+        btnPlay:removeSelf(); 
+        btnPlay = nil; 
+    end
+
+    if(btnTutorial) then 
+        btnTutorial:removeEventListener( "touch" , tutorialPress ); 
+        menuGroup:remove( btnTutorial ); 
+        btnTutorial:removeSelf(); 
+        btnTutorial = nil; 
+    end
+
+    if(btnCredits) then 
+        btnCredits:removeEventListener( "touch" , creditsPress ); 
+        menuGroup:remove( btnCredits ); 
+        btnCredits:removeSelf(); 
+        btnCredits = nil; 
+    end
+
+    if(btnAbout) then 
+        btnAbout:removeEventListener( "touch" , aboutPress );
+        menuGroup:remove( btnAbout ); 
+        btnAbout:removeSelf(); 
+        btnAbout = nil; 
+    end
+
+    if(btnSinglePlayer1) then 
+        btnSinglePlayer1:removeEventListener( "touch" , singleplayer1Press ); 
+        menuGroup:remove( btnSinglePlayer1 ); 
+        btnSinglePlayer1:removeSelf(); 
+        btnSinglePlayer1 = nil; 
+    end
+
+    if(btnSinglePlayer2) then 
+        btnSinglePlayer2:removeEventListener( "touch" , singleplayer2Press ); 
+        menuGroup:remove( btnSinglePlayer2 ); 
+        btnSinglePlayer2:removeSelf(); 
+        btnSinglePlayer2 = nil; 
+    end    
+end
+
+-- "scene:create()"
+function scene:create( event )
+    createAll()
+end
+
+-- "scene:show()"
+function scene:show( event )
+    createAll()
+end
+
+-- "scene:hide()"
+function scene:hide( event )
+    --removeAll()
+end
+
+-- "scene:destroy()"
+function scene:destroy( event )
+    removeAll()
 end
 
 -- -------------------------------------------------------------------------------
@@ -198,12 +271,5 @@ scene:addEventListener( "hide", scene )
 scene:addEventListener( "destroy", scene )
 
 -- -------------------------------------------------------------------------------
-
-local function checkMemory()
-   collectgarbage( "collect" )
-   local memUsage_str = string.format( "MEMORY = %.3f KB", collectgarbage( "count" ) )
-   print( memUsage_str, "TEXTURE = "..(system.getInfo("textureMemoryUsed") / (1024 * 1024) ) )
-end
--- timer.performWithDelay( 1000, checkMemory, 0 )
 
 return scene
