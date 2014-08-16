@@ -34,7 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration 			= require( "src.tutorial.tutorial_settings" )
+local configuration 			= require( "src.singleplayer.singleplayer_settings" )
 
 ----------------------------------------------------------
 -- UPPER SCORES TILES											--

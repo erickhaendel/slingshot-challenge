@@ -1,7 +1,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.gameplay.configuration" )
+local configuration = require( "src.singleplayer.singleplayer_settings" )
 
 -- Pass state reference
 state = {};

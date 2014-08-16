@@ -1,9 +1,9 @@
 ------------------------------------------------------------------------------------------------------------------------------
 -- game.lua
--- Dewcription: gameplay file
+-- Dewcription: singleplayer file
 -- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @version 1.00
--- @date 06/29/2014
+-- @date 09/16/2014
 -- @website http://www.psyfun.com.br
 -- @license MIT license
 --
@@ -36,27 +36,25 @@
 -------------------------------------------
 require( "src.infra.includeall" )
 
--- Assets
-local assets_image 				= require( "src.gameplay.assets" )
-local assets_audio				= require( "src.gameplay.assets_audio" )
-local projectile_tiles_lib		= require( "src.gameplay.assets.projectile_tiles" )
-local band_line_tiles_lib 		= require( "src.gameplay.assets.band_line_tiles" )
-
 -- utils
-local gamelib 					= require( "src.gameplay.gamelib" )
-local configuration 			= require( "src.gameplay.configuration" )
+local gamelib 					= require( "src.singleplayer.gamelib" )
+local configuration 			= require( "src.singleplayer.singleplayer_settings" )
+
+-- Assets
+local assets_image 				= require( "src.singleplayer.assets" )
+local assets_audio				= require( "src.singleplayer.assets_audio" )
+local projectile_tiles_lib		= require( "src.singleplayer.assets.projectile_tiles" )
+local band_line_tiles_lib 		= require( "src.singleplayer.assets.band_line_tiles" )
 
 -- Process
-local collision_process_lib 	= require( "src.gameplay.process.collision" )
-local projectile_process_lib 	= require( "src.gameplay.process.projectile" )
+local collision_process_lib 	= require( "src.singleplayer.process.collision" )
+local projectile_process_lib 	= require( "src.singleplayer.process.projectile" )
 
--- Network
--- local network_pregameplay   	= require( "src.network.gameplaysync" )
-local player1_obj           	= require( "src.player.player1" )
-local player2_obj           	= require( "src.player.player2" )
+-- NPC
+local npc_lib					= require( "src.singleplayer.npc" ) 
 
 -- sprite
-local donottouch_sprite_lib 	= require( "src.gameplay.assets.donottouch_sprite" )
+local donottouch_sprite_lib 	= require( "src.singleplayer.assets.donottouch_sprite" )
 
 -------------------------------------------
 -- GROUPS
@@ -145,7 +143,7 @@ function projectileTouchListener(e)
 						-- Remove the elastic band
 						band_line_tiles_lib.removeBandLine( )
 
-						stone = projectile_process_lib.launched_process(stone, e,  assets_image, configuration.state_object)
+						stone = projectile_process_lib.launched_process(stone, e, configuration.state_object)
 												
 					end
 				end
@@ -182,8 +180,9 @@ function configuration.state_object:change(e)
 					timer.performWithDelay( 2000, function( )
 
 				    	assets_image.removeGameplayScenario()
+						configuration.assets_image_object = assets_image				    	
 
-					    composer.removeScene('src.gameplay.game')
+					    composer.removeScene('src.singleplayer.game')
 					    composer.gotoScene( "src.menu.results_scene", "fade", 400)
 					end )
 
@@ -206,7 +205,7 @@ end
 
 
 
--- prepare the gameplay to the next round
+-- prepare the singleplayer to the next round
 function next_turn()
 
 	if configuration.game_current_turn == 1  then 
@@ -229,14 +228,16 @@ function next_turn()
 
 			if configuration.game_current_player == 1 and configuration.game_current_round == 1 then
 				assets_image.load_animation_man_sprite("yellow")
+				configuration.assets_image_object = assets_image				
 			elseif configuration.game_current_player == 2 and configuration.game_current_round == 1 then 
 				assets_image.load_animation_man_sprite("green")		
+				configuration.assets_image_object = assets_image				
 			end
 
 		end)	
 end
 
--- prepare the gameplay to the next round
+-- prepare the singleplayer to the next round
 function next_round()
 
 	-- reset turn
@@ -258,9 +259,11 @@ function next_round()
 
 	-- cria o label de novo round
 	assets_image.reload_round_tiles( )
+	configuration.assets_image_object = assets_image
 
 	-- cria novas latas
 	assets_image.reload_can_tiles( )
+	configuration.assets_image_object = assets_image	
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
 
@@ -302,32 +305,40 @@ function start_game()
     configuration.game_final_score_player[2] = 0   
     configuration.game_ended = 0
 
+	configuration.game_current_player = 2 -- começa pelo verde sempre para o singleplayer    
+
   	 -- carrega objetos do cenario
 	assets_image.createGameplayScenario()
+	configuration.assets_image_object = assets_image	
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera)
 
 	-- passando o cenario para uma variavel global - utilizado pelo pubnub
 	configuration.assets_image_object = assets_image
 
-
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 
-		configuration.state_object:addEventListener("change", configuration.state_object); -- Create listnener for state changes in the game
+			configuration.state_object:addEventListener("change", configuration.state_object); -- Create listnener for state changes in the game
 
-		-- Tell the projectile it's good to go!
-		projectile_tiles_lib.ready = true;
+			-- Tell the projectile it's good to go!
+			projectile_tiles_lib.ready = true;
 
-		spawnProjectile(); -- Spawn the first projectile.
+			spawnProjectile(); -- Spawn the first projectile.
 
-		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
+			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )
 
-		Runtime:addEventListener("touch", donottouch_warn)		
+			Runtime:addEventListener("touch", donottouch_warn)		
 
-		assets_image.load_animation_man_sprite("yellow")			
+			if configuration.game_current_player == 2 then
+				assets_image.load_animation_man_sprite("green")	
+			else		
+				assets_image.load_animation_man_sprite("yellow")	
+			end			
+
+			npc_lib.npc("random")
 		end)
 
-	-- Inicia a musica do gameplay
+	-- Inicia a musica do singleplayer
 	assets_audio.startBackgroundMusic( )
 end
 

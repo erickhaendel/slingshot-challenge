@@ -34,7 +34,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.singleplayer.configuration" )
+local configuration = require( "src.singleplayer.singleplayer_settings" )
 
 local can_tiles_lib 				= require( "src.singleplayer.assets.can_tiles" )
 local ground_tiles_lib 				= require( "src.singleplayer.assets.ground_tiles" )

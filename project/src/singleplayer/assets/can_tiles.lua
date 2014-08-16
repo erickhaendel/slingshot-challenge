@@ -34,8 +34,8 @@
 
 module(..., package.seeall)
 
-local configuration 		= require( "src.gameplay.configuration" )
-local can_process_lib 		= require( "src.gameplay.process.can" )
+local configuration 		= require( "src.singleplayer.singleplayer_settings" )
+local can_process_lib 		= require( "src.singleplayer.process.can" )
 
 ----------------------------------------------------------
 -- CAN TILES									--

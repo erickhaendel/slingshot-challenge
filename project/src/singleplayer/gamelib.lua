@@ -33,7 +33,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.singleplayer.configuration" )
+local configuration = require( "src.singleplayer.singleplayer_settings" )
 
 function changeCurrentPlayer()
 		-- change the current player

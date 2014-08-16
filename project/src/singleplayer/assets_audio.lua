@@ -33,7 +33,7 @@
 
 module(..., package.seeall)
 
-local configuration = require( "src.singleplayer.configuration" )
+local configuration = require( "src.singleplayer.singleplayer_settings" )
 
 
 -- musica de fundo singleplayer

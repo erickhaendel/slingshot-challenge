@@ -1,12 +1,11 @@
 
 module(..., package.seeall)
 
-local configuration 			= require( "src.singleplayer.configuration" )
+local configuration 			= require( "src.singleplayer.singleplayer_settings" )
 local assets_audio				= require( "src.singleplayer.assets_audio" )
 local smoke_sprite_lib 			= require( "src.singleplayer.assets.smoke_sprite" )
 local collision_process_lib 	= require( "src.singleplayer.process.collision" )
 
-local network_gameplay   	= require( "src.network.gameplaysync" )
 local player1_obj           = require( "src.player.player1" )
 local player2_obj           = require( "src.player.player2" )
 
@@ -89,111 +88,7 @@ function converter(iso)
     end
 end
 
--- Metodo de lancamneto de pedra multiplayer
-function remote_launched_process( info )
-
-	local stone = configuration.projectile_object
-	local assets_image = configuration.assets_image_object
-
-	stone.isVisible = true
-
-	configuration.game_is_shooted = 1
-
-	-- Reset the stage focus
-	display.getCurrentStage():setFocus(nil);
-	stone.isFocus = false;	
-	-- Launch projectile
-
-	configuration.projecttile_scale = 1.0
-
--- velocity, angle, x, y
-	-- SYNC NETWORK
-	--info["projectile"]["player"] = configuration.game_i_am_player_number
-	local angle = info["projectile"]["angle"]
-	local dx = info["projectile"]["dx"] 
-	local dy = info["projectile"]["dy"] 
-	local sentido = info["projectile"]["sentido"]	
-
-	t = trajectory(120,angle,dx,dy)
-
-	-- iso projection of 1 deg
-	c = converter(1)
-
-		timer.performWithDelay(1, function(e)
-				local xx = c(false,dx,0) -- x in world co-ords
-				local y = t(xx) -- y in world co-ords
-				local _,yy = c(true,xx,y) -- y in screen co-ords
-				local _,y0 = c(true,xx,0) --ground in screen co-ords
-				yy = math.floor(yy) -- not needed 
-				
-				dx = dx + 7
-					
-				dy = yy
-
-				if yy>y0 then 
-
-					if sentido == 1 then		
-						stone.x = dx
-					else
-						stone.x = (display.contentWidth - dx)
-					end
-
-					stone.y = (display.contentHeight )	- dy 
-
-					-- abaixo do muro
-					if stone.y > 400 then
-						
-						if stone.xScale > 0.4 then
-							
-							stone.xScale = stone.xScale - dy*0.00005
-							stone.yScale = stone.yScale - dy*0.00005
-
-						else
-							timer.cancel( e.source )
-							smoke_sprite_lib.newSmokeSprite(stone.x, stone.y)								
-							stone.isVisible = false
-												
-						end	
-					
-					-- acima do muro
-					elseif (stone.xScale - dy*0.00004) > 0 then
-												
-
-						stone.xScale = stone.xScale - dy*0.00001
-						stone.yScale = stone.yScale - dy*0.00001
-					end
-				end -- if it's above ground
-		end,1000)
-
-	stone.timer1 = timer.performWithDelay(1, function(e)
-		-- diminui a escala da pedra e traça sua trajetoria
-
-		-- monitora colisao com as latas
-		if configuration.game_is_hit == 0 and configuration.projecttile_scale > 0 then		
-
-			collision_process_lib.collision_process(stone, configuration.assets_image_object)
-		else
-			timer.cancel(stone.timer1);
-			stone.timer1 = nil;
-		end			
-	end,0)	
-
-	-- Wait a second before the catapult is reloaded (Avoids conflicts).
-	stone.timer = timer.performWithDelay(1000, 
-		function(e)
-			configuration.state_object:dispatchEvent({name="change", state="fire"});
-
-			if(e.count == 1) then
-				timer.cancel(stone.timer);
-				stone.timer = nil;			
-			end
-		
-		end
-	, 1)
-end
-
-
-function launched_process(stone, e, assets_image, state)
+function launched_process(stone, e, state)
 
 	configuration.game_is_shooted = 1
 
@@ -232,18 +127,7 @@ function launched_process(stone, e, assets_image, state)
 		sentido = -1
 	end
 	
-	-- velocity, angle, x, y
-	-- SYNC NETWORK
-	local info = {}
-	info["projectile"] = {}
-	info["projectile"]["player"] = configuration.game_i_am_player_number
-	info["projectile"]["angle"] = angle
-	info["projectile"]["dx"] =dx
-	info["projectile"]["dy"] = dy
-	info["projectile"]["sentido"] = sentido	
-
-	network_gameplay.updateMyProjectile(info)			
-	
+	-- velocity, angle, x, y		
 	t = trajectory(120,angle,dx,dy)
 
 	-- iso projection of 1 deg
@@ -256,7 +140,7 @@ function launched_process(stone, e, assets_image, state)
 		if configuration.game_is_hit == 0 and 
 			configuration.game_ended == 0 and 
 			stone.xScale > 0 and  
-			assets_image.can_tiles_obj then
+			configuration.assets_image_object.can_tiles_obj then
 
 			collision_process_lib.collision_process(stone, configuration.assets_image_object)
 		else
