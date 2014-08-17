@@ -35,19 +35,10 @@
 -- my libs
 require( "src.infra.includeall" )
 local configuration = require( "src.menu.menu_settings" )
-
-local widget = require( "widget" )
-
--- local util =  require( "src.infra.util" )
+local singleplayer_settings = require( "src.singleplayer.singleplayer_settings" )
+local gameplay_settings = require( "src.gameplay.configuration" )
 
 local scene = composer.newScene()
-
--- -----------------------------------------------------------------------------------------------------------------
--- All code outside of the listener functions will only be executed ONCE unless "composer.removeScene()" is called.
--- -----------------------------------------------------------------------------------------------------------------
-
--- local forward references should go here
-
 -- -------------------------------------------------------------------------------
 
 local function removeObject(object, group)
@@ -55,35 +46,111 @@ local function removeObject(object, group)
   	if object then object = nil; end 
 end
 
-local sceneGroup , background
-local btnBack
+local sceneGroup , background, btnBack, roundsLabel, roundsNumberLabel, moreRoundsButton, lessRoundsButton
+
 -- Metodos
-local removeAll, onBtnBackPress, onSwitchPress
+local removeAll, onBtnBackPress, onSwitchPress, loadLessRoundsButton, loadMoreRoundsButton, loadRoundsNumberLabel
+local moreRoundsButtonPress, lessRoundsButtonPress
+
+loadRoundsLabel = function()
+  roundsLabel = display.newText( 
+    "Number of Rounds", 
+    configuration.rounds_label_x, 
+    configuration.rounds_label_y, 
+    configuration.rounds_label_font_name, 
+    configuration.rounds_label_font_size )
+
+  roundsLabel:setTextColor( 1, 1, 1, 255 )
+  sceneGroup:insert(roundsLabel)
+end
+
+loadRoundsNumberLabel = function()
+  roundsNumberLabel = display.newText( 
+    singleplayer_settings.game_total_rounds, 
+    configuration.rounds_number_label_x, 
+    configuration.rounds_number_label_y, 
+    configuration.rounds_number_label_font_name, 
+    configuration.rounds_number_label_font_size )
+
+  roundsNumberLabel:setTextColor( 1, 1, 1, 255 )
+  sceneGroup:insert(roundsNumberLabel)
+end
+
+loadMoreRoundsButton = function()
+
+  moreRoundsButton = widget.newButton{ 
+  defaultFile = configuration.more_button_image,
+  overFile = configuration.more_button_image,
+  emboss = true,
+  onPress = moreRoundsButtonPress,}
+
+  moreRoundsButton.x = configuration.more_rounds_button_x
+  moreRoundsButton.y = configuration.more_rounds_button_y
+  sceneGroup:insert(moreRoundsButton)
+end
+
+loadLessRoundsButton = function()
+
+  lessRoundsButton = widget.newButton{ 
+  defaultFile = configuration.less_button_image,
+  overFile = configuration.less_button_image,
+  emboss = true,
+  onPress = lessRoundsButtonPress,}
+
+  lessRoundsButton.x = configuration.less_rounds_button_x
+  lessRoundsButton.y = configuration.less_rounds_button_y
+  sceneGroup:insert(lessRoundsButton)
+end
+
+lessRoundsButtonPress = function( event )
+    if  singleplayer_settings.game_total_rounds > 0 then
+        singleplayer_settings.game_total_rounds = singleplayer_settings.game_total_rounds - 1
+        gameplay_settings.game_total_rounds = singleplayer_settings.game_total_rounds
+        roundsNumberLabel.text = singleplayer_settings.game_total_rounds
+    end
+end
+
+moreRoundsButtonPress = function( event )
+    if  singleplayer_settings.game_total_rounds < 20 then
+        singleplayer_settings.game_total_rounds = singleplayer_settings.game_total_rounds + 1
+        gameplay_settings.game_total_rounds = singleplayer_settings.game_total_rounds
+        roundsNumberLabel.text = singleplayer_settings.game_total_rounds
+    end
+end
 
 -- "scene:create()"
 function scene:create( event )
-     sceneGroup = self.view
+    sceneGroup = self.view
 
     -- Create elements
     -- Background & box  welcome
-    background = display.newImage( "resources/images/backgrounds/settings_scene.png", display.contentCenterX , display.contentCenterY , true )
+    background = display.newImage( configuration.settings_background_image, display.contentCenterX , display.contentCenterY , true )
+    
     -- Buttons
-    btnBack     = display.newImage( "resources/images/buttons/back_scene.png",  200, ( display.contentHeight - 100) , true  )
-    -- Create the widget
-    local onOffSwitch = widget.newSwitch
-    {
-        left = 250,
-        top = 200,
-        style = "onOff",
-        id = "onOffSwitch",
-        onPress = onSwitchPress
-    }
+    btnBack     = display.newImage( 
+        configuration.back_button_image,  
+        configuration.back_settings_button_x, 
+        configuration.back_settings_button_y, 
+        true  )
 
-    --Insert elements to scene
+        --Insert elements to scene
     sceneGroup:insert( background ) -- insert background to group
     sceneGroup:insert( btnBack )
-    sceneGroup:insert( onOffSwitch )
 
+    -- -- Create the widget
+    -- local onOffSwitch = widget.newSwitch
+    -- {
+    --     left = 250,
+    --     top = 200,
+    --     style = "onOff",
+    --     id = "onOffSwitch",
+    --     onPress = onSwitchPress
+    -- }
+
+    loadRoundsLabel()
+    loadRoundsNumberLabel()
+    loadMoreRoundsButton()
+    loadLessRoundsButton()
 end
 
 -- "scene:show()"
@@ -115,8 +182,8 @@ end
 function removeAll( sceneGroup )
     removeObject( background , sceneGroup)  -- destroi imagem de fundo
     removeObject( btnBack , sceneGroup)  -- destroi botao back
-    removeObject( onOffSwitch , sceneGroup)  -- destroi botao
-    removeObject( onOffSwitch , sceneGroup)  -- destroi botao
+    -- removeObject( onOffSwitch , sceneGroup)  -- destroi botao
+    -- removeObject( onOffSwitch , sceneGroup)  -- destroi botao
 end
 
 -- "scene:destroy()"

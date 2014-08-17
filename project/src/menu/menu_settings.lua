@@ -58,6 +58,8 @@ invite_button_image 		= "resources/images/buttons/invite.png"
 settings_button_image 		= "resources/images/buttons/settings.png"
 credits_button_image 		= "resources/images/buttons/credits.png"
 about_button_image 			= "resources/images/buttons/about.png"
+more_button_image 			= "resources/images/buttons/more.png"
+less_button_image 			= "resources/images/buttons/less.png"
 
 -- BACKGROUND IMAGES
 signup_background_image 	= "resources/images/backgrounds/signup.png"
@@ -187,3 +189,19 @@ results_player2_score_font_size = 64
 
 results_imagesheet_options 		= { width=1280, height=800, numFrames=10, sheetContentWidth=1280, sheetContentHeight=8000 }
 results_sprite_options			= { name = "normalRun", start=1, count=10, time=900, loopCount = 1 }
+
+-- SETTINGS SCENE
+back_settings_button_x			= display.contentCenterX + 400
+back_settings_button_y			= display.contentCenterY - 200
+rounds_label_x					= display.contentCenterX 
+rounds_label_y					= display.contentCenterY
+rounds_label_font_name			= native.systemFontBold
+rounds_label_font_size			= 64
+rounds_number_label_x			= display.contentCenterX
+rounds_number_label_y			= display.contentCenterY + 100
+rounds_number_label_font_name	= native.systemFontBold
+rounds_number_label_font_size	= 64
+more_rounds_button_x			= display.contentCenterX + 100
+more_rounds_button_y			= display.contentCenterY + 100
+less_rounds_button_x			= display.contentCenterX - 100
+less_rounds_button_y			= display.contentCenterY + 100

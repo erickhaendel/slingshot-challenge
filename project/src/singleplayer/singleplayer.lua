@@ -199,11 +199,8 @@ function configuration.state_object:change(e)
 					next_round()
 				end
 			end)
-
 	end
 end
-
-
 
 -- prepare the singleplayer to the next round
 function next_turn()
