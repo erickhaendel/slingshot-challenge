@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------------------------------------------------------
--- game.lua
--- Dewcription: singleplayer file
+-- npc.lua
+-- Dewcription: npc strategy file
 -- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @version 1.00
 -- @date 06/29/2014
@@ -31,6 +31,7 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
+-- isto é uma biblioteca
 module(..., package.seeall)
 
 -------------------------------------------
@@ -52,6 +53,7 @@ function npc( type )
 	local right_side_x = 350
 	local right_side_y = configuration.stone_position_y + 300
 
+	-- comportamento olho-por-olho imitando ação anterior do jogador humano
 	if type == "tit-for-tat" then
 
 		-- inicie acertando as latas do outro player - comportamento altruista no inicio
@@ -59,10 +61,17 @@ function npc( type )
 			configuration.projectile_object.x = left_side_x
 			configuration.projectile_object.y = left_side_y
 		else
-			-- obtem a jogada do outro player e replica
+			if configuration.game_hit_choose[1][configuration.game_current_round-1] == 1 then
+				configuration.projectile_object.x = left_side_x
+				configuration.projectile_object.y = left_side_y
+			else
+				configuration.projectile_object.x = right_side_x
+				configuration.projectile_object.y = right_side_y
+			end
 
 		end
 
+	-- comportamento aleatorio na escolha do alvo
 	elseif type == "random" then
 
 		local side = math.random(1,2)
@@ -75,9 +84,12 @@ function npc( type )
 			configuration.projectile_object.y = right_side_y
 		end
 
+	-- sempre acerta suas proprias latas
 	elseif type == "selfish" then
 		configuration.projectile_object.x = left_side_x
 		configuration.projectile_object.y = left_side_y
+
+	-- sempre acerta as latas do jogador humano
 	elseif type == "Altruist" then
 		configuration.projectile_object.x = right_side_x
 		configuration.projectile_object.y = right_side_y
@@ -85,6 +97,7 @@ function npc( type )
 
 	local pseudo_stone = configuration.projectile_object
 
+	-- lanca a pedra
 	configuration.projectile_object = projectile_process_lib.launched_process(
 		configuration.projectile_object, 
 		pseudo_stone, 

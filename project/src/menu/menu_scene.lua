@@ -35,6 +35,7 @@
 -- my libs
 require( "src.infra.includeall" )
 local configuration = require( "src.menu.menu_settings" )
+local singleplayer_settings = require( "src.singleplayer.singleplayer_settings" )
 
 local scene = composer.newScene()
 
@@ -153,12 +154,14 @@ function settingsPress( event )
 end
 
 function singleplayer1Press( event )
+    singleplayer_settings.npc_strategy = "random"
     removeAll()
     composer.removeScene('src.menu.menu_scene')
     composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)
 end
 
 function singleplayer2Press( event )
+    singleplayer_settings.npc_strategy = "tit-for-tat"    
     removeAll()
     composer.removeScene('src.menu.menu_scene')
     composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)

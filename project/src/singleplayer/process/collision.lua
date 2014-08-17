@@ -1,6 +1,6 @@
 ------------------------------------------------------------------------------------------------------------------------------
 -- collision.lua
--- Dewcription: gameplay file
+-- Dewcription: collision from singleplayer file
 -- @author Samuel Martins <samuellunamartins@gmail.com>
 -- @version 1.00
 -- @date 07/10/2014
@@ -139,8 +139,6 @@ end
 -- detecta colisao da pedra com com as latas e atualiza a gui
 function collision_process(stone, assets_image)
 
-	local side = nil
-
 	if configuration.game_is_shooted == 1 and configuration.game_is_hit == 0 then
 
 		local M = 2; local N = 2;	
@@ -160,14 +158,6 @@ function collision_process(stone, assets_image)
 					if test then
 
 						animationProcess(assets_image, k, stone)
-
-						if k == 1 or k==4 then
-							side = 1	
-							configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = side -- own can
-						else
-							side = 2	
-							configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = side -- own can
-						end
 
 						score_process_lib.score_process(assets_image)					
 					

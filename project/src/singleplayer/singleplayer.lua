@@ -237,10 +237,10 @@ function next_turn()
 				configuration.assets_image_object = assets_image				
 			end
 
-			timer.performWithDelay(2000, function ( event )	
+			timer.performWithDelay(4000, function ( event )	
 				if configuration.game_current_player == 2 then
 					-- chama o npc pra jogar
-					npc_lib.npc("random")
+					npc_lib.npc(configuration.npc_strategy)
 				end
 			end)
 		end)	
@@ -282,10 +282,10 @@ function next_round()
 
 			Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )	
 
-			timer.performWithDelay(2000, function ( event )	
+			timer.performWithDelay(4000, function ( event )	
 				if configuration.game_current_player == 2 then
 					-- chama o npc pra jogar
-					npc_lib.npc("random")
+					npc_lib.npc(configuration.npc_strategy)
 				end
 			end)
 		end)		
@@ -351,10 +351,10 @@ function start_game()
 				assets_image.load_animation_man_sprite("yellow")	
 			end			
 
-			timer.performWithDelay(2000, function ( event )	
+			timer.performWithDelay(4000, function ( event )	
 				if configuration.game_current_player == 2 then
 					-- chama o npc pra jogar
-					npc_lib.npc("random")
+					npc_lib.npc(configuration.npc_strategy)
 				end
 			end)
 		end)

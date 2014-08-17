@@ -27,7 +27,6 @@ function getBoundaryProjectile( e, stone )
 	return stone.x, stone.y
 end
 
-
 function ready_to_launch_process(stone)
 
 	-- Play the band stretch
@@ -35,11 +34,6 @@ function ready_to_launch_process(stone)
 
 	display.getCurrentStage():setFocus( stone ); -- Set the stage focus to the touched projectile
 	stone.isFocus = true;
-	--stone.bodyType = "kinematic";			
-	
-	--stone:setLinearVelocity(0,0); -- Stop current physics motion, if any
-
-	--stone.angularVelocity = 0;
 
 	return stone
 end
@@ -52,7 +46,6 @@ function launching_process(stone, touch_event)
 
 	return stone
 end
-
 
 -- A trajectory in world space
 function trajectory(v,elevation,x0,y0,g)
@@ -164,8 +157,10 @@ function launched_process(stone, e, state)
 
 				if sentido == 1 then		
 					stone.x = dx
+					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 
 				else
 					stone.x = (display.contentWidth - dx)
+					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 					
 				end
 
 				stone.y = (display.contentHeight )	- dy 

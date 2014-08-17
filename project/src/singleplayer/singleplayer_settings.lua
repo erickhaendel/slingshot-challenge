@@ -46,10 +46,12 @@ game_final_score_player = {} 	-- NAO_MODIFICAR_VALOR
 game_final_score_player[1] = 0 	-- NAO_MODIFICAR_VALOR
 game_final_score_player[2] = 0 	-- NAO_MODIFICAR_VALOR
 
-
 game_hit_choose = {} 			-- intencao de acerto de cada player
 game_hit_choose[1] = {}			-- player 1
 game_hit_choose[2] = {} 		-- player 2
+
+-- NPC
+npc_strategy = "random"			-- esse valor padrao eh alterado quando se clica nos botoes singleplayer 1 e 2
 
 -- GAME STATE MACHINE
 game_is_shooted = 0 			-- se a pedra foi disparada
