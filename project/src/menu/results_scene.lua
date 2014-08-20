@@ -35,6 +35,7 @@
 require( "src.infra.includeall" )
 local assets_audio            = require( "src.gameplay.assets_audio" )
 local configuration           = require( "src.menu.menu_settings" )
+local score                   = require( "src.singleplayer.singleplayer_settings" )
 local gameplay_configuration  = require( "src.gameplay.configuration" )
 
 ----------------------------------------------------------------------------------------------
@@ -69,7 +70,7 @@ end
 
 function loadPlayer1ScoreLabel()
   player1ScoreLabel = display.newText( 
-  	"Score: 0", 
+  	"Score: "..score.game_final_score_player[1], 
   	configuration.results_player1_score_label_x, 
   	configuration.results_player1_score_label_y, 
   	configuration.results_font_name, 
@@ -93,7 +94,7 @@ end
 
 function loadPlayer2ScoreLabel()
   player2ScoreLabel = display.newText( 
-  	"Score: 0", 
+  	"Score: "..score.game_final_score_player[2], 
   	configuration.results_player2_score_label_x, 
   	configuration.results_player2_score_label_y, 
   	configuration.results_font_name, 

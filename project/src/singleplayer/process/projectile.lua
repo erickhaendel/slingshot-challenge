@@ -157,10 +157,10 @@ function launched_process(stone, e, state)
 
 				if sentido == 1 then		
 					stone.x = dx
-					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 
+					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 
 				else
 					stone.x = (display.contentWidth - dx)
-					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 2 					
+					configuration.game_hit_choose[configuration.game_current_player][configuration.game_current_round] = 1 					
 				end
 
 				stone.y = (display.contentHeight )	- dy 
