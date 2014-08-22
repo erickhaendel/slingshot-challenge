@@ -183,12 +183,12 @@ local function create_scoreboard_tiles_obj(  )
 end
 
 -- LABEL DA GRADE
--- local function create_score_player_tiles_obj(  )
--- 	score_player_tiles_obj = score_player_tiles_lib.newScorePlayerLabel()
--- 	for i=1, #score_player_tiles_obj do
--- 		assetsGroup:insert( score_player_tiles_obj[i] )	
--- 	end	
--- end
+local function create_score_player_tiles_obj(  )
+ 	score_player_tiles_obj = score_player_tiles_lib.newScorePlayerLabel()
+ 	for i=1, #score_player_tiles_obj do
+ 		assetsGroup:insert( score_player_tiles_obj[i] )	
+ 	end	
+ end
 
 local function create_upperScore_tiles_obj(  )
 
@@ -223,6 +223,8 @@ local function create_label_score( )
 		native.systemFont, 100 )
 	label_score_player2:setTextColor( 0, 0, 0, 255 )
 	label_score_player2:toFront( )
+
+	return label_score_player1, label_score_player2
 end
 
 function create_man_sprite()

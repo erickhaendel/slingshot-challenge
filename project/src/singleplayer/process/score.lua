@@ -45,7 +45,7 @@ local can_process_lib 		= require( "src.singleplayer.process.can" )
 
 function score_animation( intend_to_hit, assets_image )
 
-	print( ">>>"..(configuration.game_score_player[1])..">"..configuration.game_score_player[2])
+
 	--configuration.game_final_score_player[intend_to_hit] = 3
 		----------------------teste-----------------------
 	assets_image.label_score_player1.text = ">"..configuration.game_score_player[1]
@@ -65,7 +65,7 @@ function score_animation( intend_to_hit, assets_image )
 			-- end)
 
 			temp = temp + 1							
-			if temp >= configuration.game_final_score_player[intend_to_hit] then
+			if temp >= configuration.game_round_score_player[intend_to_hit] then
 				return;
 			end			
 		end
@@ -105,7 +105,6 @@ function score_process(assets_image)
 	-- cenario 01, jogador 1 acerta suas proprias latas
 	if player == 1 and intend_to_hit == 1  then
 		configuration.game_score_player[1] =  points_p1
-
 		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + configuration.game_score_player[1]
 
 	-- cenario 01, jogador 1 acerta as latas do jogador 2
@@ -124,6 +123,10 @@ function score_process(assets_image)
 		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + configuration.game_score_player[2]
 	end
 
+	print( ">>>"..(configuration.game_score_player[1])..">"..configuration.game_score_player[2])
+	print( intend_to_hit )
+	configuration.game_round_score_player[intend_to_hit] = configuration.game_round_score_player[intend_to_hit] + configuration.game_score_player[intend_to_hit]
+	print( "round"..configuration.game_round_score_player[intend_to_hit] )
 	-- exibe os pontos na grade
 	score_animation( intend_to_hit, assets_image )
 end

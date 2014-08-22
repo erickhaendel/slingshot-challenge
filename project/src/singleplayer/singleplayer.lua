@@ -264,7 +264,9 @@ function next_round()
 
 	-- deal with scores
 	configuration.game_score_player[1] = 0
-	configuration.game_score_player[2] = 0	
+	configuration.game_score_player[2] = 0
+	configuration.game_round_score_player[1] = 0
+	configuration.game_round_score_player[2] = 0	
 
 	-- cria o label de novo round
 	assets_image.reload_round_tiles( )
