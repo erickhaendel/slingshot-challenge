@@ -199,10 +199,12 @@ local function create_upperScore_tiles_obj(  )
 		upperScore_tiles_obj[i]:toFront( )
 	end
 
-	for i=1,2 do
-		for j=1,4 do
-			myCircleYellow_upperScore_tiles_obj[i][j]:toFront( )
-			myCircleGreen_upperScore_tiles_obj[i][j]:toFront( )
+	-- for i=1,2 do
+	-- 	for j=1,4 do
+	for j=1,4 do
+		for i=1,2 do
+			myCircleYellow_upperScore_tiles_obj[j][i]:toFront( )
+			myCircleGreen_upperScore_tiles_obj[j][i]:toFront( )
 		end
 	end
 end

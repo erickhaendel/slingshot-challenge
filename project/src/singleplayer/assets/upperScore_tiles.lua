@@ -79,26 +79,30 @@ function newUpperBoardTile()
 	
 
 		
-	for i=1,2 do
-		myCircleYellow[i] = {}	
-		myCircleGreen[i] = {}	
-		for j=1,4 do
+--	for i=1,2 do
+	for j=1,4 do
+		-- myCircleYellow[i] = {}	
+		-- myCircleGreen[i] = {}
+		myCircleYellow[j] = {}	
+		myCircleGreen[j] = {}
+		for i=1,2 do
+--		for j=1,4 do
 			-- x, y, raio
-			myCircleYellow[i][j] = display.newImage( yellowpoint ,display.contentCenterX - 670 + j*50, 10 + i*45, 10 )
+			myCircleYellow[j][i] = display.newImage( yellowpoint ,display.contentCenterX - 670 + j*50, 10 + i*45, 10 )
 			-- myCircleYellow[i][j]:setFillColor(1, 1, 0)
 			-- myCircleYellow[i][j].strokeWidth = 5			
 			-- myCircleYellow[i][j]:setStrokeColor(0.1, 0.1, 0.1)			
 			--upperScoreBoardGroup:insert( myCircleYellow[i][j] )
-			myCircleYellow[i][j].isVisible = false	
+			myCircleYellow[j][i].isVisible = false	
 
 			-- x, y, raio
-			myCircleGreen[i][j] = display.newImage( greenpoint, display.contentCenterX + 420 + j*50, 10 + i*45, 10  )
+			myCircleGreen[j][i] = display.newImage( greenpoint, display.contentCenterX + 420 + j*50, 10 + i*45, 10  )
 			-- myCircleGreen[i][j] = display.newCircle( display.contentCenterX +290 + j*30, 25 + i*30, 10 )
 			-- myCircleGreen[i][j]:setFillColor(0, 1, 0)
 			-- myCircleGreen[i][j].strokeWidth = 5			
 			-- myCircleGreen[i][j]:setStrokeColor(0.1, 0.1, 0.1)			
 			--upperScoreBoardGroup:insert( myCircleGreen[i][j] )
-			myCircleGreen[i][j].isVisible = false						
+			myCircleGreen[j][i].isVisible = false						
 		end
 	end
 
@@ -110,20 +114,24 @@ function removeUpperBoardTile(upperScoreBoard, myCircleYellow, myCircleGreen)
 	for i=1,2 do
 		upperScoreBoard[i]:removeSelf( ); upperScoreBoard[i] = nil		
 	end
-	for i=1,2 do
-		for j=1,4 do
-			myCircleYellow[i][j]:removeSelf( ); myCircleYellow[i][j] = nil	
-			myCircleGreen[i][j]:removeSelf( ); myCircleGreen[i][j] = nil				
+	-- for i=1,2 do
+	-- 	for j=1,4 do	
+	for j=1,4 do
+		for i=1,2 do
+			myCircleYellow[j][i]:removeSelf( ); myCircleYellow[j][i] = nil	
+			myCircleGreen[j][i]:removeSelf( ); myCircleGreen[j][i] = nil				
 		end
 	end
 
 end
 
 function circlesremove()
-	for i=1,2 do
-		for j=1,4 do
-			myCircleYellow[i][j].isVisible = false	
-			myCircleGreen[i][j].isVisible = false				
+	-- for i=1,2 do
+	-- 	for j=1,4 do
+	for j=1,4 do
+		for i=1,2 do
+			myCircleYellow[j][i].isVisible = false	
+			myCircleGreen[j][i].isVisible = false				
 		end
 	end
 end

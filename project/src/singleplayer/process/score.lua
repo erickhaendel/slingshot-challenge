@@ -51,13 +51,15 @@ function score_animation( intend_to_hit, assets_image )
 	assets_image.label_score_player1.text = ">"..configuration.game_score_player[1]
 		-------------------------------------------------
 	local temp = 0
-	for i=1,2 do
-		for j=1,4 do
+	-- for i=1,2 do
+	-- 	for j=1,4 do
+	for j=1,4 do
+		for i=1,2 do
 			-- timer.performWithDelay(1+i*110, function(e)
 				if intend_to_hit == 1 then
-					assets_image.myCircleYellow_upperScore_tiles_obj[i][j].isVisible = true						
+					assets_image.myCircleYellow_upperScore_tiles_obj[j][i].isVisible = true						
 				else
-					assets_image.myCircleGreen_upperScore_tiles_obj[i][j].isVisible = true	
+					assets_image.myCircleGreen_upperScore_tiles_obj[j][i].isVisible = true	
 				end
 				assets_audio.playIncreasingScore()
 			-- end)
