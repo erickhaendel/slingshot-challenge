@@ -44,7 +44,7 @@ local scene = composer.newScene()
 
 -- Prototype Objects
 local mySheet, animation, menuButton
-local player1TitleLabel, player2TitleLabel, player1ScoreLabel, player2ScoreLabel
+local player1TitleLabel, player2TitleLabel, totalTitleLabel, player1ScoreLabel, player2ScoreLabel, totalScoreLabel
 
 -- prototype Methods
 local unloadBackgoundAnimation, loadBackgroundAnimation, btnBackEvent, loadMenuButton
@@ -102,6 +102,19 @@ function loadPlayer2ScoreLabel()
 
   player2ScoreLabel:setTextColor( 1, 1, 1, 255 )
   resultsGroup:insert(player2ScoreLabel)
+end
+
+function loadtotalScoreLabel()
+  local total = score.game_final_score_player[2] + score.game_final_score_player[1]
+  totalScoreLabel = display.newText( 
+    "Total: "..total, 
+    display.contentCenterX + 50,
+    display.contentCenterY + 225, 
+    configuration.results_font_name, 
+    configuration.results_player2_score_font_size )
+
+  totalScoreLabel:setTextColor( 1, 1, 1, 255 )
+  resultsGroup:insert(totalScoreLabel)
 end
 
 function loadBackgroundAnimation()
@@ -180,6 +193,8 @@ function createAll()
 
   if not player2ScoreLabel then loadPlayer2ScoreLabel(); end
 
+  if not totalScoreLabel then loadtotalScoreLabel(); end
+
   if not menuButton then loadMenuButton();  end 
 
   showScoreAnimation()
@@ -197,6 +212,8 @@ function removeAll()
 	if(player2TitleLabel) then resultsGroup:remove( player2TitleLabel ); player2TitleLabel:removeSelf(); player2TitleLabel = nil; end
 
 	if(player2ScoreLabel) then resultsGroup:remove( player2ScoreLabel ); player2ScoreLabel:removeSelf(); player2ScoreLabel = nil; end
+
+  if(totalScoreLabel) then resultsGroup:remove( loadtotalScoreLabel ) ; loadtotalScoreLabel:removeSelf( ); loadtotalScoreLabel= nil; end
 
 	if(menuButton) then resultsGroup:remove( menuButton ); menuButton:removeSelf(); menuButton = nil; end
 end

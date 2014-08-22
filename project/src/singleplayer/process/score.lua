@@ -45,10 +45,14 @@ local can_process_lib 		= require( "src.singleplayer.process.can" )
 
 function score_animation( intend_to_hit, assets_image )
 
-	print( ">>>"..configuration.game_final_score_player[intend_to_hit] )
+	print( ">>>"..(configuration.game_score_player[1])..">"..configuration.game_score_player[2])
+	--configuration.game_final_score_player[intend_to_hit] = 3
+		----------------------teste-----------------------
+	assets_image.label_score_player1.text = ">"..configuration.game_score_player[1]
+		-------------------------------------------------
 	local temp = 0
-	for i=1,3 do
-		for j=1,7 do
+	for i=1,2 do
+		for j=1,4 do
 			-- timer.performWithDelay(1+i*110, function(e)
 				if intend_to_hit == 1 then
 					assets_image.myCircleYellow_upperScore_tiles_obj[i][j].isVisible = true						
@@ -99,34 +103,22 @@ function score_process(assets_image)
 	-- cenario 01, jogador 1 acerta suas proprias latas
 	if player == 1 and intend_to_hit == 1  then
 		configuration.game_score_player[1] =  points_p1
-		print( "scoreplayer1--"..configuration.game_score_player[1])
-		print( "points_p1"..points_p1 )
-		print( "points_p2"..points_p1 )
 
 		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + configuration.game_score_player[1]
 
 	-- cenario 01, jogador 1 acerta as latas do jogador 2
 	elseif player == 1 and intend_to_hit == 2 then
 		configuration.game_score_player[2] = points_p2
-		print( "scoreplayer2--"..configuration.game_score_player[2])
-		print( "points_p1"..points_p1 )
-		print( "points_p2"..points_p2 )
 		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + configuration.game_score_player[2]
 
 	-- cenario 02, jogador 2 acerta as latas do jogador 1
 	elseif player == 2 and intend_to_hit == 1 then
 		configuration.game_score_player[1] = points_p2
-		print( "scoreplayer1--"..configuration.game_score_player[1])
-		print( "points_p1"..points_p1 )
-		print( "points_p2"..points_p2 )
 		configuration.game_final_score_player[1] = configuration.game_final_score_player[1] + configuration.game_score_player[1]
 
 	-- cenario 02, jogador 2 acerta suas proprias latas
 	elseif player == 2 and intend_to_hit == 2 then
 		configuration.game_score_player[2] = points_p1
-		print( "scoreplayer2--"..configuration.game_score_player[2])
-		print( "points_p1"..points_p1 )
-		print( "points_p2"..points_p2 )
 		configuration.game_final_score_player[2] = configuration.game_final_score_player[2] + configuration.game_score_player[2]
 	end
 

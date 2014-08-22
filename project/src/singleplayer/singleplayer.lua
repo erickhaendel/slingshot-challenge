@@ -45,6 +45,7 @@ local assets_image 				= require( "src.singleplayer.assets" )
 local assets_audio				= require( "src.singleplayer.assets_audio" )
 local projectile_tiles_lib		= require( "src.singleplayer.assets.projectile_tiles" )
 local band_line_tiles_lib 		= require( "src.singleplayer.assets.band_line_tiles" )
+local upperscore                = require( "src.singleplayer.assets.upperScore_tiles")
 
 -- Process
 local collision_process_lib 	= require( "src.singleplayer.process.collision" )
@@ -55,6 +56,7 @@ local npc_lib					= require( "src.singleplayer.npc" )
 
 -- sprite
 local donottouch_sprite_lib 	= require( "src.singleplayer.assets.donottouch_sprite" )
+
 
 -------------------------------------------
 -- GROUPS
@@ -245,7 +247,8 @@ end
 
 -- prepare the singleplayer to the next round
 function next_round()
-
+	-- Deixar invisivel as bolinhas na troca de round.
+	upperscore.circlesremove()
 	-- reset turn
 	configuration.game_current_turn = 1
 
@@ -328,6 +331,13 @@ function start_game()
 
 	-- passando o cenario para uma variavel global - utilizado pelo pubnub
 	configuration.assets_image_object = assets_image
+
+	----------------------teste-----------------------
+	print("kkk"..configuration.game_final_score_player[1] )
+	scoreplayer1 = display.newText( ">"..configuration.game_final_score_player[1], (display.contentCenterX - 480), display.contentCenterY, native.systemFont, 100 )
+	scoreplayer1:setTextColor( 0, 0, 0, 255 )
+	scoreplayer1:toFront()
+	-------------------------------------------------
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 

@@ -76,6 +76,8 @@ myCircleYellow_upperScore_tiles_obj		= nil;
 myCircleGreen_upperScore_tiles_obj		= nil;
 man_yellow_sprite 			= nil;
 man_green_sprite			= nil;
+label_score_player1         = nil;
+label_score_player2         = nil;
 
 
 ---------------------------------------------------------------------------------------------------------------
@@ -197,12 +199,28 @@ local function create_upperScore_tiles_obj(  )
 		upperScore_tiles_obj[i]:toFront( )
 	end
 
-	for i=1,3 do
-		for j=1,7 do
+	for i=1,2 do
+		for j=1,4 do
 			myCircleYellow_upperScore_tiles_obj[i][j]:toFront( )
 			myCircleGreen_upperScore_tiles_obj[i][j]:toFront( )
 		end
 	end
+end
+
+local function create_label_score( )
+	label_score_player1 = display.newText( ">"..configuration.game_final_score_player[1],
+	 (display.contentCenterX - 480),
+	  display.contentCenterY,
+	  native.systemFont, 100 )
+	label_score_player1:setTextColor( 0, 0, 0, 255 )
+	label_score_player1:toFront()
+
+	label_score_player2 = display.newText( ">"..configuration.game_final_score_player[1],
+		(display.contentCenterX + 480),
+		display.contentCenterY,
+		native.systemFont, 100 )
+	label_score_player2:setTextColor( 0, 0, 0, 255 )
+	label_score_player2:toFront( )
 end
 
 function create_man_sprite()
@@ -295,6 +313,13 @@ local function remove_tree_tiles_obj(  )
 		end	
 		tree_tiles_lib.removeTreeTile( tree_tiles_obj )			
 	end
+end
+
+local function remove_label_score()
+	label_score_player2:removeSelf( ); label_score_player2 = nil
+	label_score_player1:removeSelf( ); label_score_player1 = nil
+
+	-- body
 end
 
 local function remove_wall_tiles_obj(  )
@@ -425,6 +450,7 @@ function removeGameplayScenario()
 	-- remove_scoreboard_tiles_obj()
 	remove_score_player_tiles_obj()
 	remove_upperScore_tiles_obj()	
+	remove_label_score()
 
 	remove_man_sprite()
 end
@@ -441,6 +467,7 @@ function createGameplayScenario()
 	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
 	create_title_player_tiles_obj()	-- carrega as labels identificando os cenários
 	create_man_sprite()
+	create_label_score() -- Cria a label que vai mostrar o score
 
 	timer.performWithDelay( configuration.time_hide_title_player_label, function ( event )	
 			remove_title_player_tiles_obj(  )
