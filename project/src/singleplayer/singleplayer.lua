@@ -187,8 +187,6 @@ function configuration.state_object:change(e)
 					    composer.removeScene('src.singleplayer.game')
 					    composer.gotoScene( "src.menu.results_scene", "fade", 400)
 					end )
-
-
 				
 				elseif configuration.game_current_turn == 1 then
 					print( "Prox turno" )
@@ -333,13 +331,6 @@ function start_game()
 
 	-- passando o cenario para uma variavel global - utilizado pelo pubnub
 	configuration.assets_image_object = assets_image
-
-	----------------------teste-----------------------
-	print("kkk"..configuration.game_final_score_player[1] )
-	scoreplayer1 = display.newText( ">"..configuration.game_final_score_player[1], (display.contentCenterX - 480), display.contentCenterY, native.systemFont, 100 )
-	scoreplayer1:setTextColor( 0, 0, 0, 255 )
-	scoreplayer1:toFront()
-	-------------------------------------------------
 
 	timer.performWithDelay(configuration.time_delay_toshow_slingshot, function ( event )	
 

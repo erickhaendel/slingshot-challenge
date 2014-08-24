@@ -168,20 +168,6 @@ local function create_title_round_tiles_obj(  )
 	end	
 end
 
--- GRADE DE PONTOS
-local function create_scoreboard_tiles_obj(  )
-	scoreboard_tiles_obj = scoreboard_tiles_lib.new_scoreboard()
-	-- matriz de 20 - 4 linhas da grade por 5 colunas
-	local M = 4 ; local N = 5	
-	for k = 1, 4 do	
-		for j = 1, M do
-			for i = 1, N do
-				assetsGroup:insert( scoreboard_tiles_obj[k][M * (i-1) + j] )
-			end
-		end
-	end	
-end
-
 -- LABEL DA GRADE
 local function create_score_player_tiles_obj(  )
  	score_player_tiles_obj = score_player_tiles_lib.newScorePlayerLabel()
@@ -207,24 +193,6 @@ local function create_upperScore_tiles_obj(  )
 			myCircleGreen_upperScore_tiles_obj[j][i]:toFront( )
 		end
 	end
-end
-
-local function create_label_score( )
-	label_score_player1 = display.newText( ">"..configuration.game_final_score_player[1],
-	 (display.contentCenterX - 480),
-	  display.contentCenterY,
-	  native.systemFont, 100 )
-	label_score_player1:setTextColor( 0, 0, 0, 255 )
-	label_score_player1:toFront()
-
-	label_score_player2 = display.newText( ">"..configuration.game_final_score_player[1],
-		(display.contentCenterX + 480),
-		display.contentCenterY,
-		native.systemFont, 100 )
-	label_score_player2:setTextColor( 0, 0, 0, 255 )
-	label_score_player2:toFront( )
-
-	return label_score_player1, label_score_player2
 end
 
 function create_man_sprite()
@@ -319,13 +287,6 @@ local function remove_tree_tiles_obj(  )
 	end
 end
 
-local function remove_label_score()
-	label_score_player2:removeSelf( ); label_score_player2 = nil
-	label_score_player1:removeSelf( ); label_score_player1 = nil
-
-	-- body
-end
-
 local function remove_wall_tiles_obj(  )
 	if wall_tiles_obj then
 		for i=1, #wall_tiles_obj do
@@ -394,21 +355,6 @@ local function remove_title_round_tiles_obj(  )
 	end
 end
 
-local function remove_scoreboard_tiles_obj(  )
-	if scoreboard_tiles_obj then
-		-- matriz de 20 - 4 linhas da grade por 5 colunas
-		local M = 4 ; local N = 5
-		for k = 1, 4 do	
-			for j = 1, M do
-				for i = 1, N do
-					assetsGroup:remove( scoreboard_tiles_obj[k][M * (i-1) + j] )	
-				end	
-			end
-		end
-		scoreboard_tiles_lib.removeScoreboard( scoreboard_tiles_obj )
-	end
-end
-
 local function remove_score_player_tiles_obj(  )
 	if score_player_tiles_obj then 
 		for i=1, #score_player_tiles_obj do
@@ -451,10 +397,8 @@ function removeGameplayScenario()
 	remove_slingshot_tiles_obj()
 	remove_title_player_tiles_obj()
 	remove_title_round_tiles_obj()
-	-- remove_scoreboard_tiles_obj()
 	remove_score_player_tiles_obj()
 	remove_upperScore_tiles_obj()	
-	remove_label_score()
 
 	remove_man_sprite()
 end
@@ -471,7 +415,6 @@ function createGameplayScenario()
 	create_slingshot_tiles_obj()	-- carrega a imagem do slingshot
 	create_title_player_tiles_obj()	-- carrega as labels identificando os cenários
 	create_man_sprite()
-	create_label_score() -- Cria a label que vai mostrar o score
 
 	timer.performWithDelay( configuration.time_hide_title_player_label, function ( event )	
 			remove_title_player_tiles_obj(  )
@@ -485,8 +428,6 @@ function createGameplayScenario()
 				remove_title_round_tiles_obj(  )
 			end)
 		end)
-
-	-- create_scoreboard_tiles_obj()	-- as latas de scores dos scoreboards
 
 	-- create_score_player_tiles_obj()	-- carrega as labels identificando os scoreboards
 

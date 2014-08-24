@@ -213,7 +213,7 @@ function removeAll()
 
 	if(player2ScoreLabel) then resultsGroup:remove( player2ScoreLabel ); player2ScoreLabel:removeSelf(); player2ScoreLabel = nil; end
 
-  if(totalScoreLabel) then resultsGroup:remove( loadtotalScoreLabel ) ; loadtotalScoreLabel:removeSelf( ); loadtotalScoreLabel= nil; end
+  if(totalScoreLabel) then resultsGroup:remove( totalScoreLabel ) ; totalScoreLabel:removeSelf( ); totalScoreLabel= nil; end
 
 	if(menuButton) then resultsGroup:remove( menuButton ); menuButton:removeSelf(); menuButton = nil; end
 end

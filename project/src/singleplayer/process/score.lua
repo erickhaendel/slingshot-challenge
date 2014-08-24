@@ -45,11 +45,6 @@ local can_process_lib 		= require( "src.singleplayer.process.can" )
 
 function score_animation( intend_to_hit, assets_image )
 
-
-	--configuration.game_final_score_player[intend_to_hit] = 3
-		----------------------teste-----------------------
-	assets_image.label_score_player1.text = ">"..configuration.game_score_player[1]
-		-------------------------------------------------
 	local temp = 0
 	-- for i=1,2 do
 	-- 	for j=1,4 do
