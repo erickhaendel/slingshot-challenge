@@ -184,7 +184,7 @@ function configuration.state_object:change(e)
 				    	assets_image.removeGameplayScenario()
 						configuration.assets_image_object = assets_image				    	
 
-					    composer.removeScene('src.singleplayer.game')
+					    composer.removeScene('src.singleplayer.singleplayer')
 					    composer.gotoScene( "src.menu.results_scene", "fade", 400)
 					end )
 				
@@ -369,7 +369,7 @@ local scene = composer.newScene()
 
 function scene:create( event )
 	local sceneGroup = self.view
-
+	
 	start_game()
 
 end
@@ -377,6 +377,7 @@ end
 function scene:show( event )
 	local sceneGroup = self.view
 	local phase = event.phase
+	
 	
 	if phase == "will" then
 
