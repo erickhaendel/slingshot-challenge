@@ -177,9 +177,9 @@ function createAll()
 
   if not btnTutorial then loadBtnTutorial(); end
 
-  if not btnCredits then loadBtnCredits(); end
+  -- if not btnCredits then loadBtnCredits(); end
 
-  if not btnAbout then loadBtnAbout();  end 
+  -- if not btnAbout then loadBtnAbout();  end 
 
   if not btnSinglePlayer1 then loadBtnSinglePlayer1(); end
 
