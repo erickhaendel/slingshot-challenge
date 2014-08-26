@@ -62,11 +62,17 @@ function npc( type )
 			configuration.projectile_object.y = left_side_y
 		else
 			if configuration.game_hit_choose[1][configuration.game_current_round-1] == 1 then
-				configuration.projectile_object.x = left_side_x
-				configuration.projectile_object.y = left_side_y
-			else
+				--configuration.projectile_object.x = left_side_x
+				--configuration.projectile_object.y = left_side_y
 				configuration.projectile_object.x = right_side_x
 				configuration.projectile_object.y = right_side_y
+
+			else
+				--configuration.projectile_object.x = right_side_x
+				--configuration.projectile_object.y = right_side_y
+
+				configuration.projectile_object.x = left_side_x
+				configuration.projectile_object.y = left_side_y
 			end
 
 		end
