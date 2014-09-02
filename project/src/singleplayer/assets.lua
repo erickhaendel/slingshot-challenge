@@ -50,6 +50,7 @@ local title_player_tiles_lib 		= require( "src.singleplayer.assets.title_player_
 local title_round_tiles_lib 		= require( "src.singleplayer.assets.title_round_tiles" )
 local wall_tiles_lib 				= require( "src.singleplayer.assets.wall_tiles" )
 local upperScore_tiles_lib			= require( "src.singleplayer.assets.upperScore_tiles")
+local totalscore                	= require( "src.singleplayer.assets.totalScore")
 local man_sprite_lib 				= require( "src.singleplayer.assets.man_sprite" )
 
 ---------------------------------------------------------------------------------------------------------------
@@ -78,6 +79,7 @@ man_yellow_sprite 			= nil;
 man_green_sprite			= nil;
 label_score_player1         = nil;
 label_score_player2         = nil;
+label_total_score 			= nil;
 
 
 ---------------------------------------------------------------------------------------------------------------
@@ -193,6 +195,10 @@ local function create_upperScore_tiles_obj(  )
 			myCircleGreen_upperScore_tiles_obj[j][i]:toFront( )
 		end
 	end
+end
+
+function create_total_score()
+	label_total_score = totalscore.newTotalScore()
 end
 
 function create_man_sprite()
@@ -383,6 +389,12 @@ local function remove_man_sprite(  )
 	end	
 end
 
+local function remove_total_score()
+	if label_total_score then
+		totalscore.remove()
+	end
+end
+
 ---------------------------------------------------------------------------------------------------------------
 
 -- remove all elements from scene
@@ -398,7 +410,8 @@ function removeGameplayScenario()
 	remove_title_player_tiles_obj()
 	remove_title_round_tiles_obj()
 	remove_score_player_tiles_obj()
-	remove_upperScore_tiles_obj()	
+	remove_upperScore_tiles_obj()
+	remove_total_score()
 
 	remove_man_sprite()
 end
@@ -502,6 +515,11 @@ function reload_can_tiles( )
 	timer.performWithDelay(1000, function ( event )	
 		create_can_tiles_obj(  )
 		end)
+end
+
+function reload_total_score()
+	
+	totalscore.updateTotalScore()
 end
 
 -- -- hide all scores from all scoreboards

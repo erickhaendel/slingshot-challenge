@@ -46,6 +46,7 @@ local assets_audio				= require( "src.singleplayer.assets_audio" )
 local projectile_tiles_lib		= require( "src.singleplayer.assets.projectile_tiles" )
 local band_line_tiles_lib 		= require( "src.singleplayer.assets.band_line_tiles" )
 local upperscore                = require( "src.singleplayer.assets.upperScore_tiles")
+--local totalscore                = require( "src.singleplayer.assets.totalScore")
 
 -- Process
 local collision_process_lib 	= require( "src.singleplayer.process.collision" )
@@ -210,8 +211,11 @@ function next_turn()
 		gamelib.changeCurrentPlayer()
 	end	
 
+
+
 	print( "currente turn: "..configuration.game_current_turn )
 	print( "current player: "..configuration.game_current_player )
+
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
 
@@ -252,6 +256,9 @@ function next_round()
 
 	-- change the current player
 	gamelib.changeCurrentPlayer()
+
+	--totalscore.updateTotalScore( configuration.game_final_score_player[1] , configuration.game_final_score_player[2] )
+	assets_image.reload_total_score()
 
 	-- next round
 	configuration.game_current_round = configuration.game_current_round + 1
@@ -310,6 +317,8 @@ end
 function start_game()
 	-- fisica ligado
 	physics.start();	
+
+	assets_image.create_total_score()
 
 	-- sempre inicia pelo primeiro turno, independente do jogador
 	configuration.game_current_turn = 1

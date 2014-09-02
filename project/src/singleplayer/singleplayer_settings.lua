@@ -213,9 +213,9 @@ sky_transition_event = nil
 
 -- TITLE PLAYER LABEL
 title_player_label_x = {}; title_player_label_y = {}
-title_player_label_x[1] = display.contentCenterX
+title_player_label_x[1] = display.contentCenterX + 15
 title_player_label_y[1] = display.contentCenterY-280
-title_player_label_x[2] = display.contentCenterX + 1400
+title_player_label_x[2] = display.contentCenterX + 1465
 title_player_label_y[2] = display.contentCenterY-280
 title_player_image = {}
 title_player_image[1] = "resources/images/buttons/player1.png"
