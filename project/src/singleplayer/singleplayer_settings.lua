@@ -176,11 +176,11 @@ cans_y[4] = cans_y[1]
 can_image_dir = "resources/images/objects/"		-- diretorio onde estao as imagens das latas
 can_xScale = 1.00; 
 can_yScale = can_xScale		-- escala da lata na parede
-can_width = 40 * can_xScale
-can_height = 85 * can_yScale
+can_width = 45 * can_xScale
+can_height = 80 * can_yScale
 player1_can = "yellow-can.png"					-- imagem da lata do player 1
 player2_can = "green-can.png"					-- imagem da lata do player 2
-neutral_can = "white-can.png"					-- imagem da lata neutra
+neutral_can = "neutral-can.png"					-- imagem da lata neutra
 pack_of_cans = 4 								-- quantidade de latas agrupadas no muro para cada player
 
 -----------------
