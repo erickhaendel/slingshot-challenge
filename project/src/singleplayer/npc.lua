@@ -41,6 +41,8 @@ require( "src.infra.includeall" )
 
 local configuration 			= require( "src.singleplayer.singleplayer_settings" )
 local projectile_process_lib 	= require( "src.singleplayer.process.projectile" )
+local bondoso = 0
+
 
 -- funcao que faz o npc realizar uma jogada de acordo com a estratégia passada
 function npc( type )
@@ -60,17 +62,96 @@ function npc( type )
 		if configuration.game_current_turn == 1 and configuration.game_current_round == 1 then
 			configuration.projectile_object.x = left_side_x
 			configuration.projectile_object.y = left_side_y
+
 		else
+			--comportamento egoista
 			if configuration.game_hit_choose[1][configuration.game_current_round-1] == 1 then
 				--configuration.projectile_object.x = left_side_x
 				--configuration.projectile_object.y = left_side_y
+				
+
 				configuration.projectile_object.x = right_side_x
 				configuration.projectile_object.y = right_side_y
-
+			--comportamento bondoso
 			else
 				--configuration.projectile_object.x = right_side_x
 				--configuration.projectile_object.y = right_side_y
+				
+				configuration.projectile_object.x = left_side_x
+				configuration.projectile_object.y = left_side_y
+			end
 
+		end
+
+	elseif type == "tit-for-tat-generous" then
+
+		-- inicie acertando as latas do outro player - comportamento altruista no inicio
+		if configuration.game_current_turn == 1 and configuration.game_current_round == 1 then
+			configuration.projectile_object.x = left_side_x
+			configuration.projectile_object.y = left_side_y
+		else
+			--comportamento egoista
+			if configuration.game_hit_choose[1][configuration.game_current_round-1] == 1 then
+				if bondoso >= 1 then
+					bondoso = bondoso +1
+					configuration.projectile_object.x = right_side_x
+					configuration.projectile_object.y = right_side_y
+				
+				--dando mais uma chance sendo bondoso
+				else 
+					--Adcionando para mostrar que lhe foi dado uma chance
+					bondoso = bondoso + 1
+					configuration.projectile_object.x = left_side_x
+					configuration.projectile_object.y = left_side_y
+				end
+
+			--comportamento bondoso
+			else
+				-- ja que quando o parceiro é generoso ele ganha uma nova chance.
+				bondoso = 0
+				configuration.projectile_object.x = left_side_x
+				configuration.projectile_object.y = left_side_y
+			end
+
+		end
+
+
+		elseif type == "tit-for-tat-aleatory" then
+
+		-- inicie acertando as latas do outro player - comportamento altruista no inicio
+		if configuration.game_current_turn == 1 and configuration.game_current_round == 1 then
+			configuration.projectile_object.x = left_side_x
+			configuration.projectile_object.y = left_side_y
+		else
+			--comportamento egoista
+			if configuration.game_hit_choose[1][configuration.game_current_round-1] == 1 then
+				--se a pessoa insiste em não cooperar ele é egoista 
+				if bondoso >= 1 then
+					bondoso = bondoso +1
+					local side = math.random(1,2)
+					print( "NPC choosed"..side )
+					if side == 1 then
+						configuration.projectile_object.x = left_side_x
+						configuration.projectile_object.y = left_side_y
+					else
+						configuration.projectile_object.x = right_side_x
+						configuration.projectile_object.y = right_side_y
+					end
+				
+				--dando mais uma chance sendo bondoso
+				else 
+					--Adcionando para mostrar que lhe foi dado uma chance
+					bondoso = bondoso + 1
+					print( "esse é o if"..bondoso )
+					configuration.projectile_object.x = left_side_x
+					configuration.projectile_object.y = left_side_y
+				end
+
+			--comportamento bondoso
+			else
+				-- ja que quando o parceiro é generoso ele ganha uma nova chance.
+				print( "voltando a ser generoso" )
+				bondoso = 0
 				configuration.projectile_object.x = left_side_x
 				configuration.projectile_object.y = left_side_y
 			end

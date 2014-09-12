@@ -42,11 +42,11 @@ local scene = composer.newScene()
 menuGroup = display.newGroup( )
 
 -- objetos com valor nil
-local  background, btnSettings, btnPlay, btnTutorial, btnCredits, btnAbout, btnSinglePlayer1, btnSinglePlayer2
+local  background, btnSettings, btnPlay, btnTutorial, btnCredits, btnAbout, btnSinglePlayer1, btnSinglePlayer2, btnSinglePlayer3, btnSinglePlayer4
 
 -- Declaracao dos Metodos com valor nil
-local playPress, tutorialPress, creditsPress, aboutPress, settingsPress, singleplayer1Press, singleplayer2Press
-local loadBtnSettings, loadBtnPlay, loadBtnTutorial, loadBtnCredits, loadBtnAbout,loadBtnSinglePlayer1, loadBtnSinglePlayer2
+local playPress, tutorialPress, creditsPress, aboutPress, settingsPress, singleplayer1Press, singleplayer2Press, singleplayer3Press, singleplayer4Press
+local loadBtnSettings, loadBtnPlay, loadBtnTutorial, loadBtnCredits, loadBtnAbout,loadBtnSinglePlayer1, loadBtnSinglePlayer2, loadBtnSinglePlayer3, loadBtnSinglePlayer4
 local removeAll, createAll
 
 --------------------------------------------------------------------------------------------------------------
@@ -121,6 +121,24 @@ function loadBtnSinglePlayer2()
     menuGroup:insert( btnSinglePlayer2 ) 
     btnSinglePlayer2:addEventListener( "touch" , singleplayer2Press )   
 end
+
+function loadBtnSinglePlayer3()
+   btnSinglePlayer3 = display.newImage( configuration.singleplayer3_button_image, 
+        configuration.singleplayer3_button_x, 
+        configuration.singleplayer3_button_y, 
+    true)
+    menuGroup:insert( btnSinglePlayer3 ) 
+    btnSinglePlayer3:addEventListener( "touch" , singleplayer3Press )   
+end
+
+function loadBtnSinglePlayer4()
+   btnSinglePlayer4 = display.newImage( configuration.singleplayer4_button_image, 
+        configuration.singleplayer4_button_x, 
+        configuration.singleplayer4_button_y, 
+    true)
+    menuGroup:insert( btnSinglePlayer4 ) 
+    btnSinglePlayer4:addEventListener( "touch" , singleplayer4Press )   
+end
 --------------------------------------------------------------------------------------------------------------
 -- EVENT METHODS
 function playPress( event )
@@ -167,6 +185,20 @@ function singleplayer2Press( event )
     composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)
 end
 
+function singleplayer3Press( event )
+    singleplayer_settings.npc_strategy = "tit-for-tat-generous"    
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)
+end
+
+function singleplayer4Press( event )
+    singleplayer_settings.npc_strategy = "tit-for-tat-aleatory"    
+    removeAll()
+    composer.removeScene('src.menu.menu_scene')
+    composer.gotoScene( "src.singleplayer.singleplayer" , "fade", 400)
+end
+
 function createAll()
 
   if not background then loadBackground(); end
@@ -185,9 +217,14 @@ function createAll()
 
   if not btnSinglePlayer2 then loadBtnSinglePlayer2(); end
 
+  if not btnSinglePlayer3 then loadBtnSinglePlayer3(); end
+
+  if not btnSinglePlayer4 then loadBtnSinglePlayer4(); end
+
 end
 
 function removeAll()
+
 
     if(background) then 
         menuGroup:remove( background ); 
@@ -242,7 +279,21 @@ function removeAll()
         menuGroup:remove( btnSinglePlayer2 ); 
         btnSinglePlayer2:removeSelf(); 
         btnSinglePlayer2 = nil; 
-    end    
+    end  
+
+    if(btnSinglePlayer3) then 
+        btnSinglePlayer3:removeEventListener( "touch" , singleplayer3Press ); 
+        menuGroup:remove( btnSinglePlayer3 ); 
+        btnSinglePlayer3:removeSelf(); 
+        btnSinglePlayer3 = nil; 
+    end
+
+    if(btnSinglePlayer4) then 
+        btnSinglePlayer4:removeEventListener( "touch" , singleplayer4Press ); 
+        menuGroup:remove( btnSinglePlayer4 ); 
+        btnSinglePlayer4:removeSelf(); 
+        btnSinglePlayer4 = nil; 
+    end   
 end
 
 -- "scene:create()"
