@@ -250,8 +250,7 @@ function scene:hide( event )
 end
 
 function scene:destroy( event )
-	local sceneGroup = self.view
-
+	local sceneGroup = self.vie
 	removeAll()	
 end
 

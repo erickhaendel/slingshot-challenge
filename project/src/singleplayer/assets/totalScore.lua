@@ -54,20 +54,22 @@ function newTotalScore()
 
 	totalScoresGroup = display.newGroup();
 
-	labelScorePlayer1 = display.newText( "Total 0 ", 100 , 200 , native.systemFont , 46 )
+	labelScorePlayer1 = display.newText( "0 ", 230 , 80 , native.systemFont , 66 )
 	labelScorePlayer1:setFillColor( 0 , 0 , 0 )
 	totalScoresGroup:insert( labelScorePlayer1 )
 
-	labelScorePlayer2 = display.newText( "Total 0 ", display.contentWidth - 100 , 200 , native.systemFont , 46 )
+	labelScorePlayer2 = display.newText( "0 ", display.contentWidth - 260 , 80 , native.systemFont , 66 )
 	labelScorePlayer2:setFillColor( 0 , 0 , 0 )
 	totalScoresGroup:insert( labelScorePlayer2 )
+
+	totalScoresGroup:toFront()
 
 	return totalScoresGroup
 end
 
 function updateTotalScore()
-	labelScorePlayer1.text = "Total "..configuration.game_final_score_player[1]
-	labelScorePlayer2.text = "Total "..configuration.game_final_score_player[2] 
+	labelScorePlayer1.text = configuration.game_final_score_player[1]
+	labelScorePlayer2.text = configuration.game_final_score_player[2] 
 end
 
 function remove()

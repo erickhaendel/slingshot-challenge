@@ -148,6 +148,7 @@ function collision_process(stone, assets_image)
 				-- k is the position of the wall 1,2,3,4
 				for k=1,4 do
 
+
 					local test
 					if assets_image.can_tiles_obj[k][M * (i-1) + j] and stone then
 						test = hitTestObjects( stone, assets_image.can_tiles_obj[k][M * (i-1) + j])

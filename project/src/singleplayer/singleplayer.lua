@@ -82,6 +82,7 @@ function spawnProjectile()
 	if(projectile_tiles_lib.ready)then
 
 		projectiles_container = projectile_tiles_lib.newProjectile();
+		projectiles_container.myName = 'oi'
 
 		-- Flag projectiles for removal
 		projectiles_container.ready = true;
@@ -96,6 +97,21 @@ function spawnProjectile()
 		configuration.projectile_object = projectiles_container
 	end	
 end
+
+local function onCollision( event )
+
+    if ( event.phase == "began" ) then
+
+        
+
+    elseif ( event.phase == "ended" ) then
+
+        --print( "ended: " .. event.object1.myName .. " and " .. event.object2.myName )
+
+    end
+end
+
+Runtime:addEventListener( "collision", onCollision )
 
 -- processa os eventos de toque do dedo em cima da pedra
 function projectileTouchListener(e)
@@ -145,6 +161,7 @@ function projectileTouchListener(e)
 
 						-- Remove the elastic band
 						band_line_tiles_lib.removeBandLine( )
+
 
 						stone = projectile_process_lib.launched_process(stone, e, configuration.state_object)
 												
@@ -318,7 +335,7 @@ function start_game()
 	-- fisica ligado
 	physics.start();	
 
-	assets_image.create_total_score()
+	
 
 	-- sempre inicia pelo primeiro turno, independente do jogador
 	configuration.game_current_turn = 1
@@ -335,6 +352,8 @@ function start_game()
   	 -- carrega objetos do cenario
 	assets_image.createGameplayScenario()
 	configuration.assets_image_object = assets_image	
+
+	assets_image.create_total_score()
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera)
 
