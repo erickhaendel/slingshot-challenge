@@ -36,97 +36,113 @@ module(..., package.seeall)
 
 local configuration = require( "src.singleplayer.singleplayer_settings" )
 
+local invertido = math.random(0,1)
+print( invertido.."esta invertendo?" )
+
+if invertido == 0 then
+	p1scene1 = 1;
+	p2scene1 = 2;
+	p1scene2 = 3;
+	p2scene2 = 4;
+else
+	p1scene1 = 2;
+	p2scene1 = 1;
+	p1scene2 = 4;
+	p2scene2 = 3;
+end
+
+
 function prepare_can_organization(  )
 
 	local can_organization = {}
-	can_organization[1] = {} --player1
-	can_organization[2] = {} --player2
-	can_organization[3] = {} --player1
-	can_organization[4] = {} --player2
+	can_organization[p1scene1] = {} --player1
+	can_organization[p2scene1] = {} --player2
+	can_organization[p1scene2] = {} --player1
+	can_organization[p2scene2] = {} --player2
 
-	can_organization[1][ 1] = {1,0,1,0}
-	can_organization[1][ 2] = {0,1,1,0} 
-	can_organization[1][ 3] = {1,0,0,1} 
-	can_organization[1][ 4] = {1,1,0,0}	
-	can_organization[1][ 5] = {0,0,1,0} 
-	can_organization[1][ 6] = {1,0,1,0}
-	can_organization[1][ 7] = {1,0,0,1}
-	can_organization[1][ 8] = {1,0,0,0}	
-	can_organization[1][ 9] = {0,1,1,0} 
-	can_organization[1][10] = {0,1,1,0}
-	can_organization[1][11] = {0,1,0,1}
-	can_organization[1][12] = {0,1,0,0}	
-	can_organization[1][13] = {0,0,1,1}
-	can_organization[1][14] = {0,0,1,0}
-	can_organization[1][15] = {0,0,0,1}
-	can_organization[1][16] = {1,1,0,0}	
-	can_organization[1][17] = {1,0,1,0}
-	can_organization[1][18] = {1,0,0,1}
-	can_organization[1][19] = {0,0,0,1}
-	can_organization[1][20] = {0,1,0,1}	
+	can_organization[p1scene1][ 1] = {1,0,1,0}
+	can_organization[p1scene1][ 2] = {0,1,1,0} 
+	can_organization[p1scene1][ 3] = {1,0,0,1} 
+	can_organization[p1scene1][ 4] = {1,1,0,0}	
+	can_organization[p1scene1][ 5] = {0,0,1,0} 
+	can_organization[p1scene1][ 6] = {1,0,1,0}
+	can_organization[p1scene1][ 7] = {1,0,0,1}
+	can_organization[p1scene1][ 8] = {1,0,0,0}	
+	can_organization[p1scene1][ 9] = {0,1,1,0} 
+	can_organization[p1scene1][10] = {0,1,1,0}
+	can_organization[p1scene1][11] = {0,1,0,1}
+	can_organization[p1scene1][12] = {0,1,0,0}	
+	can_organization[p1scene1][13] = {0,0,1,1}
+	can_organization[p1scene1][14] = {0,0,1,0}
+	can_organization[p1scene1][15] = {0,0,0,1}
+	can_organization[p1scene1][16] = {1,1,0,0}	
+	can_organization[p1scene1][17] = {1,0,1,0}
+	can_organization[p1scene1][18] = {1,0,0,1}
+	can_organization[p1scene1][19] = {0,0,0,1}
+	can_organization[p1scene1][20] = {0,1,0,1}	
 
-	can_organization[2][ 1] = {1,1,1,1}
-	can_organization[2][ 2] = {1,1,1,1} 
-	can_organization[2][ 3] = {1,1,1,1} 
-	can_organization[2][ 4] = {1,1,1,1}	
-	can_organization[2][ 5] = {0,1,1,0} 
-	can_organization[2][ 6] = {1,1,1,1}
-	can_organization[2][ 7] = {1,1,1,1}
-	can_organization[2][ 8] = {1,1,0,0}	
-	can_organization[2][ 9] = {1,1,1,1} 
-	can_organization[2][10] = {1,1,1,1}
-	can_organization[2][11] = {1,1,1,1}
-	can_organization[2][12] = {1,1,0,0}	
-	can_organization[2][13] = {1,1,1,1}
-	can_organization[2][14] = {0,0,1,1}
-	can_organization[2][15] = {0,1,0,1}
-	can_organization[2][16] = {1,1,1,1}	
-	can_organization[2][17] = {1,1,1,1}
-	can_organization[2][18] = {1,1,1,1}
-	can_organization[2][19] = {1,0,0,1}
-	can_organization[2][20] = {1,1,1,1}		
+	can_organization[p2scene1][ 1] = {1,1,1,1}
+	can_organization[p2scene1][ 2] = {1,1,1,1} 
+	can_organization[p2scene1][ 3] = {1,1,1,1} 
+	can_organization[p2scene1][ 4] = {1,1,1,1}	
+	can_organization[p2scene1][ 5] = {0,1,1,0} 
+	can_organization[p2scene1][ 6] = {1,1,1,1}
+	can_organization[p2scene1][ 7] = {1,1,1,1}
+	can_organization[p2scene1][ 8] = {1,1,0,0}	
+	can_organization[p2scene1][ 9] = {1,1,1,1} 
+	can_organization[p2scene1][10] = {1,1,1,1}
+	can_organization[p2scene1][11] = {1,1,1,1}
+	can_organization[p2scene1][12] = {1,1,0,0}	
+	can_organization[p2scene1][13] = {1,1,1,1}
+	can_organization[p2scene1][14] = {0,0,1,1}
+	can_organization[p2scene1][15] = {0,1,0,1}
+	can_organization[p2scene1][16] = {1,1,1,1}	
+	can_organization[p2scene1][17] = {1,1,1,1}
+	can_organization[p2scene1][18] = {1,1,1,1}
+	can_organization[p2scene1][19] = {1,0,0,1}
+	can_organization[p2scene1][20] = {1,1,1,1}		
 
-	can_organization[3][ 1] = {1,0,1,0}
-	can_organization[3][ 2] = {0,1,1,0} 
-	can_organization[3][ 3] = {1,0,0,1} 
-	can_organization[3][ 4] = {1,1,0,0}	
-	can_organization[3][ 5] = {0,0,1,0} 
-	can_organization[3][ 6] = {1,0,1,0}
-	can_organization[3][ 7] = {1,0,0,1}
-	can_organization[3][ 8] = {1,0,0,0}	
-	can_organization[3][ 9] = {0,1,1,0} 
-	can_organization[3][10] = {0,1,1,0}
-	can_organization[3][11] = {0,1,0,1}
-	can_organization[3][12] = {0,1,0,0}	
-	can_organization[3][13] = {0,0,1,1}
-	can_organization[3][14] = {0,0,1,0}
-	can_organization[3][15] = {0,0,0,1}
-	can_organization[3][16] = {1,1,0,0}	
-	can_organization[3][17] = {1,0,1,0}
-	can_organization[3][18] = {1,0,0,1}
-	can_organization[3][19] = {0,0,0,1}
-	can_organization[3][20] = {0,1,0,1}	
+	can_organization[p1scene2][ 1] = {1,0,1,0}
+	can_organization[p1scene2][ 2] = {0,1,1,0} 
+	can_organization[p1scene2][ 3] = {1,0,0,1} 
+	can_organization[p1scene2][ 4] = {1,1,0,0}	
+	can_organization[p1scene2][ 5] = {0,0,1,0} 
+	can_organization[p1scene2][ 6] = {1,0,1,0}
+	can_organization[p1scene2][ 7] = {1,0,0,1}
+	can_organization[p1scene2][ 8] = {1,0,0,0}	
+	can_organization[p1scene2][ 9] = {0,1,1,0} 
+	can_organization[p1scene2][10] = {0,1,1,0}
+	can_organization[p1scene2][11] = {0,1,0,1}
+	can_organization[p1scene2][12] = {0,1,0,0}	
+	can_organization[p1scene2][13] = {0,0,1,1}
+	can_organization[p1scene2][14] = {0,0,1,0}
+	can_organization[p1scene2][15] = {0,0,0,1}
+	can_organization[p1scene2][16] = {1,1,0,0}	
+	can_organization[p1scene2][17] = {1,0,1,0}
+	can_organization[p1scene2][18] = {1,0,0,1}
+	can_organization[p1scene2][19] = {0,0,0,1}
+	can_organization[p1scene2][20] = {0,1,0,1}	
 
-	can_organization[4][ 1] = {1,1,1,1}
-	can_organization[4][ 2] = {1,1,1,1} 
-	can_organization[4][ 3] = {1,1,1,1} 
-	can_organization[4][ 4] = {1,1,1,1}	
-	can_organization[4][ 5] = {0,1,1,0} 
-	can_organization[4][ 6] = {1,1,1,1}
-	can_organization[4][ 7] = {1,1,1,1}
-	can_organization[4][ 8] = {1,1,0,0}	
-	can_organization[4][ 9] = {1,1,1,1} 
-	can_organization[4][10] = {1,1,1,1}
-	can_organization[4][11] = {1,1,1,1}
-	can_organization[4][12] = {1,1,0,0}	
-	can_organization[4][13] = {1,1,1,1}
-	can_organization[4][14] = {0,0,1,1}
-	can_organization[4][15] = {0,1,0,1}
-	can_organization[4][16] = {1,1,1,1}	
-	can_organization[4][17] = {1,1,1,1}
-	can_organization[4][18] = {1,1,1,1}
-	can_organization[4][19] = {1,0,0,1}
-	can_organization[4][20] = {1,1,1,1}	
+	can_organization[p2scene2][ 1] = {1,1,1,1}
+	can_organization[p2scene2][ 2] = {1,1,1,1} 
+	can_organization[p2scene2][ 3] = {1,1,1,1} 
+	can_organization[p2scene2][ 4] = {1,1,1,1}	
+	can_organization[p2scene2][ 5] = {0,1,1,0} 
+	can_organization[p2scene2][ 6] = {1,1,1,1}
+	can_organization[p2scene2][ 7] = {1,1,1,1}
+	can_organization[p2scene2][ 8] = {1,1,0,0}	
+	can_organization[p2scene2][ 9] = {1,1,1,1} 
+	can_organization[p2scene2][10] = {1,1,1,1}
+	can_organization[p2scene2][11] = {1,1,1,1}
+	can_organization[p2scene2][12] = {1,1,0,0}	
+	can_organization[p2scene2][13] = {1,1,1,1}
+	can_organization[p2scene2][14] = {0,0,1,1}
+	can_organization[p2scene2][15] = {0,1,0,1}
+	can_organization[p2scene2][16] = {1,1,1,1}	
+	can_organization[p2scene2][17] = {1,1,1,1}
+	can_organization[p2scene2][18] = {1,1,1,1}
+	can_organization[p2scene2][19] = {1,0,0,1}
+	can_organization[p2scene2][20] = {1,1,1,1}	
 
 	return can_organization
 end

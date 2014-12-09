@@ -150,8 +150,9 @@ end
 function menuButtonPress( event )
 	
 	removeAll()
-
-	composer.removeScene('src.menu.results_scene')	
+  print( " essa é a função que ta sendo chamada" )
+	composer.removeScene('src.menu.results_scene')
+  composer.removeScene('src.gameplay.game')	
 	composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
 end
 

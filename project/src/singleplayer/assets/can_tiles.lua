@@ -50,8 +50,8 @@ function newCanTile()
 
 	-- nome de arquivo das imagens das latas
 	filename = {}
-	filename[1] = configuration.can_image_dir..configuration.player1_can; 
-	filename[2] = configuration.can_image_dir..configuration.player2_can; 
+	filename[can_process_lib.p1scene1] = configuration.can_image_dir..configuration.player1_can; 
+	filename[can_process_lib.p2scene1] = configuration.can_image_dir..configuration.player2_can; 
 	filename[3] = filename[1]	-- repete no cenario 2
 	filename[4] = filename[2]	-- reprete no cenario 2
 	filename[5] = configuration.can_image_dir..configuration.neutral_can; 

@@ -308,7 +308,7 @@ end
 
 -- "scene:hide()"
 function scene:hide( event )
-    --removeAll()
+    removeAll()
 end
 
 -- "scene:destroy()"
