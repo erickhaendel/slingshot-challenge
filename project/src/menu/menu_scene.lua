@@ -105,7 +105,7 @@ function loadBtnAbout()
 end
 
 function loadBtnSinglePlayer1()
-   btnSinglePlayer1 = display.newImage( configuration.singleplayer1_button_image, 
+   btnSinglePlayer1 = display.newImage( configuration.full_random_button_image, 
         configuration.singleplayer1_button_x, 
         configuration.singleplayer1_button_y, 
     true)
@@ -114,7 +114,7 @@ function loadBtnSinglePlayer1()
 end
 
 function loadBtnSinglePlayer2()
-   btnSinglePlayer2 = display.newImage( configuration.singleplayer2_button_image, 
+   btnSinglePlayer2 = display.newImage( configuration.tit_for_tat_button_image, 
         configuration.singleplayer2_button_x, 
         configuration.singleplayer2_button_y, 
     true)
@@ -123,7 +123,7 @@ function loadBtnSinglePlayer2()
 end
 
 function loadBtnSinglePlayer3()
-   btnSinglePlayer3 = display.newImage( configuration.singleplayer3_button_image, 
+   btnSinglePlayer3 = display.newImage( configuration.generous_tit_for_tat_button_image, 
         configuration.singleplayer3_button_x, 
         configuration.singleplayer3_button_y, 
     true)
@@ -132,7 +132,7 @@ function loadBtnSinglePlayer3()
 end
 
 function loadBtnSinglePlayer4()
-   btnSinglePlayer4 = display.newImage( configuration.singleplayer4_button_image, 
+   btnSinglePlayer4 = display.newImage( configuration.random_tit_for_tat_button_image, 
         configuration.singleplayer4_button_x, 
         configuration.singleplayer4_button_y, 
     true)

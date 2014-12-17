@@ -98,24 +98,24 @@ press_button_sound					= ""
 -- MENU_SCENE OBJECT POSITIONS
 
 tutorial_button_x			= display.contentCenterX/2 + 750
-tutorial_button_y			= display.contentCenterY + 100
-play_button_x				= display.contentCenterX
-play_button_y				= display.contentCenterY - 100
+tutorial_button_y			= display.contentCenterY - 50
+play_button_x				= display.contentCenterX/2 - 100
+play_button_y				= display.contentCenterY + 200
 singleplayer1_button_x		= display.contentCenterX/2 - 100
-singleplayer1_button_y		= display.contentCenterY + 100
-singleplayer2_button_x		= display.contentCenterX 
-singleplayer2_button_y		= display.contentCenterY + 100
-singleplayer3_button_x		= display.contentCenterX 
-singleplayer3_button_y		= display.contentCenterY + 300
+singleplayer1_button_y		= display.contentCenterY  -- img 3
+singleplayer2_button_x		= display.contentCenterX/2 - 100 
+singleplayer2_button_y		= display.contentCenterY -200 -- img 1
+singleplayer3_button_x		= display.contentCenterX/2 - 100 
+singleplayer3_button_y		= display.contentCenterY + 100 --img 4
 singleplayer4_button_x		= display.contentCenterX/2 - 100
-singleplayer4_button_y		= display.contentCenterY + 300
+singleplayer4_button_y		= display.contentCenterY -100 -- img 2
 
 about_button_x				= display.contentCenterX/2 - 100
 about_button_y				= display.contentCenterY + 280
 credits_button_x			= display.contentCenterX - 100
 credits_button_y			= display.contentCenterY + 280
-settings_button_x			= display.contentCenterX + 270
-settings_button_y			= display.contentCenterY + 280
+settings_button_x			= display.contentCenterX/2 + 750
+settings_button_y			= display.contentCenterY + 100
 
 
 -- LOGIN SCENE OBJECT POSITIONS
