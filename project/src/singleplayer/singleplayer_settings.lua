@@ -173,6 +173,12 @@ cans_y[3] = cans_y[1]
 cans_x[4] = display.contentCenterX + 1160
 cans_y[4] = cans_y[1]
 
+player_can= {}
+player_can[1] =  1
+player_can[2] =  2
+player_can[3] =  2
+player_can[4] =  1
+
 can_image_dir = "resources/images/objects/"		-- diretorio onde estao as imagens das latas
 can_xScale = 1.00; 
 can_yScale = can_xScale		-- escala da lata na parede
@@ -182,6 +188,7 @@ player1_can = "yellow-can.png"					-- imagem da lata do player 1
 player2_can = "green-can.png"					-- imagem da lata do player 2
 neutral_can = "neutral-can.png"					-- imagem da lata neutra
 pack_of_cans = 4 								-- quantidade de latas agrupadas no muro para cada player
+
 
 -----------------
 -- SCOREBOARD

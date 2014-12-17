@@ -69,7 +69,7 @@ function loadBtnSettings()
 end
 
 function loadBtnPlay()
-    btnPlay     = display.newImage( configuration.play_button_image, 
+    btnPlay     = display.newImage( configuration.multiplayer_button_image, 
         configuration.play_button_x, 
         configuration.play_button_y, 
         true  )
@@ -105,10 +105,12 @@ function loadBtnAbout()
 end
 
 function loadBtnSinglePlayer1()
-   btnSinglePlayer1 = display.newImage( configuration.full_random_button_image, 
+    btnSinglePlayer1 = display.newImage( configuration.full_random_button_image, 
         configuration.singleplayer1_button_x, 
         configuration.singleplayer1_button_y, 
     true)
+
+
     menuGroup:insert( btnSinglePlayer1 ) 
     btnSinglePlayer1:addEventListener( "touch" , singleplayer1Press )
 end
