@@ -33,9 +33,11 @@
 
 -------------------------------------------
 -- LIBs
+
 -------------------------------------------
 require( "src.infra.includeall" )
 
+local printTable = require('src.singleplayer.inspect')
 -- utils
 local gamelib 					= require( "src.singleplayer.gamelib" )
 local configuration 			= require( "src.singleplayer.singleplayer_settings" )
@@ -208,11 +210,13 @@ function configuration.state_object:change(e)
 				
 				elseif configuration.game_current_turn == 1 then
 					print( "Prox turno" )
+					print(configuration.game_current_turn)
 					-- utilizado pelo pubnub					
 					next_turn()
 						-- avanca um round					
 				elseif configuration.game_current_turn == 2 then
 					print( "prox round" )
+					print(configuration.game_current_turn)
 					-- utilizado pelo pubnub				
 					next_round()
 				end
@@ -223,15 +227,18 @@ end
 -- prepare the singleplayer to the next round
 function next_turn()
 
+	print('----------------------------------------------')
+	print( "Turn: "..configuration.game_current_turn )
+	print( "Player: "..configuration.game_current_player )
+	print(" Itenção")
+	print(printTable(configuration.game_hit_choose[configuration.game_current_player]))
+	print(" Pontos")
+	print(printTable(configuration.game_round_score_player[configuration.game_current_player]))
+
 	if configuration.game_current_turn == 1  then 
 		configuration.game_current_turn = 2
 		gamelib.changeCurrentPlayer()
 	end	
-
-
-
-	print( "currente turn: "..configuration.game_current_turn )
-	print( "current player: "..configuration.game_current_player )
 
 
 	Runtime:addEventListener( "enterFrame", assets_image.moveCamera )
@@ -266,6 +273,16 @@ end
 
 -- prepare the singleplayer to the next round
 function next_round()
+
+	print('----------------------------------------------')
+	print( "Turn: "..configuration.game_current_turn )
+	print( "Player: "..configuration.game_current_player )
+	print(" Itenção")
+	print(printTable(configuration.game_hit_choose[configuration.game_current_player]))
+	print(" Pontos")
+	print(printTable(configuration.game_round_score_player[configuration.game_current_player]))
+
+
 	-- Deixar invisivel as bolinhas na troca de round.
 	upperscore.circlesremove()
 	-- reset turn
@@ -436,4 +453,12 @@ scene:addEventListener( "destroy", scene )
 
 ---------------------------------------------------------------------------------
 
+
+
 return scene
+
+
+
+
+
+

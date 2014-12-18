@@ -31,6 +31,8 @@
 --
 ------------------------------------------------------------------------------------------------------------------------------
 
+
+
 -- libs
 require( "src.infra.includeall" )
 local assets_audio            = require( "src.gameplay.assets_audio" )
@@ -150,7 +152,8 @@ end
 function menuButtonPress( event )
 	
 	removeAll()
-  print( " essa é a função que ta sendo chamada" )
+
+  --print( " essa é a função que ta sendo chamada" )
 	composer.removeScene('src.menu.results_scene')
   composer.removeScene('src.gameplay.game')	
 	composer.gotoScene( "src.menu.menu_scene", "slideLeft", 400 )
@@ -183,6 +186,9 @@ local score_player1, score_player2 = 0,0
 end
 
 function createAll()
+
+  print('--------------')
+  print(gameplay_configuration.game_final_score_player)
   
   if not animation then  loadBackgroundAnimation();  end  
 
