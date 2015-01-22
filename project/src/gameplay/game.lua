@@ -239,6 +239,7 @@ end
 -- prepare the gameplay to the next round
 function next_round()
 
+
 	-- reset turn
 	configuration.game_current_turn = 1
 
@@ -270,9 +271,8 @@ function next_round()
 
 		Runtime:removeEventListener( "enterFrame", assets_image.moveCamera )	
 
-		end)		
-
-end
+		end)	
+		
 
 function donottouch_warn( event )
 

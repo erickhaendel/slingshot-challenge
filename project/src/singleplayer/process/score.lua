@@ -42,6 +42,7 @@ require( "src.infra.includeall" )
 local assets_audio			= require( "src.singleplayer.assets_audio" )
 local configuration 		= require( "src.singleplayer.singleplayer_settings" )
 local can_process_lib 		= require( "src.singleplayer.process.can" )
+local auxiliar;
 
 function score_animation( intend_to_hit, assets_image )
 
@@ -51,17 +52,19 @@ function score_animation( intend_to_hit, assets_image )
 	for j=1,4 do
 		for i=1,2 do
 			-- timer.performWithDelay(1+i*110, function(e)
-				if intend_to_hit == 1 then
-					assets_image.myCircleYellow_upperScore_tiles_obj[j][i].isVisible = true						
-				else
-					assets_image.myCircleGreen_upperScore_tiles_obj[j][i].isVisible = true	
-				end
+			
+			if configuration.game_all_intent[configuration.game_current_round][configuration.game_current_player] == 1 then
+				assets_image.myCircleYellow_upperScore_tiles_obj[j][i].isVisible = true						
+			elseif configuration.game_all_intent[configuration.game_current_round][configuration.game_current_player] == 2 then
+				assets_image.myCircleGreen_upperScore_tiles_obj[j][i].isVisible = true	
+			end
 				assets_audio.playIncreasingScore()
 			-- end)
 
-			temp = temp + 1							
-			if temp >= configuration.game_round_score_player[intend_to_hit] then
-				print(intend_to_hit);
+			temp = temp + 1	
+
+			if temp >= configuration.game_all_round[configuration.game_current_round][configuration.game_all_intent[configuration.game_current_round][configuration.game_current_player]] then
+				
 				return;
 			end			
 		end
@@ -96,33 +99,66 @@ function score_process(assets_image)
 		end		
 	end
 
-	
+	auxiliar = configuration.game_all_round[configuration.game_current_round]
 
 	-- cenario 01, jogador 1 acerta suas proprias latas
 	if player == 1 and intend_to_hit == 1  then
 		configuration.game_score_player[can_process_lib.p1scene1] =  points_p1
 		configuration.game_final_score_player[can_process_lib.p1scene1] = configuration.game_final_score_player[can_process_lib.p1scene1] + configuration.game_score_player[can_process_lib.p1scene1]
-
+		--organizando os dados para serem salvos no BD
+		if can_process_lib.invertido == 0 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  1
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1] + configuration.game_score_player[1]), (auxiliar[2])}
+		elseif	can_process_lib.invertido == 1 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  2
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1]), (auxiliar[2] + configuration.game_score_player[2])}
+		end
 	-- cenario 01, jogador 1 acerta as latas do jogador 2
 	elseif player == 1 and intend_to_hit == 2 then
 		configuration.game_score_player[can_process_lib.p2scene1] = points_p2
 		configuration.game_final_score_player[can_process_lib.p2scene1] = configuration.game_final_score_player[can_process_lib.p2scene1] + configuration.game_score_player[can_process_lib.p2scene1]
+		--organizando os dados para serem salvos no BD
+		if can_process_lib.invertido == 0 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  2
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1]), (auxiliar[2] + configuration.game_score_player[2])}
+		elseif	can_process_lib.invertido == 1 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  1
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1] + configuration.game_score_player[1]), (auxiliar[2])}
+		end
 
 	-- cenario 02, jogador 2 acerta as latas do jogador 1
 	elseif player == 2 and intend_to_hit == 1 then
-		configuration.game_score_player[can_process_lib.p1scene1] = points_p2
-		configuration.game_final_score_player[can_process_lib.p1scene1] = configuration.game_final_score_player[can_process_lib.p1scene1] + configuration.game_score_player[can_process_lib.p1scene1]
+		configuration.game_score_player[can_process_lib.p2scene1] = points_p1
+		configuration.game_final_score_player[can_process_lib.p2scene1] = configuration.game_final_score_player[can_process_lib.p2scene1] + configuration.game_score_player[can_process_lib.p2scene1]
+		if can_process_lib.invertido == 0 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  2
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1]), (auxiliar[2] + configuration.game_score_player[2])}
+		elseif	can_process_lib.invertido == 1 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  1
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1] + configuration.game_score_player[1]), (auxiliar[2])}
+		end
 
 	-- cenario 02, jogador 2 acerta suas proprias latas
 	elseif player == 2 and intend_to_hit == 2 then
-		configuration.game_score_player[can_process_lib.p2scene1] = points_p1
-		configuration.game_final_score_player[can_process_lib.p2scene1] = configuration.game_final_score_player[can_process_lib.p2scene1] + configuration.game_score_player[can_process_lib.p2scene1]
+		configuration.game_score_player[can_process_lib.p1scene1] = points_p2
+		configuration.game_final_score_player[can_process_lib.p1scene1] = configuration.game_final_score_player[can_process_lib.p1scene1] + configuration.game_score_player[can_process_lib.p1scene1]
+		if can_process_lib.invertido == 0 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  1
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1] + configuration.game_score_player[1]), (auxiliar[2] + configuration.game_score_player[2])}
+		elseif	can_process_lib.invertido == 1 then
+			configuration.game_all_intent[configuration.game_current_round][player] =  2
+			configuration.game_all_round[configuration.game_current_round] = {(auxiliar[1]), (auxiliar[2] + configuration.game_score_player[2])}
+		end
 	end
-
+	print("INFORMAÇÕES RODADA")
 	print( ">>>"..(configuration.game_score_player[1])..">"..configuration.game_score_player[2])
+	print( ">round> jogador "..(configuration.game_all_round[configuration.game_current_round][1]).."> NPC"..configuration.game_all_round[configuration.game_current_round][2])
+	print( ">itenção> jogador "..(configuration.game_all_intent[configuration.game_current_round][1])..">NPC"..configuration.game_all_intent[configuration.game_current_round][2])
+	print("round atual"..configuration.game_current_round)
+	print( "npc escolhido  "..configuration.npc_strategy )
+	print( "total de rodadas "..configuration.game_total_rounds )
+
 	configuration.game_round_score_player[intend_to_hit] = configuration.game_round_score_player[intend_to_hit] + configuration.game_score_player[intend_to_hit]
-	print( "round"..configuration.game_round_score_player[1].."+"..configuration.game_round_score_player[2] )
-	print( configuration.game_current_player )
 	-- exibe os pontos na grade
-	score_animation( intend_to_hit, assets_image )
+	score_animation( intend_to_hit, assets_image )	
 end

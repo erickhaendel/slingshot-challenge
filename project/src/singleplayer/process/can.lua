@@ -36,19 +36,19 @@ module(..., package.seeall)
 
 local configuration = require( "src.singleplayer.singleplayer_settings" )
 
-local invertido = math.random(0,1)
+invertido = math.random(0,1)
 print( invertido.."esta invertendo?" )
 
 if invertido == 0 then
 	p1scene1 = 1;
 	p2scene1 = 2;
-	p1scene2 = 3;
-	p2scene2 = 4;
+	p1scene2 = 4;
+	p2scene2 = 3;
 else
 	p1scene1 = 2;
 	p2scene1 = 1;
-	p1scene2 = 4;
-	p2scene2 = 3;
+	p1scene2 = 3;
+	p2scene2 = 4;
 end
 
 

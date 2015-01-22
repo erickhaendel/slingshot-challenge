@@ -65,6 +65,7 @@ function npc( type )
 
 		else
 			--comportamento egoista
+			print("hitchoose"..configuration.game_hit_choose[1][configuration.game_current_round-1])
 			if configuration.game_hit_choose[1][configuration.game_current_round-1] == 1 then
 				--configuration.projectile_object.x = left_side_x
 				--configuration.projectile_object.y = left_side_y

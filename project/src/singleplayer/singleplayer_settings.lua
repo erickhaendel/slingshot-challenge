@@ -48,6 +48,8 @@ game_round_score_player[2] = 0
 game_final_score_player = {} 	-- NAO_MODIFICAR_VALOR
 game_final_score_player[1] = 0 	-- NAO_MODIFICAR_VALOR
 game_final_score_player[2] = 0 	-- NAO_MODIFICAR_VALOR
+game_all_round = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}}
+game_all_intent = {{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0}}
 
 game_hit_choose = {} 			-- intencao de acerto de cada player
 game_hit_choose[1] = {}			-- player 1

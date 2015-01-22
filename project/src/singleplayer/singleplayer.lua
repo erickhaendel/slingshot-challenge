@@ -227,13 +227,6 @@ end
 -- prepare the singleplayer to the next round
 function next_turn()
 
-	print('----------------------------------------------')
-	print( "Turn: "..configuration.game_current_turn )
-	print( "Player: "..configuration.game_current_player )
-	print(" Itenção")
-	print(printTable(configuration.game_hit_choose[configuration.game_current_player]))
-	print(" Pontos")
-	print(printTable(configuration.game_round_score_player[configuration.game_current_player]))
 
 	if configuration.game_current_turn == 1  then 
 		configuration.game_current_turn = 2
@@ -274,13 +267,7 @@ end
 -- prepare the singleplayer to the next round
 function next_round()
 
-	print('----------------------------------------------')
-	print( "Turn: "..configuration.game_current_turn )
-	print( "Player: "..configuration.game_current_player )
-	print(" Itenção")
-	print(printTable(configuration.game_hit_choose[configuration.game_current_player]))
-	print(" Pontos")
-	print(printTable(configuration.game_round_score_player[configuration.game_current_player]))
+	
 
 
 	-- Deixar invisivel as bolinhas na troca de round.
@@ -329,7 +316,9 @@ function next_round()
 					npc_lib.npc(configuration.npc_strategy)
 				end
 			end)
-		end)		
+		end)	
+
+
 
 end
 
