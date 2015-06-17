@@ -1,4 +1,4 @@
-# slingshot-challenge
+# Slingshot Challenge
 (game theory, game design, research, methodology, video games, psychology)
 
 Research on resource sharing in human behavior often require experiments involving humans and not always the participants have the commitment necessary for the tets show good results. Digital research tools with the fun factor bring a playful perspective to the participants during the experiments, contributing to a more efficient immersion of the test subject at the heart of the experience.
